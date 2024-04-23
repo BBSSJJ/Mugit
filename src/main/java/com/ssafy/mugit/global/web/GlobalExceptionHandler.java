@@ -1,11 +1,11 @@
-package com.ssafy.mugit.global.handler;
+package com.ssafy.mugit.global.web;
 
-import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.global.exception.UserApiException;
+import com.ssafy.mugit.global.web.dto.MessageDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +37,10 @@ public class GlobalExceptionHandler {
             case DUPLICATE_NICK_NAME -> {
                 log.error(e.getMessage());
                 return new ResponseEntity<>(new MessageDto("중복 닉네임"), HttpStatus.CONFLICT);
+            }
+            case NOT_REGISTERED_USER -> {
+                log.error(e.getMessage());
+                return new ResponseEntity<>(new MessageDto("회원가입 필요"), HttpStatus.FOUND);
             }
             default -> {
                 return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

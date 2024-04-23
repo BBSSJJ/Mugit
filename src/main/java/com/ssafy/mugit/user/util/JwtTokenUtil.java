@@ -1,4 +1,4 @@
-package com.ssafy.mugit.global.auth;
+package com.ssafy.mugit.user.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

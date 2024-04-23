@@ -1,8 +1,7 @@
-package com.ssafy.mugit.user;
+package com.ssafy.mugit.user.fixture;
 
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.entity.type.SnsType;
 
 public enum ProfileFixture {
     DEFAULT_PROFILE(1L, "leaf", "프로필", "http://localhost:8080/profile/1"),

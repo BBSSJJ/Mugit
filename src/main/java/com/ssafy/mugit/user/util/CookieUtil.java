@@ -1,5 +1,6 @@
-package com.ssafy.mugit.global.auth;
+package com.ssafy.mugit.user.util;
 
+import com.ssafy.mugit.global.web.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class CookieService {
+public class CookieUtil {
 
     private final JwtTokenUtil tokenService;
 
@@ -35,7 +36,18 @@ public class CookieService {
         cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("isLogined", "true").toString());
         cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("nickName", profile.getNickName()).toString());
         cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileText", profile.getProfileText()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileImage", profile.getProfileImage()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileImage", profile.getProfileImagePath()).toString());
+
+        return cookieHeaders;
+    }
+
+    public HttpHeaders getRegistCookieHeader(UserInfoDto userInfo) {
+        HttpHeaders cookieHeaders = new HttpHeaders();
+
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("needRegist", "true").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("snsId", userInfo.getSnsId()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("snsType", userInfo.getSnsType().toString()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("email", userInfo.getEmail()).toString());
 
         return cookieHeaders;
     }
@@ -47,6 +59,16 @@ public class CookieService {
                 .sameSite("None")
                 .secure(true)
                 .maxAge(periodAccessTokenCookie)
+                .build();
+    }
+
+    public ResponseCookie getRegistCookie(String key, String value) {
+        return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
+                .path("/")
+                .domain(domainUrl)
+                .sameSite("None")
+                .secure(true)
+                .maxAge(600)
                 .build();
     }
 
