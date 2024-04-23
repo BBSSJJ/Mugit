@@ -1,15 +1,16 @@
-package com.ssafy.mugit.user.service;
+package com.ssafy.mugit.user.acceptance;
 
-import com.ssafy.mugit.global.auth.CookieService;
-import com.ssafy.mugit.global.dto.MessageDto;
-import com.ssafy.mugit.global.handler.GlobalExceptionHandler;
-import com.ssafy.mugit.user.ProfileFixture;
-import com.ssafy.mugit.user.UserFixture;
+import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.web.GlobalExceptionHandler;
+import com.ssafy.mugit.user.fixture.ProfileFixture;
+import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.controller.UserRegistController;
 import com.ssafy.mugit.user.dto.request.RegistProfileDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.UserRepository;
+import com.ssafy.mugit.user.service.UserRegistService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class UserRegistIntegrationTest {
+public class UserRegistAcceptanceTest {
 
     @Autowired
     UserRegistService userRegistService;
@@ -34,7 +35,7 @@ public class UserRegistIntegrationTest {
     UserRepository userRepository;
 
     @Autowired
-    CookieService cookieService;
+    CookieUtil cookieUtil;
 
     WebTestClient webClient;
 
@@ -67,7 +68,7 @@ public class UserRegistIntegrationTest {
 
         // then
         result.expectStatus().isCreated()
-                .expectHeader().valueMatches(HttpHeaders.SET_COOKIE, cookieService.getUserInfoCookie("isLogined", "true").toString())
+                .expectHeader().valueMatches(HttpHeaders.SET_COOKIE, cookieUtil.getUserInfoCookie("isLogined", "true").toString())
                 .expectBody(MessageDto.class).isEqualTo(new MessageDto("회원가입 완료"));
     }
 
@@ -83,7 +84,7 @@ public class UserRegistIntegrationTest {
         List<String> cookies = userRegistService.registAndGetLoginCookieHeader(snsIdCookie, snsTypeCookie, registProfileDto).get(HttpHeaders.SET_COOKIE);
 
         // then
-        assertThat(cookies).contains(cookieService.getUserInfoCookie("isLogined", "true").toString());
+        assertThat(cookies).contains(cookieUtil.getUserInfoCookie("isLogined", "true").toString());
         assert cookies != null;
         assertThat(cookies).anyMatch(cookie -> cookie.contains("leaf"))
                 .anyMatch(cookie -> cookie.contains("%ED%94%84%EB%A1%9C%ED%95%84"))

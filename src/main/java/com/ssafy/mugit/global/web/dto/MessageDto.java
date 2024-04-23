@@ -1,4 +1,4 @@
-package com.ssafy.mugit.global.dto;
+package com.ssafy.mugit.global.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
