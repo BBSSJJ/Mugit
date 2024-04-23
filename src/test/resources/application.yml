@@ -1,4 +1,3 @@
-
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
@@ -15,13 +14,13 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_DOMAIN}:${DB_PORT}/${DB_NAME}
-    username: ${DB_ID}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${TEST_DB_DOMAIN}:${TEST_DB_PORT}/${TEST_DB_NAME}
+    username: ${TEST_DB_ID}
+    password: ${TEST_DB_PASSWORD}
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect

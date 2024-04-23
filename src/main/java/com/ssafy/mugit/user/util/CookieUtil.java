@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.util;
 
+import com.ssafy.mugit.global.web.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,17 @@ public class CookieUtil {
         return cookieHeaders;
     }
 
+    public HttpHeaders getRegistCookieHeader(UserInfoDto userInfo) {
+        HttpHeaders cookieHeaders = new HttpHeaders();
+
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("needRegist", "true").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("snsId", userInfo.getSnsId()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("snsType", userInfo.getSnsType().toString()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("email", userInfo.getEmail()).toString());
+
+        return cookieHeaders;
+    }
+
     public ResponseCookie getUserInfoCookie(String key, String value) {
         return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
                 .path("/")
@@ -47,6 +59,16 @@ public class CookieUtil {
                 .sameSite("None")
                 .secure(true)
                 .maxAge(periodAccessTokenCookie)
+                .build();
+    }
+
+    public ResponseCookie getRegistCookie(String key, String value) {
+        return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
+                .path("/")
+                .domain(domainUrl)
+                .sameSite("None")
+                .secure(true)
+                .maxAge(600)
                 .build();
     }
 

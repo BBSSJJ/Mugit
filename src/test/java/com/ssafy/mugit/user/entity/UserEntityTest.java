@@ -3,6 +3,7 @@ package com.ssafy.mugit.user.entity;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,8 +29,9 @@ class UserEntityTest {
                 .isEqualTo("http://localhost:8080/profile/1");
     }
 
+    @Tag("login")
     @Test
-    @DisplayName("입력값 없을 때 기본값 설정 테스트")
+    @DisplayName("[단위] 입력값 없을 때 기본값 설정 테스트")
     void defaultSettingTest() {
         // given
         User tempUser = UserFixture.DEFAULT_LOGIN_USER.getUser();

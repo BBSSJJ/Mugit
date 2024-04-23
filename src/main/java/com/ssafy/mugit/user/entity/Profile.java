@@ -46,5 +46,9 @@ public class Profile {
         this.profileText = !profileText.isBlank() ? profileText : DEFAULT_PROFILE_TEXT;
         this.profileImagePath = !profileImagePath.isBlank() ? profileImagePath : DEFAULT_PROFILE_IMAGE_PATH;
     }
+
+    public void regist(final User user) {
+        this.user = user;
+    }
 }
 

@@ -1,7 +1,5 @@
 package com.ssafy.mugit.user.service;
 
-import com.ssafy.mugit.global.exception.UserApiException;
-import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.web.api.OAuthApi;
 import com.ssafy.mugit.global.web.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.User;
@@ -27,21 +25,30 @@ public class UserLoginService {
     public HttpHeaders loginAndGetCookieHeader(String token, SnsType snsType) {
         UserInfoDto userInfo = getUserInfo(getBearerToken(token), snsType);
         User userInDB = getUser(userInfo);
+
+        // 회원가입 필요시
+        if (userInDB == null) return getRegistCookie(userInfo);
+
         return getLoginCookieHeader(userInDB);
     }
 
     public UserInfoDto getUserInfo(String token, SnsType snsType) {
+        System.out.println("oAuthApi = " + oAuthApi);
+        System.out.println("userInfo = " + oAuthApi.getUserInfo(token, snsType));
         return oAuthApi.getUserInfo(token, snsType);
     }
 
     public User getUser(UserInfoDto userInfo) {
         User userInDB = userRepository.findBySnsIdAndSnsType(userInfo.getSnsId(), userInfo.getSnsType());
-        if (userInDB == null) throw new UserApiException(UserApiError.NOT_REGISTERED_USER);
         return userInDB;
     }
 
     public HttpHeaders getLoginCookieHeader(User user) {
         return cookieUtil.getLoginCookieHeader(user);
+    }
+
+    public HttpHeaders getRegistCookie(UserInfoDto userInfo) {
+        return cookieUtil.getRegistCookieHeader(userInfo);
     }
 
     public String getBearerToken(String token) {

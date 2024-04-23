@@ -41,5 +41,6 @@ public class User {
 
     public void regist(Profile profile) {
         this.profile = profile;
+        profile.regist(this);
     }
 }

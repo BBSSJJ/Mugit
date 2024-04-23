@@ -8,7 +8,6 @@ public enum UserFixture {
     DEFAULT_LOGIN_USER(1L, "asdf1234", SnsType.GOOGLE, "test@test.com"),
     DEFAULT_LOGIN_USER_2(2L, "qwer1234", SnsType.GOOGLE, "test2@test.com");
 
-
     private final Long id;
     private final String snsId;
     private final SnsType snsType;
