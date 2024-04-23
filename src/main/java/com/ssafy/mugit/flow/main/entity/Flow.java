@@ -1,6 +1,6 @@
 package com.ssafy.mugit.flow.main.entity;
 
-import com.ssafy.mugit.user.main.entity.User;
+import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

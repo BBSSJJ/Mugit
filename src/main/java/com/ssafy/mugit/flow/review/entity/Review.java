@@ -1,7 +1,7 @@
 package com.ssafy.mugit.flow.review.entity;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
-import com.ssafy.mugit.user.main.entity.User;
+import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
 
 @Entity(name = "review")
