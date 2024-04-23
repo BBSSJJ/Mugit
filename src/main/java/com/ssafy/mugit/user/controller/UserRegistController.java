@@ -20,8 +20,10 @@ public class UserRegistController {
     public ResponseEntity<MessageDto> regist(
             @CookieValue(value = "snsId") String snsId,
             @CookieValue(value = "snsType") SnsType snsType,
+            @CookieValue(value = "email") String email,
             @RequestBody RegistProfileDto registProfileDto) {
-        HttpHeaders cookieHeader = userRegistService.registAndGetLoginCookieHeader(snsId, snsType, registProfileDto);
+
+        HttpHeaders cookieHeader = userRegistService.registAndGetCookieHeader(snsId, snsType, email, registProfileDto);
 
         return ResponseEntity.status(201)
                 .headers(cookieHeader)

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -72,39 +70,24 @@ public class CookieUtil {
                 .build();
     }
 
-    public HttpHeaders getTokenCookie(User user) {
-        HttpHeaders cookieHeaders = new HttpHeaders();
 
-        List<String> cookies = new ArrayList<>();
-        cookies.add(getAccessTokenCookie(user.getId()).toString());
-        cookies.add(getRefreshTokenCookie(user.getId()).toString());
+//    public HttpHeaders deleteRegistCookieHeader(HttpHeaders cookieHeader) {
+//        HttpHeaders headers = new HttpHeaders();
+//        List<String> cookies = cookieHeader.get(HttpHeaders.SET_COOKIE);
+//        Objects.requireNonNull(cookies).forEach(cookie -> {
+//            headers.remove(cookie);
+//        });
+//        return ;
+//    }
+//
+//    public ResponseCookie removeCookie(String cookie) {
+//        return ResponseCookie.from(key, "")
+//                .path("/")
+//                .domain(domainUrl)
+//                .sameSite("None")
+//                .secure(true)
+//                .maxAge(0)
+//                .build();
+//    }
 
-        cookies.forEach(cookie -> cookieHeaders.add(HttpHeaders.SET_COOKIE, cookie));
-
-        return cookieHeaders;
-    }
-
-    private ResponseCookie getAccessTokenCookie(Long id) {
-        String accessToken = tokenService.generateAccessToken(id);
-        return ResponseCookie.from("accessToken", accessToken)
-                .path("/")
-                .domain(domainUrl)
-                .sameSite("None")
-                .httpOnly(true)
-                .secure(true)
-                .maxAge(periodAccessTokenCookie)
-                .build();
-    }
-
-    private ResponseCookie getRefreshTokenCookie(Long id) {
-        String refreshToken = tokenService.generateRefreshToken(id);
-        return ResponseCookie.from("refreshToken", refreshToken)
-                .path("/")
-                .domain(domainUrl)
-                .sameSite("None")
-                .httpOnly(true)
-                .secure(true)
-                .maxAge(periodRefreshTokenCookie)
-                .build();
-    }
 }

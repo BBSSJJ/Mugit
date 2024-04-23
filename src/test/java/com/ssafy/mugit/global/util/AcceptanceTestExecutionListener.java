@@ -16,7 +16,7 @@ public class AcceptanceTestExecutionListener extends AbstractTestExecutionListen
     }
 
     private List<String> getTruncateQueries(final JdbcTemplate jdbcTemplate) {
-        return jdbcTemplate.queryForList("SELECT Concat('TRUNCATE TABLE ', TABLE_NAME, ';') AS q FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'PUBLIC'", String.class);
+        return jdbcTemplate.queryForList("SELECT CONCAT('TRUNCATE TABLE ', TABLE_NAME, ';') AS list FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mugit_test_db'", String.class);
     }
 
     private JdbcTemplate getJdbcTemplate(final TestContext testContext) {
@@ -24,9 +24,9 @@ public class AcceptanceTestExecutionListener extends AbstractTestExecutionListen
     }
 
     private void truncateTables(final JdbcTemplate jdbcTemplate, final List<String> truncateQueries) {
-        execute(jdbcTemplate, "SET REFERENTIAL_INTEGRITY FALSE");
+        execute(jdbcTemplate, "SET FOREIGN_KEY_CHECKS = 0");
         truncateQueries.forEach(v -> execute(jdbcTemplate, v));
-        execute(jdbcTemplate, "SET REFERENTIAL_INTEGRITY TRUE");
+        execute(jdbcTemplate, "SET FOREIGN_KEY_CHECKS = 1");
     }
 
     private void execute(final JdbcTemplate jdbcTemplate, final String query) {

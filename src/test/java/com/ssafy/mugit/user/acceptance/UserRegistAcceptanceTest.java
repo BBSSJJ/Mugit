@@ -1,31 +1,31 @@
 package com.ssafy.mugit.user.acceptance;
 
-import com.ssafy.mugit.user.util.CookieUtil;
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.global.web.GlobalExceptionHandler;
-import com.ssafy.mugit.user.fixture.ProfileFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
+import com.ssafy.mugit.global.web.dto.MessageDto;
 import com.ssafy.mugit.user.controller.UserRegistController;
 import com.ssafy.mugit.user.dto.request.RegistProfileDto;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.entity.type.SnsType;
+import com.ssafy.mugit.user.fixture.ProfileFixture;
+import com.ssafy.mugit.user.fixture.RegistProfileDtoFixture;
+import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserRegistService;
+import com.ssafy.mugit.user.util.CookieUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-@SpringBootTest
+@Tag("regist")
+@Slf4j
+@AcceptanceTest
 public class UserRegistAcceptanceTest {
 
     @Autowired
@@ -52,71 +52,57 @@ public class UserRegistAcceptanceTest {
     }
 
     @Test
-    @DisplayName("임시 유저 정상 회원가입 테스트")
+    @DisplayName("[인수] 정상 회원가입 시 쿠키 설정된 Header 및 201 반환")
     void testTempUserRegist() throws Exception {
         // given
+        String needRegistCookie = "true";
         String snsIdCookie = "asdf1234";
         String snsTypeCookie = "GOOGLE";
-        RegistProfileDto registProfileDto = new RegistProfileDto("leaf", "프로필", "profile/image/path");
+        String emailCookie = "test@test.com";
+        RegistProfileDto registProfileDto = RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto();
 
         // when
         ResponseSpec result = webClient.post().uri("/profiles")
                 .accept(MediaType.ALL)
+                .cookie("needRegist", needRegistCookie)
                 .cookie("snsId", snsIdCookie)
                 .cookie("snsType", snsTypeCookie)
+                .cookie("email", emailCookie)
                 .bodyValue(registProfileDto).exchange();
 
         // then
         result.expectStatus().isCreated()
                 .expectHeader().valueMatches(HttpHeaders.SET_COOKIE, cookieUtil.getUserInfoCookie("isLogined", "true").toString())
+                .expectHeader().values(HttpHeaders.SET_COOKIE, cookie -> log.info(cookie.toString()))
                 .expectBody(MessageDto.class).isEqualTo(new MessageDto("회원가입 완료"));
     }
 
     @Test
-    @DisplayName("쿠키 정상 발급 테스트")
-    void testGetCookie() {
-        // given
-        String snsIdCookie = "asdf1234";
-        SnsType snsTypeCookie = SnsType.GOOGLE;
-        RegistProfileDto registProfileDto = new RegistProfileDto("leaf", "프로필", "profile/image/path");
-
-        // when
-        List<String> cookies = userRegistService.registAndGetLoginCookieHeader(snsIdCookie, snsTypeCookie, registProfileDto).get(HttpHeaders.SET_COOKIE);
-
-        // then
-        assertThat(cookies).contains(cookieUtil.getUserInfoCookie("isLogined", "true").toString());
-        assert cookies != null;
-        assertThat(cookies).anyMatch(cookie -> cookie.contains("leaf"))
-                .anyMatch(cookie -> cookie.contains("%ED%94%84%EB%A1%9C%ED%95%84"))
-                .anyMatch(cookie -> cookie.contains("profile%2Fimage%2Fpath"));
-    }
-
-    @Test
-    @DisplayName("회원가입 시 닉네임 중복검사 하는지 테스트")
+    @DisplayName("[인수] 중복 프로필 시 409 반환")
     void testDuplicationNickName() throws Exception {
         // given
-        User tempUser = UserFixture.DEFAULT_LOGIN_USER_2.getUser(ProfileFixture.DEFAULT_PROFILE.getProfile());
+        User tempUser = UserFixture.DEFAULT_LOGIN_USER_2.getUser();
+        tempUser.regist(ProfileFixture.DEFAULT_PROFILE.getProfile());
         userRepository.save(tempUser);
-        String snsIdCookie = "qwer1234";
+        String needRegistCookie = "true";
+        String snsIdCookie = "asdf1234";
         String snsTypeCookie = "GOOGLE";
+        String emailCookie = "test@test.com";
         RegistProfileDto registProfileDto = new RegistProfileDto("leaf", "프로필", "profile/image/path");
 
         // when
-        try {
-            ResponseSpec result = webClient.post().uri("/profiles")
-                    .accept(MediaType.ALL)
-                    .cookie("snsId", snsIdCookie)
-                    .cookie("snsType", snsTypeCookie)
-                    .bodyValue(registProfileDto).exchange();
+        ResponseSpec result = webClient.post().uri("/profiles")
+                .accept(MediaType.ALL)
+                .cookie("needRegist", needRegistCookie)
+                .cookie("snsId", snsIdCookie)
+                .cookie("snsType", snsTypeCookie)
+                .cookie("email", emailCookie)
+                .bodyValue(registProfileDto).exchange();
 
-            // then
-            result.expectStatus().isEqualTo(409)
-                    .expectBody(MessageDto.class).isEqualTo(new MessageDto("중복 닉네임"));
+        // then
+        result.expectStatus().isEqualTo(409)
+                .expectBody(MessageDto.class).isEqualTo(new MessageDto("중복 닉네임"));
 
-            // remove temp user
-        } finally {
-            userRepository.delete(tempUser);
-        }
     }
 
 }

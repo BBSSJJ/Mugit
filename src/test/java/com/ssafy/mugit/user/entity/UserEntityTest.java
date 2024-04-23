@@ -49,4 +49,18 @@ class UserEntityTest {
                 .isEqualTo("DEFAULT_IMAGE_URL");
     }
 
+    @Tag("regist")
+    @Test
+    @DisplayName("[단위] 회원가입 시 유저-프로필 동시 설정됨")
+    void testRegistProfile() {
+        // given
+        User user = UserFixture.DEFAULT_LOGIN_USER.getUser();
+        Profile profile = ProfileFixture.DEFAULT_PROFILE.getProfile();
+
+        // when
+        user.regist(profile);
+
+        // then
+        assertThat(profile.getUser()).isEqualTo(user);
+    }
 }
