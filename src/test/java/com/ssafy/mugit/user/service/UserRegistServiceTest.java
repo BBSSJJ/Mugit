@@ -11,7 +11,6 @@ import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
-import com.ssafy.mugit.user.util.JwtTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -42,7 +41,7 @@ class UserRegistServiceTest {
 
     @BeforeEach
     void setUp() {
-        cookieUtil = new CookieUtil(new JwtTokenUtil());
+        cookieUtil = new CookieUtil();
         sut = new UserRegistService(userRepository, profileRepository, cookieUtil);
     }
 

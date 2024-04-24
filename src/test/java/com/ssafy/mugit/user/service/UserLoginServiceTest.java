@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.service;
 
+import com.ssafy.mugit.auth.SessionKeys;
 import com.ssafy.mugit.global.web.api.OAuthApi;
 import com.ssafy.mugit.global.web.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.Profile;
@@ -10,7 +11,7 @@ import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
-import com.ssafy.mugit.user.util.JwtTokenUtil;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -50,7 +52,7 @@ class UserLoginServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cookieUtil = new CookieUtil(new JwtTokenUtil());
+        cookieUtil = new CookieUtil();
         sut = new UserLoginService(oAuthApi, userRepository, cookieUtil);
     }
 
@@ -145,13 +147,15 @@ class UserLoginServiceTest {
         SnsType snsType = SnsType.GOOGLE;
         UserInfoDto userInfo = GoogleUserInfoFixture.DEFAULT_USER_INFO.getUserInfo();
         userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getUser(ProfileFixture.DEFAULT_PROFILE.getProfile()));
+        HttpSession session = new MockHttpSession();
 
         // when
         when(oAuthApi.getUserInfo(any(), any())).thenReturn(userInfo);
-        HttpHeaders cookieHeader = sut.loginAndGetCookieHeader(token, snsType);
+        HttpHeaders cookieHeader = sut.login(token, snsType, session);
         List<String> cookies = cookieHeader.get(HttpHeaders.SET_COOKIE);
 
         // then
         assertThat(cookies).contains(cookieUtil.getUserInfoCookie("isLogined", "true").toString());
+        assertThat(session.getAttribute(SessionKeys.LOGIN_USER_ID.getKey())).isNotNull();
     }
 }

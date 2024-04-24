@@ -16,16 +16,11 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class CookieUtil {
 
-    private final JwtTokenUtil tokenService;
-
     @Value("${cookie.domain}")
     private String domainUrl;
 
-    @Value("${cookie.period.access-token}")
+    @Value("${server.servlet.session.timeout}")
     private long periodAccessTokenCookie;
-
-    @Value("${cookie.period.refresh-token}")
-    private long periodRefreshTokenCookie;
 
     public HttpHeaders getLoginCookieHeader(User user) {
         HttpHeaders cookieHeaders = new HttpHeaders();
@@ -66,28 +61,6 @@ public class CookieUtil {
                 .domain(domainUrl)
                 .sameSite("None")
                 .secure(true)
-                .maxAge(600)
                 .build();
     }
-
-
-//    public HttpHeaders deleteRegistCookieHeader(HttpHeaders cookieHeader) {
-//        HttpHeaders headers = new HttpHeaders();
-//        List<String> cookies = cookieHeader.get(HttpHeaders.SET_COOKIE);
-//        Objects.requireNonNull(cookies).forEach(cookie -> {
-//            headers.remove(cookie);
-//        });
-//        return ;
-//    }
-//
-//    public ResponseCookie removeCookie(String cookie) {
-//        return ResponseCookie.from(key, "")
-//                .path("/")
-//                .domain(domainUrl)
-//                .sameSite("None")
-//                .secure(true)
-//                .maxAge(0)
-//                .build();
-//    }
-
 }

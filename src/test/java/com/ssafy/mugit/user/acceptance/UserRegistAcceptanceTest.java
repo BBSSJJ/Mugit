@@ -1,10 +1,7 @@
 package com.ssafy.mugit.user.acceptance;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
-import com.ssafy.mugit.global.web.GlobalExceptionHandler;
-import com.ssafy.mugit.global.web.dto.MessageDto;
-import com.ssafy.mugit.user.controller.UserRegistController;
-import com.ssafy.mugit.user.dto.request.RegistProfileDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.RegistProfileDtoFixture;
@@ -12,21 +9,25 @@ import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserRegistService;
 import com.ssafy.mugit.user.util.CookieUtil;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("regist")
-@Slf4j
 @AcceptanceTest
 public class UserRegistAcceptanceTest {
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Autowired
     UserRegistService userRegistService;
@@ -37,17 +38,11 @@ public class UserRegistAcceptanceTest {
     @Autowired
     CookieUtil cookieUtil;
 
-    WebTestClient webClient;
+    @Autowired
+    MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
-        webClient = WebTestClient
-                .bindToController(new UserRegistController(userRegistService))
-                .controllerAdvice(new GlobalExceptionHandler())
-                .configureClient()
-                .baseUrl("/api/users/")
-                .build();
-
         userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getUser());
     }
 
@@ -55,26 +50,24 @@ public class UserRegistAcceptanceTest {
     @DisplayName("[인수] 정상 회원가입 시 쿠키 설정된 Header 및 201 반환")
     void testTempUserRegist() throws Exception {
         // given
-        String needRegistCookie = "true";
-        String snsIdCookie = "asdf1234";
-        String snsTypeCookie = "GOOGLE";
-        String emailCookie = "test@test.com";
-        RegistProfileDto registProfileDto = RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto();
+        Cookie[] cookies = new Cookie[4];
+        cookies[0] = new Cookie("needRegist","true");
+        cookies[1] = new Cookie("snsId","asdf1234");
+        cookies[2] = new Cookie("snsType","GOOGLE");
+        cookies[3] = new Cookie("email","test@test.com");
+        String body = objectMapper.writeValueAsString(RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto());
 
         // when
-        ResponseSpec result = webClient.post().uri("/profiles")
-                .accept(MediaType.ALL)
-                .cookie("needRegist", needRegistCookie)
-                .cookie("snsId", snsIdCookie)
-                .cookie("snsType", snsTypeCookie)
-                .cookie("email", emailCookie)
-                .bodyValue(registProfileDto).exchange();
+        ResultActions perform = mockMvc.perform(post("/api/users/regist")
+                .cookie(cookies)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
 
         // then
-        result.expectStatus().isCreated()
-                .expectHeader().valueMatches(HttpHeaders.SET_COOKIE, cookieUtil.getUserInfoCookie("isLogined", "true").toString())
-                .expectHeader().values(HttpHeaders.SET_COOKIE, cookie -> log.info(cookie.toString()))
-                .expectBody(MessageDto.class).isEqualTo(new MessageDto("회원가입 완료"));
+        perform.andExpect(status().isCreated())
+                .andExpect(cookie().exists("isLogined"))
+                .andExpect(cookie().exists("JSESSIONID"))
+                .andExpect(content().json("{\"message\":\"회원가입 완료\"}"));
     }
 
     @Test
@@ -84,25 +77,22 @@ public class UserRegistAcceptanceTest {
         User tempUser = UserFixture.DEFAULT_LOGIN_USER_2.getUser();
         tempUser.regist(ProfileFixture.DEFAULT_PROFILE.getProfile());
         userRepository.save(tempUser);
-        String needRegistCookie = "true";
-        String snsIdCookie = "asdf1234";
-        String snsTypeCookie = "GOOGLE";
-        String emailCookie = "test@test.com";
-        RegistProfileDto registProfileDto = new RegistProfileDto("leaf", "프로필", "profile/image/path");
+        Cookie[] cookies = new Cookie[4];
+        cookies[0] = new Cookie("needRegist","true");
+        cookies[1] = new Cookie("snsId","asdf1234");
+        cookies[2] = new Cookie("snsType","GOOGLE");
+        cookies[3] = new Cookie("email","test@test.com");
+        String body = objectMapper.writeValueAsString(RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto());
 
         // when
-        ResponseSpec result = webClient.post().uri("/profiles")
-                .accept(MediaType.ALL)
-                .cookie("needRegist", needRegistCookie)
-                .cookie("snsId", snsIdCookie)
-                .cookie("snsType", snsTypeCookie)
-                .cookie("email", emailCookie)
-                .bodyValue(registProfileDto).exchange();
+        ResultActions perform = mockMvc.perform(post("/api/users/regist")
+                .cookie(cookies)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
 
         // then
-        result.expectStatus().isEqualTo(409)
-                .expectBody(MessageDto.class).isEqualTo(new MessageDto("중복 닉네임"));
-
+        perform.andExpect(status().is(409))
+                .andExpect(content().json("{\"message\":\"중복 닉네임\"}"));
     }
 
 }
