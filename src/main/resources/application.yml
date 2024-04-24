@@ -1,7 +1,4 @@
 spring:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-
   application:
     name: mugit
 
@@ -12,6 +9,9 @@ spring:
     import:
       - optional:file:env/backend/.env[.properties]
 
+  main:
+    web-application-type: servlet
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DB_DOMAIN}:${DB_PORT}/${DB_NAME}
@@ -20,30 +20,50 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 1000
 
-jwt:
-  secret-key: ${JWT_SECRET_KEY}
-  period:
-    access-token: 86400000 # 1일
-    refresh-token: 2419200000 #4주
+  security:
+    user:
+      password: ${SPRING_USER_PASSWORD}
+      name: ${SPRING_USER_NAME}
+
+  session:
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+
+  data:
+    redis:
+      host: ${SESSION_REDIS_HOST}
+      password: ${SESSION_REDIS_PASSWORD}
+      port: ${SESSION_REDIS_PORT}
 
 cookie:
-  domain: localhost
-  period:
-    access-token: 86400 # 1일
-    refresh-token: 2419200 # 4주
+  domain: ${COOKIE_DOMAIN}
 
 oauth:
   google:
     userinfo:
       url: https://www.googleapis.com/oauth2/v2/userinfo
+
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: ${SESSION_TIMEOUT}
+      cookie:
+        name: JSESSIONID
+        path: /
+        domain: ${COOKIE_DOMAIN}
+        http-only: true
+        secure: true
+        max-age: ${SESSION_TIMEOUT}
+        same-site: none
 
 logging:
   level:

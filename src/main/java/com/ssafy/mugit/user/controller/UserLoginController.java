@@ -3,6 +3,7 @@ package com.ssafy.mugit.user.controller;
 import com.ssafy.mugit.global.web.dto.MessageDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserLoginService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,10 @@ public class UserLoginController {
     @GetMapping("/login")
     public ResponseEntity<MessageDto> login(
             @RequestParam(defaultValue = "GOOGLE") SnsType snsType,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            HttpSession httpSession){
 
-        HttpHeaders cookieHeaders = userLoginService.loginAndGetCookieHeader(token, snsType);
+        HttpHeaders cookieHeaders = userLoginService.login(token, snsType, httpSession);
 
         // 회원가입 필요 시 302 반환
         if (requireNonNull(cookieHeaders.get(HttpHeaders.SET_COOKIE)).get(0).contains("needRegist=true")){

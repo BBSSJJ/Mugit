@@ -1,11 +1,13 @@
 package com.ssafy.mugit.user.service;
 
+import com.ssafy.mugit.auth.SessionKeys;
 import com.ssafy.mugit.global.web.api.OAuthApi;
 import com.ssafy.mugit.global.web.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -22,25 +24,23 @@ public class UserLoginService {
     private final CookieUtil cookieUtil;
 
     @Transactional
-    public HttpHeaders loginAndGetCookieHeader(String token, SnsType snsType) {
+    public HttpHeaders login(String token, SnsType snsType, HttpSession httpSession) {
         UserInfoDto userInfo = getUserInfo(getBearerToken(token), snsType);
         User userInDB = getUser(userInfo);
 
         // 회원가입 필요시
         if (userInDB == null) return getRegistCookie(userInfo);
 
+        httpSession.setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), userInDB.getId());
         return getLoginCookieHeader(userInDB);
     }
 
     public UserInfoDto getUserInfo(String token, SnsType snsType) {
-        System.out.println("oAuthApi = " + oAuthApi);
-        System.out.println("userInfo = " + oAuthApi.getUserInfo(token, snsType));
         return oAuthApi.getUserInfo(token, snsType);
     }
 
     public User getUser(UserInfoDto userInfo) {
-        User userInDB = userRepository.findBySnsIdAndSnsType(userInfo.getSnsId(), userInfo.getSnsType());
-        return userInDB;
+        return userRepository.findBySnsIdAndSnsType(userInfo.getSnsId(), userInfo.getSnsType());
     }
 
     public HttpHeaders getLoginCookieHeader(User user) {

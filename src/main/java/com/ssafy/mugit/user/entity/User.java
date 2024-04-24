@@ -34,8 +34,9 @@ public class User {
     private final List<Notification> notifications = new ArrayList<>();
 
     // 회원가입 시 fake user 생성자
-    public User(String snsId, String email) {
+    public User(String snsId, SnsType snsType, String email) {
         this.snsId = snsId;
+        this.snsType = snsType;
         this.email = email;
     }
 
