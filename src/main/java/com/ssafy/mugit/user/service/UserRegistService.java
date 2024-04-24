@@ -10,7 +10,7 @@ import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -23,18 +23,21 @@ public class UserRegistService {
     private final ProfileRepository profileRepository;
     private final CookieUtil cookieUtil;
 
-    public HttpHeaders registAndSetLogin(String snsId, SnsType snsType, String email, RegistProfileDto registProfileDto, HttpSession httpSession) {
+    public HttpHeaders registAndSetLogin(String snsId, SnsType snsType, String email, RegistProfileDto registProfileDto, HttpServletRequest request) {
 
         // 중복검사
         validateDuplicate(registProfileDto);
 
         // 회원가입
-        User tempUser = new User(snsId, snsType, email);
+        User registeredUser = new User(snsId, snsType, email);
         getProfile(registProfileDto);
-        regist(tempUser, getProfile(registProfileDto));
+        regist(registeredUser, getProfile(registProfileDto));
 
-        httpSession.setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), tempUser.getId());
-        return cookieUtil.getLoginCookieHeader(tempUser);
+        // 로그인
+        request.getSession().setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), registeredUser.getId());
+
+        // 로그인 쿠키 + 회원가입 쿠키 초기화
+        return cookieUtil.getLoginCookieAndRemoveRegistCookieHeader(registeredUser);
     }
 
     public void validateDuplicate(RegistProfileDto registProfileDto) {

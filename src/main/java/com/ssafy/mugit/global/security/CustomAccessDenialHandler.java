@@ -21,7 +21,7 @@ public class CustomAccessDenialHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
     private static final SecurityExceptionDto exceptionDto =
-            new SecurityExceptionDto(HttpStatus.FORBIDDEN.value(), "Security Filter 통과 실패");
+            new SecurityExceptionDto(HttpStatus.FORBIDDEN.value(), "Security Filter 통과 실패 : 권한 부족");
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,

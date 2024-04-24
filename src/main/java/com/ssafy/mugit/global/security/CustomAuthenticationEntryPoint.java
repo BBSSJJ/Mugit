@@ -21,7 +21,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private final ObjectMapper objectMapper;
 
     private static final SecurityExceptionDto exceptionDto =
-            new SecurityExceptionDto(HttpStatus.UNAUTHORIZED.value(), "Security Filter 통과 실패");
+            new SecurityExceptionDto(HttpStatus.UNAUTHORIZED.value(), "Security Filter 통과 실패 : 로그인 정보 없음");
 
     @Override
     public void commence(HttpServletRequest request,
