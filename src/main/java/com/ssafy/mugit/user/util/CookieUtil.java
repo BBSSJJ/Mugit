@@ -45,6 +45,22 @@ public class CookieUtil {
         return cookieHeaders;
     }
 
+    public HttpHeaders getLoginCookieAndRemoveRegistCookieHeader(User user) {
+        HttpHeaders cookieHeaders = new HttpHeaders();
+        Profile profile = user.getProfile();
+
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("isLogined", "true").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("nickName", profile.getNickName()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileText", profile.getProfileText()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileImage", profile.getProfileImagePath()).toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("needRegist").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("snsId").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("snsType").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("email").toString());
+
+        return cookieHeaders;
+    }
+
     public ResponseCookie getUserInfoCookie(String key, String value) {
         return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
                 .path("/")
@@ -61,6 +77,23 @@ public class CookieUtil {
                 .domain(domainUrl)
                 .sameSite("None")
                 .secure(true)
+                .build();
+    }
+
+    public HttpHeaders deleteLoginCookie() {
+        HttpHeaders cookieHeaders = new HttpHeaders();
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("isLogined").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("nickName").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("profileText").toString());
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("profileImage").toString());
+        return cookieHeaders;
+    }
+
+    private ResponseCookie deleteCookie(String name) {
+        return ResponseCookie.from(name, null)
+                .path("/")
+                .maxAge(0)
+                .domain(domainUrl)
                 .build();
     }
 }

@@ -4,7 +4,7 @@ import com.ssafy.mugit.global.web.dto.MessageDto;
 import com.ssafy.mugit.user.dto.request.RegistProfileDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserRegistService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +24,11 @@ public class UserRegistController {
             @CookieValue(value = "snsType") SnsType snsType,
             @CookieValue(value = "email") String email,
             @RequestBody RegistProfileDto registProfileDto,
-            HttpSession httpSession) {
+            HttpServletRequest request) {
 
         if (!Boolean.parseBoolean(needRegist)) return ResponseEntity.status(400).build();
 
-        HttpHeaders cookieHeader = userRegistService.registAndSetLogin(snsId, snsType, email, registProfileDto, httpSession);
+        HttpHeaders cookieHeader = userRegistService.registAndSetLogin(snsId, snsType, email, registProfileDto, request);
 
         return ResponseEntity.status(201)
                 .headers(cookieHeader)

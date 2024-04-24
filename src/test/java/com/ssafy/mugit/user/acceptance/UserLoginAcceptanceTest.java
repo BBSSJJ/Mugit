@@ -46,9 +46,6 @@ public class UserLoginAcceptanceTest {
 
     @BeforeEach
     void setup() {
-        userLoginService = new UserLoginService(oAuthApi, userRepository, cookieUtil);
-        userLoginController = new UserLoginController(userLoginService);
-
         // DB에 등록
         User user = UserFixture.DEFAULT_LOGIN_USER.getUser();
         user.regist(ProfileFixture.DEFAULT_PROFILE.getProfile());

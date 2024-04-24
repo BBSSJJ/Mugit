@@ -2,7 +2,10 @@ package com.ssafy.mugit.user.entity;
 
 import com.ssafy.mugit.user.entity.type.SnsType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
