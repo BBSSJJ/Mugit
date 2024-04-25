@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "record")
 @Getter
 @Builder
@@ -15,16 +18,19 @@ public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "record_id")
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flow_id")
-    Flow flow;
+    private Flow flow;
 
     @Column(name = "message")
-    String message;
+    private String message;
 
     @Column(name = "is_open")
     @ColumnDefault("true")
-    Boolean isOpen;
+    private Boolean isOpen;
+
+    @OneToMany(mappedBy = "record", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<RecordSource> recordSources;
 }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Entity(name = "source")
 @Getter
 @Builder
@@ -14,11 +16,11 @@ public class Source {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "source_id")
-    Long id;
+    private Long id;
 
     @Column(name = "original_name")
-    String originName;
+    private String originName;
 
     @Column(name = "uuid_name")
-    String uuidName;
+    private String uuidName;
 }
