@@ -26,6 +26,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/v2/userinfo").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/users/regist").permitAll()
+                        .requestMatchers("/api/users/*/profiles/detail").permitAll()
                         .requestMatchers("/api/users/nick/**").permitAll()
                         .requestMatchers("/api/users/mocks/**").permitAll()
                         .requestMatchers("/api/**").authenticated()

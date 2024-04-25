@@ -18,6 +18,15 @@ public class UserDtoRepositoryImpl implements UserDtoRepository {
     }
 
     @Override
+    public ResponseUserProfileDto findUserProfileDtoByUserId(Long userId) {
+        return queryFactory.select(new QResponseUserProfileDto(user, profile))
+                .from(profile)
+                .leftJoin(profile.user, user).fetchJoin()
+                .where(user.id.eq(userId))
+                .fetchOne();
+    }
+
+    @Override
     public ResponseUserProfileDto findUserProfileDtoByNickName(String nickName) {
         return queryFactory.select(new QResponseUserProfileDto(user, profile))
                 .from(profile)

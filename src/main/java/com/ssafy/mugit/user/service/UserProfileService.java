@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserProfileService {
 
     private final UserRepository userRepository;
 
-    public ResponseUserProfileDto findUserByNickName(String nickName) {
-        return userRepository.findUserProfileDtoByNickName(nickName);
+    public ResponseUserProfileDto getProfileById(Long userId) {
+        return userRepository.findUserProfileDtoByUserId(userId);
     }
 }

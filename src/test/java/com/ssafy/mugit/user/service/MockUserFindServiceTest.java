@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Tag("mock")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class MockUserServiceTest {
+class MockUserFindServiceTest {
 
     MockUserService sut;
 
