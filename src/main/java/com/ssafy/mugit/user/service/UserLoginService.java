@@ -24,31 +24,15 @@ public class UserLoginService {
     private final CookieUtil cookieUtil;
 
     @Transactional
-    public HttpHeaders login(String token, SnsType snsType, HttpSession httpSession) {
-        UserInfoDto userInfo = getUserInfo(getBearerToken(token), snsType);
-        User userInDB = getUser(userInfo);
+    public HttpHeaders login(String token, SnsType snsType, HttpSession session) {
+        UserInfoDto userInfo = oAuthApi.getUserInfo(getBearerToken(token), snsType);
+        User userInDB = userRepository.findBySnsIdAndSnsType(userInfo.getSnsId(), userInfo.getSnsType());
 
         // 회원가입 필요시
-        if (userInDB == null) return getRegistCookie(userInfo);
+        if (userInDB == null) return cookieUtil.getRegistCookieHeader(userInfo);
 
-        httpSession.setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), userInDB.getId());
-        return getLoginCookieHeader(userInDB);
-    }
-
-    public UserInfoDto getUserInfo(String token, SnsType snsType) {
-        return oAuthApi.getUserInfo(token, snsType);
-    }
-
-    public User getUser(UserInfoDto userInfo) {
-        return userRepository.findBySnsIdAndSnsType(userInfo.getSnsId(), userInfo.getSnsType());
-    }
-
-    public HttpHeaders getLoginCookieHeader(User user) {
-        return cookieUtil.getLoginCookieHeader(user);
-    }
-
-    public HttpHeaders getRegistCookie(UserInfoDto userInfo) {
-        return cookieUtil.getRegistCookieHeader(userInfo);
+        session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), userInDB.getId());
+        return cookieUtil.getLoginCookieHeader(userInDB);
     }
 
     public String getBearerToken(String token) {

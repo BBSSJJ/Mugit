@@ -21,17 +21,19 @@ public class UserLoginController {
     public ResponseEntity<MessageDto> login(
             @RequestParam(defaultValue = "GOOGLE") SnsType snsType,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            HttpSession httpSession){
+            HttpSession session){
 
-        HttpHeaders cookieHeaders = userLoginService.login(token, snsType, httpSession);
+        // 사용자 로그인 : 사용자 session 등록 및 cookie 반환
+        HttpHeaders cookieHeaders = userLoginService.login(token, snsType, session);
 
-        // 회원가입 필요 시 302 반환
+        // 회원가입 필요 시 Regist Cookie + 302 반환
         if (requireNonNull(cookieHeaders.get(HttpHeaders.SET_COOKIE)).get(0).contains("needRegist=true")){
             return ResponseEntity.status(302)
                     .headers(cookieHeaders)
                     .body(new MessageDto("회원가입 필요"));
         }
 
+        // 정상 로그인 시 Login Cookie + 200반환
         return ResponseEntity.status(200)
                 .headers(cookieHeaders)
                 .body(new MessageDto("로그인 완료"));

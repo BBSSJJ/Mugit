@@ -35,7 +35,7 @@ class SessionServiceTest {
         assertThat(session).isNotNull();
         assertThat(session.isNew()).isTrue();
         assertThat(session.getId()).isNotNull();
-        assertThat(session.getAttribute(SessionKeys.LOGIN_USER_ID.getKey())).isEqualTo(1L);
+        assertThat(session.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey())).isEqualTo(1L);
     }
     
     @Test

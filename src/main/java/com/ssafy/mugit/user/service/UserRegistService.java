@@ -34,7 +34,7 @@ public class UserRegistService {
         regist(registeredUser, getProfile(registProfileDto));
 
         // 로그인
-        request.getSession().setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), registeredUser.getId());
+        request.getSession().setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), registeredUser.getId());
 
         // 로그인 쿠키 + 회원가입 쿠키 초기화
         return cookieUtil.getLoginCookieAndRemoveRegistCookieHeader(registeredUser);

@@ -19,13 +19,13 @@ public class Profile {
     @Column(name = "profile_id")
     private Long id;
 
-    @Column(name = "nick_name")
+    @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
 
-    @Column(name = "profile_text")
+    @Column(name = "profile_text", nullable = false)
     private String profileText;
 
-    @Column(name = "profile_image_path")
+    @Column(name = "profile_image_path", nullable = false)
     private String profileImagePath;
 
     @OneToOne(fetch = FetchType.LAZY)

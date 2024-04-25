@@ -6,6 +6,7 @@ import com.ssafy.mugit.global.security.CustomUserAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,11 +26,17 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/v2/userinfo").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/users/regist").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/users/nick/**").permitAll()
+                        .requestMatchers("/api/users/mocks/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll())
 
                 // Redis Authentication Filter
                 .addFilterBefore(customUserAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
+
+                // form login
+                .formLogin(Customizer.withDefaults())
 
                 // 401 handler
                 .exceptionHandling((exceptionHandler) ->

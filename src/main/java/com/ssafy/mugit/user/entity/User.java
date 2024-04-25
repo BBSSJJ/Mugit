@@ -20,14 +20,14 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "sns_id")
+    @Column(name = "sns_id", unique = true)
     private String snsId;
 
-    @Column(name = "sns_type")
+    @Column(name = "sns_type", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private SnsType snsType;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
@@ -46,5 +46,9 @@ public class User {
     public void regist(Profile profile) {
         this.profile = profile;
         profile.regist(this);
+    }
+
+    public void makeMockSnsId() {
+        this.snsId = "Mock_" + this.id;
     }
 }

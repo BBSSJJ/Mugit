@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+    <h1>User List</h1>
+    <form id="regist-form">
+        <input id="sns-id" type="text" placeholder="sns id">
+        <input id="email" type="email" placeholder="email">
+        <button type="submit">회원가입</button>
+    </form>
+    <p th:text="${results}">users</p>
+    <table>
+        <thead>
+            <tr style="background-color: lightgrey"></tr>
+        </thead>
+        <tbody style="text-align: center">
+            <tr th:each="result : ${results}">
+                <td>
+                    <span style="font-weight: bold" th:text="${result.id}">Id</span>
+                    <span th:text="${result.snsId}">SNS Id</span>
+                    <span th:text="${result.snsType}">SNS Type</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+<script>
+    const registForm = document.getElementById("regist-form")
+    const regist = async (e) => {
+        e.preventDefault()
+        const snsId = document.getElementById("sns-id").value
+        const email = document.getElementById("email").value
+        const requestBody = {snsId, email}
+        console.log(requestBody)
+        const respones = await fetch("api/users/mocks/regist", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody)
+        })
+        const data = await respones.json()
+        console.log(respones)
+    }
+
+    registForm.addEventListener("submit", regist)
+</script>
+</html>
