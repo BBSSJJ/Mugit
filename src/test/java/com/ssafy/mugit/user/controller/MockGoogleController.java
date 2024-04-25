@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.global.web.dto.UserInfoDto;
+import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.fixture.UserInfoFixture;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

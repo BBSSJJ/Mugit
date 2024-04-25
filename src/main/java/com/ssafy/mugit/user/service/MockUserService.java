@@ -48,7 +48,8 @@ public class MockUserService {
     }
 
     public HttpHeaders login(Long userPk, HttpSession session) {
-        User userInDB = userRepository.getReferenceById(userPk);
+        User userInDB = userRepository.findById(userPk)
+                .orElseThrow(() -> new UserApiException(UserApiError.NOT_FOUND));
         session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), userInDB.getId());
         return cookieUtil.getLoginCookieHeader(userInDB);
     }

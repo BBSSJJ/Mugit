@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.fixture;
 
-import com.ssafy.mugit.global.web.dto.UserInfoDto;
+import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 
 public enum UserInfoFixture {

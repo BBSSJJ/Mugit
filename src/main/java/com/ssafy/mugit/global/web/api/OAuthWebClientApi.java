@@ -3,7 +3,7 @@ package com.ssafy.mugit.global.web.api;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.web.WebClientFactory;
-import com.ssafy.mugit.global.web.dto.UserInfoDto;
+import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

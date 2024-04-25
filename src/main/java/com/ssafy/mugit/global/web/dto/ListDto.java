@@ -1,4 +1,4 @@
-package com.ssafy.mugit.user.controller;
+package com.ssafy.mugit.global.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

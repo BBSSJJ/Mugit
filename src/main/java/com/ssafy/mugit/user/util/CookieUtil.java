@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.util;
 
-import com.ssafy.mugit.global.web.dto.UserInfoDto;
+import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import lombok.RequiredArgsConstructor;

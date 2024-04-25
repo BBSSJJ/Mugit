@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.service;
 
 import com.ssafy.mugit.auth.SessionKeys;
 import com.ssafy.mugit.global.web.api.OAuthApi;
-import com.ssafy.mugit.global.web.dto.UserInfoDto;
+import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.UserRepository;

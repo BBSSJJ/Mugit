@@ -1,4 +1,4 @@
-package com.ssafy.mugit.global.web.dto;
+package com.ssafy.mugit.user.dto;
 
 import com.ssafy.mugit.user.entity.type.SnsType;
 import lombok.AllArgsConstructor;
