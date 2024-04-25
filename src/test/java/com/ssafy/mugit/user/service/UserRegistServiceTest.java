@@ -2,12 +2,10 @@ package com.ssafy.mugit.user.service;
 
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
+import com.ssafy.mugit.global.util.AcceptanceTestExecutionListener;
 import com.ssafy.mugit.user.dto.request.RegistProfileDto;
-import com.ssafy.mugit.user.entity.Profile;
-import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.RegistProfileDtoFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
@@ -17,17 +15,16 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.http.HttpHeaders;
-
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestExecutionListeners;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag("regist")
-@DataJpaTest
+@SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 class UserRegistServiceTest {
 
     @Autowired
@@ -59,45 +56,5 @@ class UserRegistServiceTest {
         assertThat(exception).isInstanceOf(UserApiException.class);
         UserApiException userApiException = (UserApiException) exception;
         assertThat(userApiException.getUserApiError()).isEqualTo(UserApiError.DUPLICATE_NICK_NAME);
-    }
-
-    @Test
-    @DisplayName("[통합] 로그인 시 임시로 생성한 유저에 프로필 설정(repo)")
-    void testRegistProfileInTempUser() {
-        // given
-        User user = UserFixture.DEFAULT_LOGIN_USER.getUser();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getProfile();
-
-        // when
-        sut.regist(user, profile);
-        Profile profileInDB = profileRepository.getReferenceById(profile.getId());
-        User userInDB = userRepository.getReferenceById(user.getId());
-
-        // then
-        assertThat(profileInDB).isNotNull();
-        assertThat(userInDB).isNotNull();
-        assertThat(profileInDB.getUser()).isEqualTo(userInDB);
-        assertThat(userInDB.getProfile()).isEqualTo(profileInDB);
-    }
-    
-    @Test
-    @DisplayName("[통합] Header에 로그인 관련 쿠키 설정(cookie)")
-    void testSetLoginCookie() {
-        // given
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getProfile();
-        User user = UserFixture.DEFAULT_LOGIN_USER.getUser(profile);
-
-        // when
-        HttpHeaders cookieHeader = sut.getLoginCookieHeader(user);
-        List<String> cookies = cookieHeader.get(HttpHeaders.SET_COOKIE);
-
-        // then
-        assertThat(cookies).contains(cookieUtil.getUserInfoCookie("isLogined", "true").toString());
-        assertThat(cookies)
-                .anyMatch(cookie -> cookie.contains("isLogined=true"))
-                .anyMatch(cookie -> cookie.contains("nickName=leaf"))
-                .anyMatch(cookie -> cookie.contains("profileText=%ED%94%84%EB%A1%9C%ED%95%84"))
-                .anyMatch(cookie -> cookie.contains("profileImage=http%3A%2F%2Flocalhost%3A8080%2Fprofile%2F1"));
-
     }
 }

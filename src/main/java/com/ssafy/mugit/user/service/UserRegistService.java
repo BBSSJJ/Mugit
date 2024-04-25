@@ -30,8 +30,8 @@ public class UserRegistService {
 
         // 회원가입
         User registeredUser = new User(snsId, snsType, email);
-        getProfile(registProfileDto);
-        regist(registeredUser, getProfile(registProfileDto));
+        registeredUser.regist(getProfile(registProfileDto));
+        userRepository.save(registeredUser);
 
         // 로그인
         request.getSession().setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), registeredUser.getId());
@@ -45,16 +45,8 @@ public class UserRegistService {
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);
     }
 
-    public void regist(User user, Profile profile) {
-        user.regist(profile);
-        userRepository.save(user);
-    }
-
     private Profile getProfile(RegistProfileDto registProfileDto) {
         return new Profile(registProfileDto.getNickName(), registProfileDto.getProfileText(), registProfileDto.getProfileImage());
     }
 
-    public HttpHeaders getLoginCookieHeader(User user) {
-        return cookieUtil.getLoginCookieHeader(user);
-    }
 }

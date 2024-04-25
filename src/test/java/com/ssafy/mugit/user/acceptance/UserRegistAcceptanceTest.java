@@ -52,7 +52,7 @@ public class UserRegistAcceptanceTest {
         // given
         Cookie[] cookies = new Cookie[4];
         cookies[0] = new Cookie("needRegist","true");
-        cookies[1] = new Cookie("snsId","asdf1234");
+        cookies[1] = new Cookie("snsId","asdf12345");
         cookies[2] = new Cookie("snsType","GOOGLE");
         cookies[3] = new Cookie("email","test@test.com");
         String body = objectMapper.writeValueAsString(RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto());

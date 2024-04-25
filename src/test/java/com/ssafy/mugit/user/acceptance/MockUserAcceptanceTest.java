@@ -9,7 +9,6 @@ import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.MockUserService;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -40,11 +39,11 @@ public class MockUserAcceptanceTest {
     @Autowired
     UserRepository userRepository;
 
-    Cookie[] adminCookies;
 
     /**
      * 차후 관리자 기능 도입시 쿠키 획득용
-    @BeforeEach
+     Cookie[] adminCookies;
+     @BeforeEach
     void setUp() throws Exception {
         adminCookies = mockMvc.perform(get("/login")
                         .param("username", "mugit")
@@ -61,7 +60,6 @@ public class MockUserAcceptanceTest {
 
         // when
         ResultActions perform = mockMvc.perform(post("/api/users/mocks/regist")
-                .cookie(adminCookies)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));
 
@@ -81,7 +79,6 @@ public class MockUserAcceptanceTest {
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/mocks/login")
-                .cookie(adminCookies)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("pk", "1"));
 

@@ -20,8 +20,8 @@ public class UserDtoRepositoryImpl implements UserDtoRepository {
     @Override
     public ResponseUserProfileDto findUserProfileDtoByUserId(Long userId) {
         return queryFactory.select(new QResponseUserProfileDto(user, profile))
-                .from(profile)
-                .leftJoin(profile.user, user).fetchJoin()
+                .from(user)
+                .leftJoin(user.profile, profile).fetchJoin()
                 .where(user.id.eq(userId))
                 .fetchOne();
     }

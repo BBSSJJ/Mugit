@@ -5,7 +5,7 @@ import com.ssafy.mugit.user.entity.User;
 
 public enum ProfileFixture {
     DEFAULT_PROFILE(1L, "leaf", "프로필", "http://localhost:8080/profile/1"),
-    NO_INPUT_PROFILE(1L, "leaf", "", "");
+    NO_INPUT_PROFILE(2L, "leaf", "", "");
 
     private final Long id;
     private final String nickName;

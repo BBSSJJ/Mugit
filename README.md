@@ -18,3 +18,9 @@ docker run -it --name mysql_mugit_test -p 3308:3308 -e MYSQL_DATABASE=mugit_test
 docker pull redis:alpine3.19
 docker run -it --name redis_session -p 6379:6379 -d redis:alpine3.19
 ```
+
+## User Server 생성
+```docker
+docker pull 1eaf/mugit_user_server
+docker run -it -d -p 8080:8080 --name mugit_user_server 1eaf/mugit_user_server
+```

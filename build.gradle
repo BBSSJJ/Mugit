@@ -5,10 +5,15 @@ plugins {
 }
 
 group = 'com.ssafy'
-version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '17'
+}
+
+bootJar {
+	archiveBaseName = 'mugit'
+	archiveFileName = 'backend.jar'
+	archiveVersion = '0.0.1'
 }
 
 configurations {
