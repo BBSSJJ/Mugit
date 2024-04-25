@@ -1,9 +1,16 @@
-package com.ssafy.mugit.record.main.entity;
+package com.ssafy.mugit.record.entity;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "record")
+@Getter
+@Builder
+@AllArgsConstructor
 public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +25,6 @@ public class Record {
     String message;
 
     @Column(name = "is_open")
+    @ColumnDefault("true")
     Boolean isOpen;
-
 }
