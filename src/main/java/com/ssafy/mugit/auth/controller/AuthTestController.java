@@ -14,7 +14,7 @@ public class AuthTestController {
 
     @GetMapping("/jsessionid")
     public String login(HttpSession session) {
-        session.setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), 1L);
+        session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), 1L);
         return session.getId();
     }
 
@@ -25,7 +25,7 @@ public class AuthTestController {
 
     @GetMapping("/jsessionid/session")
     public String getSessionById(HttpSession session) {
-        log.info("getSessionById : {}", session.getAttribute(SessionKeys.LOGIN_USER_ID.getKey()));
+        log.info("getSessionById : {}", session.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey()));
         return "session 조회";
     }
 }

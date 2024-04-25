@@ -1,7 +1,7 @@
 package com.ssafy.mugit.auth;
 
 public enum SessionKeys {
-    LOGIN_USER_ID("userId");
+    LOGIN_USER_SESSION_ID("userId");
 
     private String key;
 

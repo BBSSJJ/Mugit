@@ -43,6 +43,14 @@ spring:
       password: ${SESSION_REDIS_PASSWORD}
       port: ${SESSION_REDIS_PORT}
 
+  web:
+    resources:
+      static-locations: file:src/main/resources/templates/
+
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+
 cookie:
   domain: ${COOKIE_DOMAIN}
 
@@ -52,6 +60,11 @@ oauth:
       url: https://www.googleapis.com/oauth2/v2/userinfo
 
 server:
+  error:
+    include-exception: true
+    include-stacktrace: always
+    whitelabel:
+      enabled: true
   port: 8080
   servlet:
     session:
@@ -68,3 +81,5 @@ server:
 logging:
   level:
     root: info
+
+

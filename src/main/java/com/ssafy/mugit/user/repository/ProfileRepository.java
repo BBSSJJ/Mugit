@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
     Boolean existsByNickName(String nickName);
-    Profile findByUser(User user);
 }
