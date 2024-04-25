@@ -2,6 +2,7 @@ package com.ssafy.mugit.record.service;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
+import com.ssafy.mugit.record.dto.RecordResponseDto;
 import com.ssafy.mugit.record.entity.Record;
 import com.ssafy.mugit.record.entity.RecordSource;
 import com.ssafy.mugit.record.entity.Source;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +76,21 @@ public class RecordService {
             }
         }
         return ids;
+    }
+
+    public RecordResponseDto selectRecord(Long recordId) {
+        Record record = recordRepository.findByIdWithSources(recordId);
+        List<Source> sources = new ArrayList<>();
+        for(RecordSource rs : record.getRecordSources()) {
+            sources.add(rs.getSource());
+        }
+        return new RecordResponseDto(record.getId(), record.getMessage(), sources);
+    }
+
+    public String deleteRecord(Long recordId) {
+        Record record = recordRepository.findById(recordId)
+                .orElseThrow(() -> new RuntimeException("Record is not existed."));
+        recordRepository.delete(record);
+        return "record delete successful";
     }
 }
