@@ -2,17 +2,15 @@ package com.ssafy.mugit.record.entity;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "record")
 @Getter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Record {
     @Id

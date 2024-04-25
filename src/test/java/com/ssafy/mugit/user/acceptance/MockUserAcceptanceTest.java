@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -45,7 +46,7 @@ public class MockUserAcceptanceTest {
      * 차후 관리자 기능 도입시 쿠키 획득용
     @BeforeEach
     void setUp() throws Exception {
-        adminCookies = mockMvc.perform(post("/login")
+        adminCookies = mockMvc.perform(get("/login")
                         .param("username", "mugit")
                         .param("password", "Mugit502!"))
                 .andReturn().getResponse().getCookies();
@@ -79,7 +80,7 @@ public class MockUserAcceptanceTest {
 
 
         // when
-        ResultActions perform = mockMvc.perform(post("/api/users/mocks/login")
+        ResultActions perform = mockMvc.perform(get("/api/users/mocks/login")
                 .cookie(adminCookies)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("pk", "1"));

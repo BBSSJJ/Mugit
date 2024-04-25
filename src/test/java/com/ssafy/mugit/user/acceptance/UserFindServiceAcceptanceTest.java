@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AcceptanceTest
-public class UserServiceAcceptanceTest {
+public class UserFindServiceAcceptanceTest {
     @Autowired
     MockMvc mockMvc;
 
