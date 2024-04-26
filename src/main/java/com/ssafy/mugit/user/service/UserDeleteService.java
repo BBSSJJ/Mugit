@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserDeleteService {
-
     private final UserRepository userRepository;
 
     public void deleteUserEntity(Long userId) {

@@ -22,6 +22,7 @@ import static java.util.Objects.requireNonNull;
 @RequestMapping("/api/users")
 @Tag(name = "User", description = "유저와 관련한 API입니다.")
 public class UserLoginController {
+
     private final UserLoginService userLoginService;
 
     @Operation(summary = "로그인", description = "SNS 로그인을 요청한다.")

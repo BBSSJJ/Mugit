@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class MockUserInfoDto {
+
     private String snsId;
     private SnsType snsType;
     private String email;
@@ -19,5 +20,4 @@ public class MockUserInfoDto {
         this.profileText = profileText;
         this.profileImagePath = profileImagePath;
     }
-
 }

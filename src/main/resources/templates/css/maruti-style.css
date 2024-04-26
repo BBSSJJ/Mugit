@@ -155,7 +155,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 #content-header {
-	position: abslute;
+	position: absolute;
     width: 100%;
     margin-top: -38px;
     z-index: 20;
@@ -514,7 +514,7 @@ ul.stat-boxes2 li:hover{  background:#f6f6f6}
 	margin-bottom: 3px;
 	margin-top: 6px;
 }
-.stat-boxes .peity_bar_good, .stat-boxes .peity_line_good, {
+.stat-boxes .peity_bar_good, .stat-boxes .peity_line_good {
 	color: #459D1C;
 }
 .stat-boxes .peity_bar_neutral, .stat-boxes .peity_line_neutral  {
@@ -1252,7 +1252,7 @@ form {
 .accordion{ margin-top:16px;}
 .fix_hgt{ height:115px; overflow-x:auto;}
 .input-append .add-on:last-child, .input-append .btn:last-child{ border-radius:0px; padding:6px 5px 2px;}
-.input-prepend input, .input-append input, .input-prepend input[class*="span"], .input-append input[class*="span"]{ width:none;}
+.input-prepend input, .input-append input, .input-prepend input[class*="span"], .input-append input[class*="span"]{ width: none;}
 .input-append input, .input-append select, .input-prepend span, .input-prepend input{ border-radius:0px!important;}
 
 /***********pop-over********************/

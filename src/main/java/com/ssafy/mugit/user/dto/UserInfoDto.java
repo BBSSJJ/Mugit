@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInfoDto {
+
     private String snsId;
     private SnsType snsType;
     private String email;

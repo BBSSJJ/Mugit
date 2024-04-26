@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class RequestModifyUserInfoDto {
+
     private String nickName;
     private String profileText;
     private String profileImagePath;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestRegistProfileDto {
+
     private String nickName;
     private String profileText;
     private String profileImagePath;

@@ -36,18 +36,20 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<Notification> notifications = new ArrayList<>();
 
-    // 회원가입 시 fake user 생성자
+    // 회원가입 시 생성자
     public User(String snsId, SnsType snsType, String email) {
         this.snsId = snsId;
         this.snsType = snsType;
         this.email = email;
     }
 
+    // User - Regist 연관관계 편의 메서드
     public void regist(Profile profile) {
         this.profile = profile;
         profile.regist(this);
     }
 
+    // 가짜 회원가입 시 SNS ID 생성
     public void makeMockSnsId() {
         this.snsId = "Mock_" + this.id;
     }

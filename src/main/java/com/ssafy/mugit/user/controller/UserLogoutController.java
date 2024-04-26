@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users/")
 @Tag(name = "User", description = "유저와 관련한 API입니다.")
 public class UserLogoutController {
+
     private final UserLogoutService userLogoutService;
 
     @Operation(summary = "로그아웃", description = "로그아웃을 요청한다.")
