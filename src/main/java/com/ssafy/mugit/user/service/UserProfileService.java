@@ -19,6 +19,8 @@ public class UserProfileService {
     private final ProfileRepository profileRepository;
 
     public ResponseUserProfileDto getProfileById(Long userId) {
+
+        // 해당 프로필 조회
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
         if (userDto == null) throw new UserApiException(UserApiError.NOT_FOUND);
         return userDto;
@@ -26,6 +28,7 @@ public class UserProfileService {
 
     @Transactional
     public void updateProfile(Long userId, RequestModifyUserInfoDto dto) {
+
         // 중복 검사
         if (profileRepository.existsByNickName(dto.getNickName()))
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);

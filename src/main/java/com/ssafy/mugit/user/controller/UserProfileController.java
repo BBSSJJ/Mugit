@@ -22,6 +22,7 @@ import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_SESSION_ID;
 @RequestMapping("/api/users")
 @Tag(name = "User", description = "유저와 관련한 API입니다.")
 public class UserProfileController {
+
     private final UserProfileService userProfileService;
 
     @Operation(summary = "프로필 정보 조회(자신)", description = "자신의 프로필 정보를 확인한다.")

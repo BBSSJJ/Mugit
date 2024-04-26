@@ -54,19 +54,6 @@ class UserLoginServiceTest {
     }
 
     @Test
-    @DisplayName("[단위] 토큰에 Bearer 빼기")
-    void testExtractBearer() {
-        // given
-        String token = "Bearer asdf1234";
-
-        // when
-        String bearerToken = sut.getBearerToken(token);
-
-        // then
-        assertThat(bearerToken).isEqualTo("asdf1234");
-    }
-
-    @Test
     @DisplayName("[통합] 로그인 완료 시 모든 로직 정상 호출 후 쿠키 반환")
     void testAllLogicCalled() {
         // given
@@ -82,7 +69,7 @@ class UserLoginServiceTest {
         List<String> cookies = cookieHeader.get(HttpHeaders.SET_COOKIE);
 
         // then
-        assertThat(cookies).contains(cookieUtil.getUserInfoCookie("isLogined", "true").toString());
+        assertThat(cookies).contains(cookieUtil.getTimeoutCookie("isLogined", "true").toString());
         assertThat(session.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey())).isNotNull();
     }
 }

@@ -52,6 +52,10 @@ public class GlobalExceptionHandler {
                 log.error(e.getMessage());
                 return new ResponseEntity<>(new MessageDto("해당 사용자 없음"), HttpStatus.NOT_FOUND);
             }
+            case NO_OAUTH_TOKEN -> {
+                log.error(e.getMessage());
+                return new ResponseEntity<>(new MessageDto("토큰 없음"), HttpStatus.UNAUTHORIZED);
+            }
             default -> {
                 return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             }

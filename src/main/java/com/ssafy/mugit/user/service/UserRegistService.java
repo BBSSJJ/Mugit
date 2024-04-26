@@ -37,10 +37,10 @@ public class UserRegistService {
         request.getSession().setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), registeredUser.getId());
 
         // 로그인 쿠키 + 회원가입 쿠키 초기화
-        return cookieUtil.getLoginCookieAndRemoveRegistCookieHeader(registeredUser);
+        return cookieUtil.getLoginCookieAndDeleteRegistCookieHeader(registeredUser);
     }
 
-    public void validateDuplicate(RequestRegistProfileDto requestRegistProfileDto) {
+    private void validateDuplicate(RequestRegistProfileDto requestRegistProfileDto) {
         if (profileRepository.existsByNickName(requestRegistProfileDto.getNickName()))
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);
     }

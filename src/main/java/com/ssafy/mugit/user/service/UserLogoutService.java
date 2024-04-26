@@ -12,7 +12,11 @@ public class UserLogoutService {
     private final CookieUtil cookieUtil;
 
     public HttpHeaders logout(HttpServletRequest request) {
+        
+        // 로그아웃 시 세션 제거
         request.getSession().invalidate();
+        
+        // 로그인 쿠키 삭제
         return cookieUtil.deleteLoginCookie();
     }
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class ResponseUserProfileDto {
+
     private Long id;
     private String snsId;
     private String snsType;

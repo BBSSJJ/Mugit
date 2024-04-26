@@ -20,80 +20,90 @@ public class CookieUtil {
     private String domainUrl;
 
     @Value("${server.servlet.session.timeout}")
-    private long periodAccessTokenCookie;
+    private long sessionTimeout;
 
     public HttpHeaders getLoginCookieHeader(User user) {
+
         HttpHeaders cookieHeaders = new HttpHeaders();
         Profile profile = user.getProfile();
 
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("isLogined", "true").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("nickName", profile.getNickName()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileText", profile.getProfileText()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileImage", profile.getProfileImagePath()).toString());
+        setTimeoutCookieHeader(cookieHeaders, "isLogined", "true");
+        setTimeoutCookieHeader(cookieHeaders, "nickName", profile.getNickName());
+        setTimeoutCookieHeader(cookieHeaders, "profileText", profile.getProfileText());
+        setTimeoutCookieHeader(cookieHeaders, "profileImage", profile.getProfileImagePath());
 
         return cookieHeaders;
     }
 
     public HttpHeaders getRegistCookieHeader(UserInfoDto userInfo) {
+
         HttpHeaders cookieHeaders = new HttpHeaders();
 
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("needRegist", "true").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("snsId", userInfo.getSnsId()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("snsType", userInfo.getSnsType().toString()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getRegistCookie("email", userInfo.getEmail()).toString());
+        setSessionCookieHeader(cookieHeaders, "needRegist", "true");
+        setSessionCookieHeader(cookieHeaders, "snsId", userInfo.getSnsId());
+        setSessionCookieHeader(cookieHeaders, "snsType", userInfo.getSnsType().toString());
+        setSessionCookieHeader(cookieHeaders, "email", userInfo.getEmail());
 
         return cookieHeaders;
     }
 
-    public HttpHeaders getLoginCookieAndRemoveRegistCookieHeader(User user) {
-        HttpHeaders cookieHeaders = new HttpHeaders();
-        Profile profile = user.getProfile();
+    public HttpHeaders getLoginCookieAndDeleteRegistCookieHeader(User user) {
 
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("isLogined", "true").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("nickName", profile.getNickName()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileText", profile.getProfileText()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, getUserInfoCookie("profileImage", profile.getProfileImagePath()).toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("needRegist").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("snsId").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("snsType").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("email").toString());
+        HttpHeaders cookieHeaders = getLoginCookieHeader(user);
+
+        // 회원가입 쿠키 삭제
+        setDeleteCookieHeader(cookieHeaders, "needRegist");
+        setDeleteCookieHeader(cookieHeaders, "snsId");
+        setDeleteCookieHeader(cookieHeaders, "snsType");
+        setDeleteCookieHeader(cookieHeaders, "email");
 
         return cookieHeaders;
-    }
-
-    public ResponseCookie getUserInfoCookie(String key, String value) {
-        return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
-                .path("/")
-                .domain(domainUrl)
-                .sameSite("None")
-                .secure(true)
-                .maxAge(periodAccessTokenCookie)
-                .build();
-    }
-
-    public ResponseCookie getRegistCookie(String key, String value) {
-        return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
-                .path("/")
-                .domain(domainUrl)
-                .sameSite("None")
-                .secure(true)
-                .build();
     }
 
     public HttpHeaders deleteLoginCookie() {
+
         HttpHeaders cookieHeaders = new HttpHeaders();
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("isLogined").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("nickName").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("profileText").toString());
-        cookieHeaders.add(HttpHeaders.SET_COOKIE, deleteCookie("profileImage").toString());
+
+        setDeleteCookieHeader(cookieHeaders, "isLogined");
+        setDeleteCookieHeader(cookieHeaders, "nickName");
+        setDeleteCookieHeader(cookieHeaders, "profileText");
+        setDeleteCookieHeader(cookieHeaders, "profileImage");
+
         return cookieHeaders;
     }
 
-    private ResponseCookie deleteCookie(String name) {
-        return ResponseCookie.from(name, null)
+    public ResponseCookie getTimeoutCookie(String key, String value) {
+        return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
+                .path("/")
+                .domain(domainUrl)
+                .sameSite("None")
+                .secure(true)
+                .maxAge(sessionTimeout)
+                .build();
+    }
+
+    public ResponseCookie getSessionCookie(String key, String value) {
+        return ResponseCookie.from(key, URLEncoder.encode(value, StandardCharsets.UTF_8))
+                .path("/")
+                .domain(domainUrl)
+                .sameSite("None")
+                .secure(true)
+                .build();
+    }
+
+    private void setTimeoutCookieHeader(HttpHeaders cookieHeaders, String key, String value) {
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getTimeoutCookie(key, value).toString());
+    }
+
+    private void setSessionCookieHeader(HttpHeaders cookieHeaders, String key, String value) {
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, getSessionCookie(key, value).toString());
+    }
+
+    private void setDeleteCookieHeader(HttpHeaders cookieHeaders, String key) {
+        cookieHeaders.add(HttpHeaders.SET_COOKIE, ResponseCookie.from(key, "")
                 .path("/")
                 .maxAge(0)
                 .domain(domainUrl)
-                .build();
+                .build().toString());
     }
 }

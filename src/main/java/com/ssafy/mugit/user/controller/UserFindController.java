@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/users")
-@Slf4j
 @Tag(name = "User Test", description = "유저 테스트를 위한 가짜 회원가입 및 로그인 API입니다.")
 public class UserFindController {
+
     private final UserFindService userFindService;
 
     @Operation(summary = "프로필 정보 조회(닉네임)", description = "해당 닉네임의 프로필 정보를 확인한다.")
@@ -34,7 +33,6 @@ public class UserFindController {
     })
     @GetMapping("/nick/{nickName}")
     public ResponseEntity<ResponseUserProfileDto> findByNick(@PathVariable(name = "nickName") String nickName) {
-        log.info("find user: {}", nickName);
         ResponseUserProfileDto dto = userFindService.findUserByNickName(nickName);
         return ResponseEntity.ok().body(dto);
     }

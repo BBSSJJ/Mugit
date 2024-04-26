@@ -41,9 +41,7 @@ public class UserRegistController {
             @CookieValue(value = "email") String email,
             @RequestBody RequestRegistProfileDto requestRegistProfileDto,
             HttpServletRequest request) {
-
-        if (!Boolean.parseBoolean(needRegist)) return ResponseEntity.status(400).build();
-
+        
         HttpHeaders cookieHeader = userRegistService.registAndSetLogin(snsId, snsType, email, requestRegistProfileDto, request);
 
         return ResponseEntity.status(201)

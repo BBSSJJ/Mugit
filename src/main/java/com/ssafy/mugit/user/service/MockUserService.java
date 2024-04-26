@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class MockUserService {
-
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final CookieUtil cookieUtil;
@@ -48,8 +47,12 @@ public class MockUserService {
     }
 
     public HttpHeaders login(Long userPk, HttpSession session) {
+
+        // DB에 해당 사용자 없을 때
         User userInDB = userRepository.findById(userPk)
                 .orElseThrow(() -> new UserApiException(UserApiError.NOT_FOUND));
+
+        // 세션에 해당 사용자 기록
         session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), userInDB.getId());
         return cookieUtil.getLoginCookieHeader(userInDB);
     }
