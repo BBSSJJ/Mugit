@@ -20,11 +20,11 @@ public enum UserFixture {
         this.email = email;
     }
 
-    public User getUser(){
+    public User getFixture(){
         return new User(id, snsId, snsType, email, null);
     }
 
-    public User getUser(Profile profile){
+    public User getFixture(Profile profile){
         return new User(id, snsId, snsType, email, profile);
     }
 

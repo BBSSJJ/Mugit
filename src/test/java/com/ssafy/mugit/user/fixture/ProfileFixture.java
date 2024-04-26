@@ -19,11 +19,11 @@ public enum ProfileFixture {
         this.profileImage = profileImage;
     }
 
-    public Profile getProfile(){
+    public Profile getFixture(){
         return new Profile(id, nickName, profileText, profileImage, null);
     }
 
-    public Profile getProfile(User user){
+    public Profile getFixture(User user){
         return new Profile(id, nickName, profileText, profileImage, user);
     }
 }

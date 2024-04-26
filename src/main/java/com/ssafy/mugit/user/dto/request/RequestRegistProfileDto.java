@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistProfileDto {
+public class RequestRegistProfileDto {
     private String nickName;
     private String profileText;
     private String profileImage;

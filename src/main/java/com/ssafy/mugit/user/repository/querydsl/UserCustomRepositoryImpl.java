@@ -3,6 +3,7 @@ package com.ssafy.mugit.user.repository.querydsl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.mugit.user.dto.response.QResponseUserProfileDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
+import com.ssafy.mugit.user.entity.Profile;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
@@ -10,10 +11,9 @@ import static com.ssafy.mugit.user.entity.QProfile.profile;
 import static com.ssafy.mugit.user.entity.QUser.user;
 
 @Repository
-public class UserDtoRepositoryImpl implements UserDtoRepository {
+public class UserCustomRepositoryImpl implements UserCustomRepository {
     private final JPAQueryFactory queryFactory;
-
-    public UserDtoRepositoryImpl(EntityManager em) {
+    public UserCustomRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 

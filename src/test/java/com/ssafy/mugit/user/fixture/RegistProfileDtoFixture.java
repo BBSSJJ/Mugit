@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.fixture;
 
-import com.ssafy.mugit.user.dto.request.RegistProfileDto;
+import com.ssafy.mugit.user.dto.request.RequestRegistProfileDto;
 
 public enum RegistProfileDtoFixture {
     DEFAULT_REGIST_PROFILE_DTO("leaf", "안녕하세요.", "https://test.com/profile/1");
@@ -16,7 +16,7 @@ public enum RegistProfileDtoFixture {
     }
 
 
-    public RegistProfileDto getRegistProfileDto() {
-        return new RegistProfileDto(nickName, profileText, profileImage);
+    public RequestRegistProfileDto getRegistProfileDto() {
+        return new RequestRegistProfileDto(nickName, profileText, profileImage);
     }
 }

@@ -43,7 +43,7 @@ public class UserRegistAcceptanceTest {
 
     @BeforeEach
     void setup() {
-        userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getUser());
+        userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getFixture());
     }
 
     @Test
@@ -74,8 +74,8 @@ public class UserRegistAcceptanceTest {
     @DisplayName("[인수] 중복 프로필 시 409 반환")
     void testDuplicationNickName() throws Exception {
         // given
-        User tempUser = UserFixture.DEFAULT_LOGIN_USER_2.getUser();
-        tempUser.regist(ProfileFixture.DEFAULT_PROFILE.getProfile());
+        User tempUser = UserFixture.DEFAULT_LOGIN_USER_2.getFixture();
+        tempUser.regist(ProfileFixture.DEFAULT_PROFILE.getFixture());
         userRepository.save(tempUser);
         Cookie[] cookies = new Cookie[4];
         cookies[0] = new Cookie("needRegist","true");

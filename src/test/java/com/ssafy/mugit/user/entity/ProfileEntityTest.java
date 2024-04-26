@@ -15,8 +15,8 @@ class ProfileEntityTest {
     @DisplayName("[단위] 입력값이 없으면 기본값이 설정됨")
     void testDefaultSetting() {
         // given
-        Profile profile = ProfileFixture.NO_INPUT_PROFILE.getProfile();
-        User user = UserFixture.DEFAULT_LOGIN_USER.getUser();
+        Profile profile = ProfileFixture.NO_INPUT_PROFILE.getFixture();
+        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
 
         // when
         user.regist(profile);

@@ -50,5 +50,11 @@ public class Profile {
     public void regist(final User user) {
         this.user = user;
     }
+
+    public void update(String nickName, String profileText, String profileImagePath) {
+        this.nickName = nickName;
+        this.profileText = !profileText.isBlank() ? profileText : DEFAULT_PROFILE_TEXT;
+        this.profileImagePath = !profileImagePath.isBlank() ? profileImagePath : DEFAULT_PROFILE_IMAGE_PATH;
+    }
 }
 

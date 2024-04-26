@@ -41,11 +41,11 @@ public class SecurityConfig {
 
                 // 401 handler
                 .exceptionHandling((exceptionHandler) ->
-                        exceptionHandler.accessDeniedHandler(customAccessDenialHandler))
+                        exceptionHandler.authenticationEntryPoint(customAuthenticationEntryPoint))
 
                 // 403 handler
                 .exceptionHandling((exceptionHandler) ->
-                        exceptionHandler.authenticationEntryPoint(customAuthenticationEntryPoint))
+                        exceptionHandler.accessDeniedHandler(customAccessDenialHandler))
 
                 // CSRF Disable
                 .csrf(AbstractHttpConfigurer::disable)

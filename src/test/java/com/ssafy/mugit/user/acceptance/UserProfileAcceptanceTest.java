@@ -3,11 +3,12 @@ package com.ssafy.mugit.user.acceptance;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.user.controller.UserProfileController;
+import com.ssafy.mugit.user.dto.request.RequestModifyUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
+import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserProfileService;
 import jakarta.servlet.http.Cookie;
@@ -21,7 +22,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DEFAULT_MODIFY_USER_INFO_DTO;
+import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
+import static com.ssafy.mugit.user.fixture.UserFixture.DEFAULT_LOGIN_USER;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,11 +49,13 @@ public class UserProfileAcceptanceTest {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @BeforeEach
     void setUp() {
-        User user = UserFixture.DEFAULT_LOGIN_USER.getUser();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getProfile();
+        User user = DEFAULT_LOGIN_USER.getFixture();
+        Profile profile = ProfileFixture.DEFAULT_PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
     }
@@ -58,8 +66,8 @@ public class UserProfileAcceptanceTest {
         // given
         String resultJson = objectMapper.writeValueAsString(
                 new ResponseUserProfileDto(
-                        UserFixture.DEFAULT_LOGIN_USER.getUser(),
-                        ProfileFixture.DEFAULT_PROFILE.getProfile()));
+                        DEFAULT_LOGIN_USER.getFixture(),
+                        ProfileFixture.DEFAULT_PROFILE.getFixture()));
         long userId = 1L;
 
         // when
@@ -80,8 +88,8 @@ public class UserProfileAcceptanceTest {
                 .andReturn().getResponse().getCookies();
         String resultJson = objectMapper.writeValueAsString(
                 new ResponseUserProfileDto(
-                        UserFixture.DEFAULT_LOGIN_USER.getUser(),
-                        ProfileFixture.DEFAULT_PROFILE.getProfile()));
+                        DEFAULT_LOGIN_USER.getFixture(),
+                        ProfileFixture.DEFAULT_PROFILE.getFixture()));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail")
@@ -105,4 +113,66 @@ public class UserProfileAcceptanceTest {
         perform.andExpect(status().isUnauthorized());
     }
 
+    @Test
+    @DisplayName("[인수] 본인 회원정보 정상 수정(200)")
+    void testModifyMyProfile() throws Exception {
+        // given
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+                .andReturn().getResponse().getCookies();
+        RequestModifyUserInfoDto dto = DEFAULT_MODIFY_USER_INFO_DTO.getFixture();
+        String body = objectMapper.writeValueAsString(dto);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/api/users/profiles")
+                .cookie(loginCookie)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        Profile profileInDB = profileRepository.findByUserId(DEFAULT_LOGIN_USER.getFixture().getId());
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(content().json("{\"message\":\"프로필 수정완료\"}"));
+        assertThat(profileInDB.getNickName()).isEqualTo(dto.getNickName());
+        assertThat(profileInDB.getProfileText()).isEqualTo(dto.getProfileText());
+        assertThat(profileInDB.getProfileImagePath()).isEqualTo(dto.getProfileImagePath());
+    }
+
+    @Test
+    @DisplayName("[인수] 로그인 없이 회원정보 수정(401)")
+    void testModifyMyProfileWithoutLogin() throws Exception {
+        // given
+        RequestModifyUserInfoDto dto = DEFAULT_MODIFY_USER_INFO_DTO.getFixture();
+        String body = objectMapper.writeValueAsString(dto);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/api/users/profiles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+
+        // then
+        perform.andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("[인수] 중복 프로필 수정(409)")
+    void testModifyDuplicateProfile() throws Exception {
+        // given
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+                .andReturn().getResponse().getCookies();
+        RequestModifyUserInfoDto dto = DUPLICATE_MODIFY_USER_INFO_DTO.getFixture();
+        String body = objectMapper.writeValueAsString(dto);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/api/users/profiles")
+                .cookie(loginCookie)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        Profile profileInDB = profileRepository.findByUserId(DEFAULT_LOGIN_USER.getFixture().getId());
+
+        // then
+        perform.andExpect(status().is(409))
+                .andExpect(content().json("{\"message\":\"중복 닉네임\"}"));
+    }
 }
