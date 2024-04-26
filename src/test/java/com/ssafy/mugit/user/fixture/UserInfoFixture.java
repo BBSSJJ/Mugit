@@ -17,7 +17,7 @@ public enum UserInfoFixture {
         this.email = email;
     }
 
-    public UserInfoDto getUserInfo() {
+    public UserInfoDto getFixture() {
         return new UserInfoDto(snsId, snsType, email);
     }
 }

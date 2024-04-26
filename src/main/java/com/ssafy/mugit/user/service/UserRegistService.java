@@ -46,7 +46,7 @@ public class UserRegistService {
     }
 
     private Profile getProfile(RequestRegistProfileDto requestRegistProfileDto) {
-        return new Profile(requestRegistProfileDto.getNickName(), requestRegistProfileDto.getProfileText(), requestRegistProfileDto.getProfileImage());
+        return new Profile(requestRegistProfileDto.getNickName(), requestRegistProfileDto.getProfileText(), requestRegistProfileDto.getProfileImagePath());
     }
 
 }

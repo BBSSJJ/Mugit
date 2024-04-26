@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class RequestRegistProfileDto {
     private String nickName;
     private String profileText;
-    private String profileImage;
+    private String profileImagePath;
 }
