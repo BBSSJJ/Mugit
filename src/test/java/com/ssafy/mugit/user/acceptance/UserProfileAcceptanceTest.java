@@ -83,8 +83,7 @@ public class UserProfileAcceptanceTest {
     @DisplayName("[인수] 로그인한 유저 본인 프로필 조회(200)")
     void testFindMyProfile() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
                 .andReturn().getResponse().getCookies();
         String resultJson = objectMapper.writeValueAsString(
                 new ResponseUserProfileDto(
