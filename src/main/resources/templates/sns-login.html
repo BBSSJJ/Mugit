@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sns Login Redirect Page</title>
+</head>
+<body>
+    <script>
+        const SERVER_BASE_URL = 'http://localhost:8080'
+        const SERVER_LOGIN_URL = '/api/users/login'
+        const hash = location.hash.substring(1)
+
+        let params = {}
+        hash.split('&').map(hk => {
+            let temp = hk.split('=')
+            params[temp[0]] = temp[1]
+        })
+
+        fetch(SERVER_BASE_URL + SERVER_LOGIN_URL, {
+            headers: {
+                "Authorization": `Bearer ${params.access_token}`
+            }
+        }).then((response) => {
+            switch (response.status) {
+                case 200: {
+                    location.href="/"
+                    break
+                }
+                case 302: {
+                    location.href="/sns-regist"
+                    break
+                }
+                default: console.log(response)
+            }
+        }).catch((e) => console.error(e))
+    </script>
+</body>
+</html>

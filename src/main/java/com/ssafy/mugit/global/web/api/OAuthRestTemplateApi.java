@@ -2,6 +2,7 @@ package com.ssafy.mugit.global.web.api;
 
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
+import com.ssafy.mugit.global.web.dto.GoogleUserInfoDto;
 import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +30,14 @@ public class OAuthRestTemplateApi implements OAuthApi {
     public UserInfoDto getUserInfo(String token, SnsType snsType) {
         switch (snsType) {
             case GOOGLE:
-                return getGoogleUserInfo(token);
+                GoogleUserInfoDto googleUserInfo = getGoogleUserInfo(token);
+                return new UserInfoDto(googleUserInfo);
             default:
                 throw new UserApiException(UserApiError.ILLEGAL_SNS_TYPE);
         }
     }
 
-    private UserInfoDto getGoogleUserInfo(String token) {
+    private GoogleUserInfoDto getGoogleUserInfo(String token) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -46,7 +48,7 @@ public class OAuthRestTemplateApi implements OAuthApi {
                 .build()
                 .toUri();
         registErrorHandler(restTemplate);
-        return restTemplate.exchange(uri, HttpMethod.GET, request, UserInfoDto.class).getBody();
+        return restTemplate.exchange(uri, HttpMethod.GET, request, GoogleUserInfoDto.class).getBody();
     }
 
     private void registErrorHandler(RestTemplate restTemplate) {

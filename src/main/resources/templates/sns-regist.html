@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sns Regist Page</title>
+</head>
+<body>
+    <h1>Regist Your Profile</h1>
+    <form id="regist-form">
+        <input id="nick" type="text" placeholder="nickName">
+        <input id="profile-text" type="text" placeholder="write my profile.">
+        <button type="submit">회원가입</button>
+    </form>
+    <script type="text/javascript">
+        const SERVER_BASE_URL = 'http://localhost:8080'
+        const SERVER_REGIST_URL = '/api/users/regist'
+        const registForm = document.getElementById("regist-form")
+        const regist = async (e) => {
+            e.preventDefault()
+            const nickName = document.getElementById("nick").value
+            const profileText = document.getElementById("profile-text").value
+            const profileImagePath = ""
+            const requestBody = {nickName, profileText, profileImagePath}
+            const response = await fetch(SERVER_BASE_URL + SERVER_REGIST_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody)
+            })
+            const status = await response.status
+            switch (status) {
+                case 201: {
+                    alert("회원가입 완료")
+                    location.href = "/"
+                    break
+                }
+                case 409: {
+                    alert("중복되는 닉네임입니다. 다른 이름을 입력하세요.")
+                    break
+                }
+                default: console.error(response.json())
+            }
+        }
+
+        registForm.addEventListener("submit", regist)
+    </script>
+</body>
+</html>
