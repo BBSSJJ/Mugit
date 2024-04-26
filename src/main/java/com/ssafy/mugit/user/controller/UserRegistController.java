@@ -1,7 +1,7 @@
 package com.ssafy.mugit.user.controller;
 
 import com.ssafy.mugit.global.web.dto.MessageDto;
-import com.ssafy.mugit.user.dto.request.RegistProfileDto;
+import com.ssafy.mugit.user.dto.request.RequestRegistProfileDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserRegistService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,12 +39,12 @@ public class UserRegistController {
             @CookieValue(value = "snsId") String snsId,
             @CookieValue(value = "snsType") SnsType snsType,
             @CookieValue(value = "email") String email,
-            @RequestBody RegistProfileDto registProfileDto,
+            @RequestBody RequestRegistProfileDto requestRegistProfileDto,
             HttpServletRequest request) {
 
         if (!Boolean.parseBoolean(needRegist)) return ResponseEntity.status(400).build();
 
-        HttpHeaders cookieHeader = userRegistService.registAndSetLogin(snsId, snsType, email, registProfileDto, request);
+        HttpHeaders cookieHeader = userRegistService.registAndSetLogin(snsId, snsType, email, requestRegistProfileDto, request);
 
         return ResponseEntity.status(201)
                 .headers(cookieHeader)

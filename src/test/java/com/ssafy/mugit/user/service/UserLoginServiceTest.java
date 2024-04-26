@@ -73,7 +73,7 @@ class UserLoginServiceTest {
         String token = "qwerasdf1234";
         SnsType snsType = SnsType.GOOGLE;
         UserInfoDto userInfo = UserInfoFixture.DEFAULT_GOOGLE_USER_INFO.getUserInfo();
-        userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getUser(ProfileFixture.DEFAULT_PROFILE.getProfile()));
+        userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getFixture(ProfileFixture.DEFAULT_PROFILE.getFixture()));
         HttpSession session = new MockHttpSession();
 
         // when

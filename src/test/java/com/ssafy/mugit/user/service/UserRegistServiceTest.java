@@ -3,7 +3,7 @@ package com.ssafy.mugit.user.service;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.util.AcceptanceTestExecutionListener;
-import com.ssafy.mugit.user.dto.request.RegistProfileDto;
+import com.ssafy.mugit.user.dto.request.RequestRegistProfileDto;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.RegistProfileDtoFixture;
 import com.ssafy.mugit.user.repository.ProfileRepository;
@@ -46,11 +46,11 @@ class UserRegistServiceTest {
     @DisplayName("[통합] 존재하는 닉네임일 경우 오류(409)")
     void testDuplicate() {
         // given
-        profileRepository.save(ProfileFixture.DEFAULT_PROFILE.getProfile());
-        RegistProfileDto registProfileDto = RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto();
+        profileRepository.save(ProfileFixture.DEFAULT_PROFILE.getFixture());
+        RequestRegistProfileDto requestRegistProfileDto = RegistProfileDtoFixture.DEFAULT_REGIST_PROFILE_DTO.getRegistProfileDto();
 
         // when
-        Exception exception = assertThrows(Exception.class, () -> sut.validateDuplicate(registProfileDto));
+        Exception exception = assertThrows(Exception.class, () -> sut.validateDuplicate(requestRegistProfileDto));
 
         // then
         assertThat(exception).isInstanceOf(UserApiException.class);

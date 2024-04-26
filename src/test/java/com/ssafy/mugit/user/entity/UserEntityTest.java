@@ -14,8 +14,8 @@ class UserEntityTest {
     @DisplayName("사용자 회원가입 테스트")
     void testUserRegist() {
         // given
-        User tempUser = UserFixture.DEFAULT_LOGIN_USER.getUser();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getProfile();
+        User tempUser = UserFixture.DEFAULT_LOGIN_USER.getFixture();
+        Profile profile = ProfileFixture.DEFAULT_PROFILE.getFixture();
 
         // when
         tempUser.regist(profile);
@@ -34,8 +34,8 @@ class UserEntityTest {
     @DisplayName("[단위] 입력값 없을 때 기본값 설정 테스트")
     void defaultSettingTest() {
         // given
-        User tempUser = UserFixture.DEFAULT_LOGIN_USER.getUser();
-        Profile profile = ProfileFixture.NO_INPUT_PROFILE.getProfile();
+        User tempUser = UserFixture.DEFAULT_LOGIN_USER.getFixture();
+        Profile profile = ProfileFixture.NO_INPUT_PROFILE.getFixture();
 
         // when
         tempUser.regist(profile);
@@ -54,8 +54,8 @@ class UserEntityTest {
     @DisplayName("[단위] 회원가입 시 유저-프로필 동시 설정됨")
     void testRegistProfile() {
         // given
-        User user = UserFixture.DEFAULT_LOGIN_USER.getUser();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getProfile();
+        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
+        Profile profile = ProfileFixture.DEFAULT_PROFILE.getFixture();
 
         // when
         user.regist(profile);
