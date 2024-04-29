@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.service;
 
-import com.ssafy.mugit.auth.SessionKeys;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.web.api.OAuthApi;
@@ -16,6 +16,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
+
 @Service
 @RequiredArgsConstructor
 public class UserLoginService {
@@ -26,7 +28,7 @@ public class UserLoginService {
     private final CookieUtil cookieUtil;
 
     @Transactional
-    public HttpHeaders login(String token, SnsType snsType, HttpSession session) {
+    public HttpHeaders login(String token, SnsType snsType, HttpSession session) throws JsonProcessingException {
 
         // 토큰 없을 때 오류처리
         if (token == null || token.isEmpty()) throw new UserApiException(UserApiError.NO_OAUTH_TOKEN);
@@ -39,7 +41,9 @@ public class UserLoginService {
         if (userInDB == null) return cookieUtil.getRegistCookieHeader(userInfo);
 
         // 로그인 시 세션 설정
-        session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), userInDB.getId());
+        UserRedisDto userRedisDto = new UserRedisDto(userInDB);
+        session.setAttribute(LOGIN_USER_KEY.getKey(), userRedisDto);
+
         return cookieUtil.getLoginCookieHeader(userInDB);
     }
 

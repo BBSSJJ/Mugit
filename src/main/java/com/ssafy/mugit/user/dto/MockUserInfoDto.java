@@ -2,8 +2,10 @@ package com.ssafy.mugit.user.dto;
 
 import com.ssafy.mugit.user.entity.type.SnsType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MockUserInfoDto {
 
     private String snsId;

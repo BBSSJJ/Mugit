@@ -56,6 +56,10 @@ public class GlobalExceptionHandler {
                 log.error(e.getMessage());
                 return new ResponseEntity<>(new MessageDto("토큰 없음"), HttpStatus.UNAUTHORIZED);
             }
+            case NOT_AUTHORIZED_USER -> {
+                log.error(e.getMessage());
+                return new ResponseEntity<>(new MessageDto("인증 필요"), HttpStatus.UNAUTHORIZED);
+            }
             default -> {
                 return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             }

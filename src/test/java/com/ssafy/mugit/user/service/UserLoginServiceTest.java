@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.auth.SessionKeys;
 import com.ssafy.mugit.global.web.api.OAuthApi;
 import com.ssafy.mugit.user.dto.UserInfoDto;
@@ -55,7 +56,7 @@ class UserLoginServiceTest {
 
     @Test
     @DisplayName("[통합] 로그인 완료 시 모든 로직 정상 호출 후 쿠키 반환")
-    void testAllLogicCalled() {
+    void testAllLogicCalled() throws JsonProcessingException {
         // given
         String token = "qwerasdf1234";
         SnsType snsType = SnsType.GOOGLE;
@@ -70,6 +71,6 @@ class UserLoginServiceTest {
 
         // then
         assertThat(cookies).contains(cookieUtil.getTimeoutCookie("isLogined", "true").toString());
-        assertThat(session.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey())).isNotNull();
+        assertThat(session.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey())).isNotNull();
     }
 }

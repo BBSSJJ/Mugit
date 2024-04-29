@@ -101,7 +101,7 @@ public class UserProfileAcceptanceTest {
     }
 
     @Test
-    @DisplayName("[인수] 로그인 안한 유저 본인 프로필 조회(403)")
+    @DisplayName("[인수] 로그인 안한 유저 본인 프로필 조회(401)")
     void testFindMyProfileWithoutLogin() throws Exception {
         // given
         // when

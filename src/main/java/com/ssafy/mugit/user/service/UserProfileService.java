@@ -29,6 +29,10 @@ public class UserProfileService {
     @Transactional
     public void updateProfile(Long userId, RequestModifyUserInfoDto dto) {
 
+        // pk 검사
+        System.out.println("userId = " + userId);
+        if (userId == null) throw new UserApiException(UserApiError.NOT_AUTHORIZED_USER);
+
         // 중복 검사
         if (profileRepository.existsByNickName(dto.getNickName()))
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);

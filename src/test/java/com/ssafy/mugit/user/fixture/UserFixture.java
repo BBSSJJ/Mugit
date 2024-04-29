@@ -2,6 +2,7 @@ package com.ssafy.mugit.user.fixture;
 
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
+import com.ssafy.mugit.user.entity.type.RoleType;
 import com.ssafy.mugit.user.entity.type.SnsType;
 
 public enum UserFixture {
@@ -21,11 +22,11 @@ public enum UserFixture {
     }
 
     public User getFixture(){
-        return new User(id, snsId, snsType, email, null);
+        return new User(id, snsId, email, snsType, RoleType.ROLE_USER, null);
     }
 
     public User getFixture(Profile profile){
-        return new User(id, snsId, snsType, email, profile);
+        return new User(id, snsId, email, snsType, RoleType.ROLE_USER, profile);
     }
 
 }

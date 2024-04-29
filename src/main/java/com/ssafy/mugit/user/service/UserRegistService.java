@@ -29,12 +29,12 @@ public class UserRegistService {
         validateDuplicate(requestRegistProfileDto);
 
         // 회원가입
-        User registeredUser = new User(snsId, snsType, email);
+        User registeredUser = new User(snsId, email, snsType);
         registeredUser.regist(getProfile(requestRegistProfileDto));
         userRepository.save(registeredUser);
 
         // 로그인
-        request.getSession().setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), registeredUser.getId());
+        request.getSession().setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), registeredUser.getId());
 
         // 로그인 쿠키 + 회원가입 쿠키 초기화
         return cookieUtil.getLoginCookieAndDeleteRegistCookieHeader(registeredUser);

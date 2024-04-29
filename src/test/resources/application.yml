@@ -39,9 +39,13 @@ spring:
 
   data:
     redis:
-      host: ${SESSION_REDIS_HOST}
-      password: ${SESSION_REDIS_PASSWORD}
-      port: ${SESSION_REDIS_PORT}
+      host: ${TEST_SESSION_REDIS_HOST}
+      password: ${TEST_SESSION_REDIS_PASSWORD}
+      port: ${TEST_SESSION_REDIS_PORT}
+      timeout: 30000
+      database: 0
+      ssl:
+        enabled: true
 
 cookie:
   domain: ${COOKIE_DOMAIN}

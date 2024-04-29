@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.web.dto.MessageDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserLoginService;
@@ -38,7 +39,7 @@ public class UserLoginController {
     public ResponseEntity<MessageDto> login(
             @RequestParam(defaultValue = "GOOGLE") SnsType snsType,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            HttpSession session) {
+            HttpSession session) throws JsonProcessingException {
 
         // 사용자 로그인 : 사용자 session 등록 및 cookie 반환
         HttpHeaders cookieHeaders = userLoginService.login(token, snsType, session);
