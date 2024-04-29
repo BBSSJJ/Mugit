@@ -1,5 +1,7 @@
 package com.ssafy.mugit.global.util;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
@@ -12,6 +14,7 @@ public class AcceptanceTestExecutionListener extends AbstractTestExecutionListen
     public void afterTestMethod(final TestContext testContext) {
         final JdbcTemplate jdbcTemplate = getJdbcTemplate(testContext);
         final List<String> truncateQueries = getTruncateQueries(jdbcTemplate);
+
         truncateTables(jdbcTemplate, truncateQueries);
     }
 

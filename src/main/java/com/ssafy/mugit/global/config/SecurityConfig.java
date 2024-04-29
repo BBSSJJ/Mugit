@@ -1,13 +1,9 @@
 package com.ssafy.mugit.global.config;
 
-import com.ssafy.mugit.global.security.CustomAccessDenialHandler;
-import com.ssafy.mugit.global.security.CustomAuthenticationEntryPoint;
-import com.ssafy.mugit.global.security.CustomAuthorizeHttpRequestsFilter;
-import com.ssafy.mugit.global.security.CustomUserAuthenticationFilter;
+import com.ssafy.mugit.global.security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,10 +12,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final CustomAuthorizeHttpRequestsFilter customAuthorizeHttpRequestsFilter;
+    private final CustomOncePerRequestFilter customOncePerRequestFilter;
+    private final CustomAdminLoginHandler customAdminLoginHandler;
+    private final CustomAdminLoginFailureHandler customAdminLoginFailureHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDenialHandler customAccessDenialHandler;
-    private final CustomUserAuthenticationFilter customUserAuthenticationFilter;
-    private final CustomAuthorizeHttpRequestsFilter customAuthorizeHttpRequestsFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,12 +26,16 @@ public class SecurityConfig {
                 // Authorize Filter
                 .authorizeHttpRequests(customAuthorizeHttpRequestsFilter.regist())
 
-                // Redis Authentication Filter
-                .addFilterBefore(customUserAuthenticationFilter,
+                // Make Authentication Object by Redis Session
+                .addFilterBefore(customOncePerRequestFilter,
                         UsernamePasswordAuthenticationFilter.class)
 
                 // form login
-                .formLogin(Customizer.withDefaults())
+                .formLogin((loginConfigurer) ->{
+                            loginConfigurer.successHandler(customAdminLoginHandler);
+                            loginConfigurer.failureHandler(customAdminLoginFailureHandler);
+                        }
+                    )
 
                 // 401 handler
                 .exceptionHandling((exceptionHandler) ->

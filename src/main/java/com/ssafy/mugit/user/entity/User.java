@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.entity;
 
+import com.ssafy.mugit.user.entity.type.RoleType;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_USER;
 
 @Entity(name = "users")
 @Getter
@@ -23,12 +26,16 @@ public class User {
     @Column(name = "sns_id", unique = true)
     private String snsId;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "sns_type", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private SnsType snsType;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "role", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private RoleType role;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Profile profile;
@@ -37,10 +44,11 @@ public class User {
     private final List<Notification> notifications = new ArrayList<>();
 
     // 회원가입 시 생성자
-    public User(String snsId, SnsType snsType, String email) {
+    public User(String snsId, String email, SnsType snsType) {
         this.snsId = snsId;
         this.snsType = snsType;
         this.email = email;
+        this.role = ROLE_USER;
     }
 
     // User - Regist 연관관계 편의 메서드

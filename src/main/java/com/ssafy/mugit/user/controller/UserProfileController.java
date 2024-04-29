@@ -1,9 +1,12 @@
 package com.ssafy.mugit.user.controller;
 
+import com.ssafy.mugit.global.exception.UserApiException;
+import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.web.dto.MessageDto;
 import com.ssafy.mugit.user.dto.request.RequestModifyUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.service.UserProfileService;
+import com.ssafy.mugit.user.service.UserRedisDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_SESSION_ID;
+import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_ID;
+import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,9 +38,11 @@ public class UserProfileController {
     })
     @GetMapping("/profiles/detail")
     public ResponseEntity<ResponseUserProfileDto> getMyProfile(HttpSession session) {
-        Long myId = (Long) session.getAttribute(LOGIN_USER_SESSION_ID.getKey());
+
+        UserRedisDto userInSession = (UserRedisDto) session.getAttribute(LOGIN_USER_KEY.getKey());
+
         return ResponseEntity.ok()
-                .body(userProfileService.getProfileById(myId));
+                .body(userProfileService.getProfileById(userInSession.getId()));
     }
 
     @Operation(summary = "프로필 정보 조회(타인)", description = "타인의 프로필 정보를 확인한다.")
@@ -67,8 +73,8 @@ public class UserProfileController {
             @RequestBody RequestModifyUserInfoDto dto) {
 
         // 사용자 id 찾아서 프로필 업데이트
-        Long userId = (Long) session.getAttribute(LOGIN_USER_SESSION_ID.getKey());
-        userProfileService.updateProfile(userId, dto);
+        UserRedisDto userInSession = (UserRedisDto) session.getAttribute(LOGIN_USER_KEY.getKey());
+        userProfileService.updateProfile(userInSession.getId(), dto);
 
         return ResponseEntity.ok().body(new MessageDto("프로필 수정완료"));
     }

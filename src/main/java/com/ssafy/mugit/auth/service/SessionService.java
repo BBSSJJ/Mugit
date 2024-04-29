@@ -10,13 +10,13 @@ public class SessionService {
 
     public HttpSession createSession(HttpServletRequest request, Long id) {
         HttpSession session = request.getSession();
-        session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), id);
+        session.setAttribute(SessionKeys.LOGIN_USER_ID.getKey(), id);
         return session;
     }
 
     public Long getSession(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        return (Long) session.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey());
+        return (Long) session.getAttribute(SessionKeys.LOGIN_USER_ID.getKey());
     }
 
 }

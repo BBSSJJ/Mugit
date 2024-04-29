@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.service;
 
-import com.ssafy.mugit.auth.SessionKeys;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.user.dto.MockUserInfoDto;
@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
+
 @Service
 @RequiredArgsConstructor
 public class MockUserService {
@@ -28,7 +30,7 @@ public class MockUserService {
         validateDuplicate(userInfo);
 
         // 엔티티 생성
-        User user = new User(null, userInfo.getSnsType(), userInfo.getEmail());
+        User user = new User(null, userInfo.getEmail(), userInfo.getSnsType());
         Profile profile = new Profile(userInfo.getNickName(), userInfo.getProfileText(), userInfo.getProfileImagePath());
         user.regist(profile);
 
@@ -46,14 +48,15 @@ public class MockUserService {
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);
     }
 
-    public HttpHeaders login(Long userPk, HttpSession session) {
+    public HttpHeaders login(Long userPk, HttpSession session) throws JsonProcessingException {
 
         // DB에 해당 사용자 없을 때
         User userInDB = userRepository.findById(userPk)
                 .orElseThrow(() -> new UserApiException(UserApiError.NOT_FOUND));
 
         // 세션에 해당 사용자 기록
-        session.setAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey(), userInDB.getId());
+        UserRedisDto userRedisDto = new UserRedisDto(userInDB);
+        session.setAttribute(LOGIN_USER_KEY.getKey(), userRedisDto);
         return cookieUtil.getLoginCookieHeader(userInDB);
     }
 }
