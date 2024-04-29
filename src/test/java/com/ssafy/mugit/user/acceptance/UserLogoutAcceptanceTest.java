@@ -69,7 +69,6 @@ public class UserLogoutAcceptanceTest {
                             .andDo(handler2 -> {
                                 Cookie[] cookies2 = new Cookie[4];
                                 for (Cookie cookie : handler2.getResponse().getCookies()) {
-                                    System.out.println("cookie = " + cookie);
                                     if ("isLogined".equals(cookie.getName())) cookies2[0] = cookie;
                                     if ("nickName".equals(cookie.getName())) cookies2[1] = cookie;
                                     if ("profileText".equals(cookie.getName())) cookies2[2] = cookie;

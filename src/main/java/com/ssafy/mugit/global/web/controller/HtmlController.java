@@ -35,7 +35,6 @@ public class HtmlController {
     String manageUser(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
-        System.out.println("users = " + users);
         return "/manage-user";
     }
 }
