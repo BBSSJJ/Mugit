@@ -8,6 +8,8 @@ spring:
   config:
     import:
       - optional:file:env/backend/.env[.properties]
+      - optional:file:/mugit/yaml/config/application.properties
+
 
   main:
     web-application-type: servlet

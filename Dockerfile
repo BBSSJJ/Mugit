@@ -5,10 +5,9 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # 애플리케이션의 빌드 결과물 복사
-COPY ./build/libs/backend.jar /app/
+ARG JAR_FILE=build/libs/*.jar
 
-# env 파일 복사
-COPY ./env/backend/.env /app/env/backend/.env
+COPY ${JAR_FILE} /app/
 
 # 애플리케이션 실행
 CMD ["java", "-jar", "backend.jar"]
