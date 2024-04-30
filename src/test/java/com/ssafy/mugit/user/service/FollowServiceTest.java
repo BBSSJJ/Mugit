@@ -201,4 +201,25 @@ class FollowServiceTest {
         UserApiException apiException = (UserApiException) exception;
         assertThat(apiException.getUserApiError()).isEqualTo(NOT_EXIST_FOLLOW);
     }
+
+    @Test
+    @DisplayName("[통합] 프로필 팔로우여부 확인")
+    void testFollowProfile() {
+        // given
+        User me = USER.getFixture(PROFILE.getFixture());
+        User follower = USER_2.getFixture(PROFILE_2.getFixture());
+        User following = USER_3.getFixture(PROFILE_3.getFixture());
+
+        userRepository.save(following);
+        sut.follow(me.getId(), follower.getId());
+        sut.follow(following.getId(), me.getId());
+
+        // when
+        Boolean isFollower = sut.checkIsFollower(me.getId(), follower.getId());
+        Boolean isFollowing = sut.checkIsFollower(me.getId(), following.getId());
+
+        // then
+        assertThat(isFollower).isTrue();
+        assertThat(isFollowing).isFalse();
+    }
 }

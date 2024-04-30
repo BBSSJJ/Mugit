@@ -1,10 +1,10 @@
 package com.ssafy.mugit.user.controller;
 
 import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import com.ssafy.mugit.user.dto.request.RequestModifyUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.service.UserProfileService;
-import com.ssafy.mugit.user.dto.UserSessionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,8 +39,17 @@ public class UserProfileController {
     @Operation(summary = "프로필 정보 조회(타인)", description = "타인의 프로필 정보를 확인한다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "유저 + 프로필 정보", content = @Content(schema = @Schema(implementation = ResponseUserProfileDto.class))), @ApiResponse(responseCode = "404", description = "해당 사용자 없음", content = @Content(schema = @Schema(implementation = MessageDto.class)))})
     @GetMapping("/{userId}/profiles/detail")
-    public ResponseEntity<ResponseUserProfileDto> getUserProfile(@PathVariable Long userId) {
-        return ResponseEntity.ok().body(userProfileService.getProfileById(userId));
+    public ResponseEntity<ResponseUserProfileDto> getUserProfile(
+            HttpSession session,
+            @PathVariable Long userId) {
+
+        // 로그인 했을때와 안했을때로 구분
+        Object userInSession = session.getAttribute(LOGIN_USER_KEY.getKey());
+        if (userInSession == null) {
+            return ResponseEntity.ok().body(userProfileService.getProfileById(userId));
+        } else {
+            return ResponseEntity.ok().body(userProfileService.getProfileById(((UserSessionDto) userInSession).getId(), userId));
+        }
     }
 
     @Operation(summary = "기본 회원정보 수정", description = "자신의 프로필을 수정한다.")
