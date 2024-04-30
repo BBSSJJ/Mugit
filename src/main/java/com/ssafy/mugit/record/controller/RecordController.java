@@ -41,7 +41,7 @@ public class RecordController {
 
     @GetMapping("/validate/{flowId}")
     public ResponseEntity<?> validateFlowId(@PathVariable Long flowId, HttpSession httpSession) {
-        Long userId = (Long) httpSession.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey());
+        Long userId = (Long) httpSession.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey());
         recordService.validate(userId, flowId);
         return new ResponseEntity<>("validated", HttpStatus.OK);
     }
