@@ -16,6 +16,8 @@ public class CustomCorsConfiguration {
         configuration.addAllowedOrigin("https://mugit.site");
         // allow local
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:8080");
+
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
