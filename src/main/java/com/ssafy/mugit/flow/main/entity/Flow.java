@@ -2,11 +2,13 @@ package com.ssafy.mugit.flow.main.entity;
 
 import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "flow")
+@Getter
 public class Flow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

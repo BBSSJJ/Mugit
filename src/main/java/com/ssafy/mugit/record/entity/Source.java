@@ -2,9 +2,7 @@ package com.ssafy.mugit.record.entity;
 
 import com.ssafy.mugit.record.entity.Record;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Source {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
