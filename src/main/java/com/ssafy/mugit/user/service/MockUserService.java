@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.user.dto.MockUserInfoDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
+import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
@@ -22,6 +24,7 @@ import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
 public class MockUserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
+    private final FollowRepository followRepository;
     private final CookieUtil cookieUtil;
 
     @Transactional
@@ -55,8 +58,10 @@ public class MockUserService {
                 .orElseThrow(() -> new UserApiException(UserApiError.NOT_FOUND));
 
         // 세션에 해당 사용자 기록
-        UserRedisDto userRedisDto = new UserRedisDto(userInDB);
-        session.setAttribute(LOGIN_USER_KEY.getKey(), userRedisDto);
-        return cookieUtil.getLoginCookieHeader(userInDB);
+        UserSessionDto userSessionDto = new UserSessionDto(userInDB);
+        session.setAttribute(LOGIN_USER_KEY.getKey(), userSessionDto);
+        return cookieUtil.getLoginCookieHeader(userInDB,
+                followRepository.countMyFollowers(userInDB.getId()),
+                followRepository.countMyFollowings(userInDB.getId()));
     }
 }

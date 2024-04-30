@@ -2,13 +2,10 @@ package com.ssafy.mugit.user.acceptance;
 
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.global.web.api.OAuthApi;
-import com.ssafy.mugit.user.controller.UserLoginController;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
-import com.ssafy.mugit.user.service.UserLoginService;
-import com.ssafy.mugit.user.util.CookieUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -33,22 +30,13 @@ public class UserLoginAcceptanceTest {
     UserRepository userRepository;
 
     @Autowired
-    CookieUtil cookieUtil;
-
-    @Autowired
-    UserLoginService userLoginService;
-
-    @Autowired
-    UserLoginController userLoginController;
-
-    @Autowired
     MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         // DB에 등록
-        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
-        user.regist(ProfileFixture.DEFAULT_PROFILE.getFixture());
+        User user = UserFixture.USER.getFixture();
+        user.regist(ProfileFixture.PROFILE.getFixture());
         userRepository.save(user);
     }
 

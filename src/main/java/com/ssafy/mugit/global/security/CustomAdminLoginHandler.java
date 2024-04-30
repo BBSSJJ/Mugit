@@ -2,7 +2,7 @@ package com.ssafy.mugit.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.web.dto.MessageDto;
-import com.ssafy.mugit.user.service.UserRedisDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,8 +35,8 @@ public class CustomAdminLoginHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 세션 설정
-        UserRedisDto userRedisDto = new UserRedisDto(-1L, "admin@mugit.site", ROLE_ADMIN);
-        request.getSession().setAttribute(LOGIN_USER_KEY.getKey(), userRedisDto);
+        UserSessionDto userSessionDto = new UserSessionDto(-1L, "admin@mugit.site", ROLE_ADMIN);
+        request.getSession().setAttribute(LOGIN_USER_KEY.getKey(), userSessionDto);
 
         // 200 응답
         response.setStatus(200);

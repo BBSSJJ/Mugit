@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.controller;
 
 import com.ssafy.mugit.global.web.dto.MessageDto;
 import com.ssafy.mugit.user.service.UserDeleteService;
-import com.ssafy.mugit.user.service.UserRedisDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_ID;
 import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
 
 @RestController
@@ -37,7 +36,7 @@ public class UserDeleteController {
     @DeleteMapping
     ResponseEntity<MessageDto> delete(HttpSession session) {
 
-        UserRedisDto userInSession = (UserRedisDto) session.getAttribute(LOGIN_USER_KEY.getKey());
+        UserSessionDto userInSession = (UserSessionDto) session.getAttribute(LOGIN_USER_KEY.getKey());
         userDeleteService.deleteUserEntity(userInSession.getId());
 
         return ResponseEntity.ok().body(new MessageDto("회원탈퇴 완료"));

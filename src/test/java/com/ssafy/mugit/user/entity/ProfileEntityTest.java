@@ -16,7 +16,7 @@ class ProfileEntityTest {
     void testDefaultSetting() {
         // given
         Profile profile = ProfileFixture.NO_INPUT_PROFILE.getFixture();
-        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
+        User user = UserFixture.USER.getFixture();
 
         // when
         user.regist(profile);

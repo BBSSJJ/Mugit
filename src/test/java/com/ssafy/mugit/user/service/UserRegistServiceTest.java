@@ -1,6 +1,7 @@
 package com.ssafy.mugit.user.service;
 
 import com.ssafy.mugit.global.util.AcceptanceTestExecutionListener;
+import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
@@ -19,8 +20,12 @@ class UserRegistServiceTest {
 
     @Autowired
     ProfileRepository profileRepository;
+
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    FollowRepository followRepository;
 
     CookieUtil cookieUtil;
 
@@ -29,6 +34,6 @@ class UserRegistServiceTest {
     @BeforeEach
     void setUp() {
         cookieUtil = new CookieUtil();
-        sut = new UserRegistService(userRepository, profileRepository, cookieUtil);
+        sut = new UserRegistService(userRepository, profileRepository, followRepository, cookieUtil);
     }
 }

@@ -31,39 +31,19 @@ public class GlobalExceptionHandler {
     // UserApiException 처리
     @ExceptionHandler(UserApiException.class)
     protected ResponseEntity<MessageDto> handleUserApiException(UserApiException e) {
-        switch (e.getUserApiError()) {
-            case ILLEGAL_SNS_TYPE -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("잘못된 Sns Type 입력"), HttpStatus.BAD_REQUEST);
-            }
-            case UNAUTHORIZED_BY_OAUTH -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("OAuth 인증 실패"), HttpStatus.UNAUTHORIZED);
-            }
-            case DUPLICATE_NICK_NAME -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("중복 닉네임"), HttpStatus.CONFLICT);
-            }
-            case NOT_REGISTERED_USER -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("회원가입 필요"), HttpStatus.FOUND);
-            }
-            case NOT_FOUND -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("해당 사용자 없음"), HttpStatus.NOT_FOUND);
-            }
-            case NO_OAUTH_TOKEN -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("토큰 없음"), HttpStatus.UNAUTHORIZED);
-            }
-            case NOT_AUTHORIZED_USER -> {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(new MessageDto("인증 필요"), HttpStatus.UNAUTHORIZED);
-            }
-            default -> {
-                return new ResponseEntity<>(new MessageDto(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+        log.error(e.getMessage());
+        return switch (e.getUserApiError()) {
+            case ILLEGAL_SNS_TYPE -> new ResponseEntity<>(new MessageDto("잘못된 Sns Type 입력"), HttpStatus.BAD_REQUEST);
+            case UNAUTHORIZED_BY_OAUTH -> new ResponseEntity<>(new MessageDto("OAuth 인증 실패"), HttpStatus.UNAUTHORIZED);
+            case DUPLICATE_NICK_NAME -> new ResponseEntity<>(new MessageDto("중복 닉네임"), HttpStatus.CONFLICT);
+            case NOT_REGISTERED_USER -> new ResponseEntity<>(new MessageDto("회원가입 필요"), HttpStatus.FOUND);
+            case NOT_FOUND -> new ResponseEntity<>(new MessageDto("해당 사용자 없음"), HttpStatus.NOT_FOUND);
+            case NO_OAUTH_TOKEN -> new ResponseEntity<>(new MessageDto("토큰 없음"), HttpStatus.UNAUTHORIZED);
+            case NOT_AUTHORIZED_USER -> new ResponseEntity<>(new MessageDto("인증 필요"), HttpStatus.UNAUTHORIZED);
+            case SELF_FOLLOW -> new ResponseEntity<>(new MessageDto("본인 팔로우"), HttpStatus.BAD_REQUEST);
+            case ALREADY_FOLLOW -> new ResponseEntity<>(new MessageDto("이미 팔로우"), HttpStatus.CONFLICT);
+            case NOT_EXIST_FOLLOW -> new ResponseEntity<>(new MessageDto("이미 삭제된 팔로우"), HttpStatus.NO_CONTENT);
+        };
     }
 
     // [500]서버 오류

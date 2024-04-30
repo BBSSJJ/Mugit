@@ -21,8 +21,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.DEFAULT_PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.DEFAULT_LOGIN_USER;
+import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -50,8 +50,8 @@ class UserProfileServiceTest {
     @DisplayName("[통합] 유저 PK로 ResponseProfileDto 생성")
     void testCreateUserProfileDto() {
         // given
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        Profile profile = DEFAULT_PROFILE.getFixture();
+        User user = USER.getFixture();
+        Profile profile = PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
 
@@ -72,8 +72,8 @@ class UserProfileServiceTest {
     @DisplayName("[통합] ProfileRepository 활용 Profile 정보 수정")
     void testModifyProfile() {
         // given
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        Profile profile = DEFAULT_PROFILE.getFixture();
+        User user = USER.getFixture();
+        Profile profile = PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
 
@@ -97,8 +97,8 @@ class UserProfileServiceTest {
     @DisplayName("[통합] 중복 프로필 수정 시 오류")
     void testModifyProfileDuplication() {
         // given
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        Profile profile = DEFAULT_PROFILE.getFixture();
+        User user = USER.getFixture();
+        Profile profile = PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
 

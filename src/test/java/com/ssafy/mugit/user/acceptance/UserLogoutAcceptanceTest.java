@@ -45,8 +45,8 @@ public class UserLogoutAcceptanceTest {
     @BeforeEach
     void setup() {
         // DB에 등록
-        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
-        user.regist(ProfileFixture.DEFAULT_PROFILE.getFixture());
+        User user = UserFixture.USER.getFixture();
+        user.regist(ProfileFixture.PROFILE.getFixture());
         userRepository.save(user);
     }
 

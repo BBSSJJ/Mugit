@@ -3,7 +3,7 @@ package com.ssafy.mugit.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.user.entity.type.RoleType;
-import com.ssafy.mugit.user.service.UserRedisDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
         // 로그인한 사용자 권한 설정
         else {
-            UserRedisDto user = (UserRedisDto) userInSession;
+            UserSessionDto user = (UserSessionDto) userInSession;
             log.info("request user session info : {}", user);
 
             Long id = user.getId();

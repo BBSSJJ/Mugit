@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DEFAULT_MODIFY_USER_INFO_DTO;
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
-import static com.ssafy.mugit.user.fixture.UserFixture.DEFAULT_LOGIN_USER;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -54,8 +54,8 @@ public class UserProfileAcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getFixture();
+        User user = USER.getFixture();
+        Profile profile = ProfileFixture.PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
     }
@@ -66,8 +66,8 @@ public class UserProfileAcceptanceTest {
         // given
         String resultJson = objectMapper.writeValueAsString(
                 new ResponseUserProfileDto(
-                        DEFAULT_LOGIN_USER.getFixture(),
-                        ProfileFixture.DEFAULT_PROFILE.getFixture()));
+                        USER.getFixture(),
+                        ProfileFixture.PROFILE.getFixture()));
         long userId = 1L;
 
         // when
@@ -87,8 +87,8 @@ public class UserProfileAcceptanceTest {
                 .andReturn().getResponse().getCookies();
         String resultJson = objectMapper.writeValueAsString(
                 new ResponseUserProfileDto(
-                        DEFAULT_LOGIN_USER.getFixture(),
-                        ProfileFixture.DEFAULT_PROFILE.getFixture()));
+                        USER.getFixture(),
+                        ProfileFixture.PROFILE.getFixture()));
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail")
@@ -127,7 +127,7 @@ public class UserProfileAcceptanceTest {
                 .cookie(loginCookie)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));
-        Profile profileInDB = profileRepository.findByUserId(DEFAULT_LOGIN_USER.getFixture().getId());
+        Profile profileInDB = profileRepository.findByUserId(USER.getFixture().getId());
 
         // then
         perform.andExpect(status().isOk())
@@ -168,7 +168,7 @@ public class UserProfileAcceptanceTest {
                 .cookie(loginCookie)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));
-        Profile profileInDB = profileRepository.findByUserId(DEFAULT_LOGIN_USER.getFixture().getId());
+        Profile profileInDB = profileRepository.findByUserId(USER.getFixture().getId());
 
         // then
         perform.andExpect(status().is(409))

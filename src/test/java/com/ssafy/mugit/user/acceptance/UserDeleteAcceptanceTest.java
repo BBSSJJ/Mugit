@@ -19,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.ssafy.mugit.user.fixture.UserFixture.DEFAULT_LOGIN_USER;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,8 +45,8 @@ public class UserDeleteAcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getFixture();
+        User user = USER.getFixture();
+        Profile profile = ProfileFixture.PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
     }
