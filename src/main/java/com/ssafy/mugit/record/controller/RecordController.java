@@ -1,8 +1,11 @@
 package com.ssafy.mugit.record.controller;
 
+import com.ssafy.mugit.auth.SessionKeys;
 import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.record.dto.RecordRequestDto;
 import com.ssafy.mugit.record.entity.Record;
 import com.ssafy.mugit.record.service.RecordService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +23,9 @@ public class RecordController {
 
     @PostMapping("/flows/{flowId}")
     public ResponseEntity<?> createRecord(@PathVariable Long flowId,
-                                          @RequestParam String message,
-                                          @RequestParam List<Long> sourceIds,
-                                          @RequestParam Map<String, String> filePaths) {
-
-        recordService.insertRecord(flowId, message, sourceIds, filePaths);
-
-        return new ResponseEntity<>(new MessageDto("record create successful"), HttpStatus.OK);
+                                          @RequestBody RecordRequestDto recordRequestDto) {
+        recordService.insertRecord(flowId, recordRequestDto);
+        return new ResponseEntity<>("record create successful", HttpStatus.OK);
     }
 
     @GetMapping("/{recordId}")
@@ -40,4 +39,10 @@ public class RecordController {
         return new ResponseEntity<>(new MessageDto(message), HttpStatus.OK);
     }
 
+    @GetMapping("/validate/{flowId}")
+    public ResponseEntity<?> validateFlowId(@PathVariable Long flowId, HttpSession httpSession) {
+        Long userId = (Long) httpSession.getAttribute(SessionKeys.LOGIN_USER_SESSION_ID.getKey());
+        recordService.validate(userId, flowId);
+        return new ResponseEntity<>("validated", HttpStatus.OK);
+    }
 }

@@ -25,6 +25,10 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 1000
