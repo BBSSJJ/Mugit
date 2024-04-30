@@ -23,8 +23,6 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
         default_batch_fetch_size: 1000
 
   security:
@@ -68,3 +66,14 @@ server:
         secure: true
         max-age: ${SESSION_TIMEOUT}
         same-site: none
+
+# p6spy
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      multiline: true
+      logging: slf4j
+    datasource-proxy:
+      json-format: true
+

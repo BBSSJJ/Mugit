@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag("follow")
-@DataJpaTest
+@SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 class FollowServiceTest {
@@ -46,6 +46,12 @@ class FollowServiceTest {
     @BeforeEach
     void setUp() {
         sut = new FollowService(userRepository, followRepository);
+
+        User user = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(user);
+
+        User user2 = USER_2.getFixture(PROFILE_2.getFixture());
+        userRepository.save(user2);
     }
 
     @Test
@@ -70,8 +76,6 @@ class FollowServiceTest {
         // given
         User follower = USER.getFixture();
         User followee = USER_2.getFixture();
-        userRepository.save(follower);
-        userRepository.save(followee);
 
         sut.follow(follower.getId(), followee.getId());
 
@@ -89,9 +93,6 @@ class FollowServiceTest {
         // given
         User follower = USER.getFixture();
         User followee = USER_2.getFixture();
-        userRepository.save(follower);
-        userRepository.save(followee);
-
         // when
         sut.follow(follower.getId(), followee.getId());
         List<Follow> all = followRepository.findAll();
@@ -107,13 +108,10 @@ class FollowServiceTest {
     @DisplayName("[통합] 본인이 팔로우하고 있는 유저 수 조회")
     void testMyTotalFollowerCount() {
         // given
-        User user = USER.getFixture();
-        userRepository.save(user);
-        long myId = user.getId();
+        long myId = USER.getFixture().getId();
 
-        User user2 = USER_2.getFixture();
-        userRepository.save(user2);
-        sut.follow(myId, user2.getId());
+        long followerId = USER_2.getFixture().getId();
+        sut.follow(myId, followerId);
 
         User user3 = USER_3.getFixture();
         userRepository.save(user3);
@@ -130,13 +128,10 @@ class FollowServiceTest {
     @DisplayName("[통합] 본인을 팔로우하고 있는 유저 수 조회")
     void testMyTotalFollowingCount() {
         // given
-        User user = USER.getFixture();
-        userRepository.save(user);
-        long myId = user.getId();
+        long myId = USER.getFixture().getId();
 
-        User user2 = USER_2.getFixture();
-        userRepository.save(user2);
-        sut.follow(user2.getId(), myId);
+        long followerId = USER_2.getFixture().getId();
+        sut.follow(followerId, myId);
 
         // when
         Long total = sut.getAllFollowingCount(myId);
@@ -147,13 +142,13 @@ class FollowServiceTest {
 
     @Test
     @DisplayName("[통합] 본인이 팔로우하고 있는 모든 유저 조회")
+    @Transactional
     void testMyTotalFollower() {
         // given
         long myId = USER.getFixture().getId();
+        long followerId = USER_2.getFixture().getId();
 
-        User user2 = USER_2.getFixture(PROFILE_2.getFixture());
-        userRepository.save(user2);
-        sut.follow(myId, user2.getId());
+        sut.follow(myId, followerId);
 
         User user3 = USER_3.getFixture(PROFILE_3.getFixture());
         userRepository.save(user3);
@@ -175,8 +170,6 @@ class FollowServiceTest {
         // given
         User me = USER.getFixture(PROFILE.getFixture());
         User follower = USER_2.getFixture(PROFILE_2.getFixture());
-        userRepository.save(me);
-        userRepository.save(follower);
 
         sut.follow(me.getId(), follower.getId());
         Long allFollowerCount = sut.getAllFollowerCount(me.getId());
@@ -196,8 +189,6 @@ class FollowServiceTest {
         // given
         User me = USER.getFixture(PROFILE.getFixture());
         User follower = USER_2.getFixture(PROFILE_2.getFixture());
-        userRepository.save(me);
-        userRepository.save(follower);
 
         Long allFollowerCount = sut.getAllFollowerCount(me.getId());
         assertThat(allFollowerCount).isEqualTo(0L);
