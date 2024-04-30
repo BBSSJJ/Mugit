@@ -1,14 +1,13 @@
 package com.ssafy.mugit.record.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Entity(name = "record_source")
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecordSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

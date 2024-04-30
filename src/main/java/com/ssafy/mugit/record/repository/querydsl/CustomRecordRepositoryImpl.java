@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import static com.ssafy.mugit.record.entity.QRecord.record;
 import static com.ssafy.mugit.record.entity.QRecordSource.recordSource;
+import static com.ssafy.mugit.record.entity.QSource.source;
 
 @Repository
 public class CustomRecordRepositoryImpl implements CustomRecordRepository {
@@ -20,8 +21,8 @@ public class CustomRecordRepositoryImpl implements CustomRecordRepository {
     public Record findByIdWithSources(Long recordId) {
         return queryFactory.select(record)
                 .from(record)
-                .leftJoin(recordSource).fetchJoin()
-                .leftJoin(recordSource.source).fetchJoin()
+                .leftJoin(record.recordSources, recordSource).fetchJoin()
+                .leftJoin(recordSource.source, source).fetchJoin()
                 .where(record.id.eq(recordId))
                 .fetchOne();
     }
