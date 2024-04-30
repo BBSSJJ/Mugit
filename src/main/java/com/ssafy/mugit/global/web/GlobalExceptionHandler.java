@@ -44,6 +44,7 @@ public class GlobalExceptionHandler {
             case ALREADY_FOLLOW -> new ResponseEntity<>(new MessageDto("이미 팔로우"), HttpStatus.CONFLICT);
             case NOT_EXIST_FOLLOW -> new ResponseEntity<>(new MessageDto("이미 삭제된 팔로우"), HttpStatus.NO_CONTENT);
             case SELF_PROFILE ->  new ResponseEntity<>(new MessageDto("본인 프로필 조회"), HttpStatus.BAD_REQUEST);
+            case NOT_ALLOWED_ACCESS -> new ResponseEntity<>(new MessageDto("접근 권한 없음"), HttpStatus.FORBIDDEN);
         };
     }
 

@@ -2,6 +2,9 @@ package com.ssafy.mugit.record.service;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
+import com.ssafy.mugit.global.exception.UserApiException;
+import com.ssafy.mugit.global.exception.error.UserApiError;
+import com.ssafy.mugit.record.dto.FilePathDto;
 import com.ssafy.mugit.record.dto.RecordRequestDto;
 import com.ssafy.mugit.record.dto.RecordResponseDto;
 import com.ssafy.mugit.record.entity.Record;
@@ -65,14 +68,14 @@ public class RecordService {
         }
     }
 
-    private List<Long> createSource(Map<String, String> filePaths) {
+    private List<Long> createSource(List<FilePathDto> filePaths) {
         List<Long> ids = null;
         if (filePaths != null && !filePaths.isEmpty()) {
             ids = new ArrayList<>();
-            for (String key : filePaths.keySet()) {
+            for (FilePathDto filePath : filePaths) {
                 Source source = Source.builder()
-                        .uuidName(key)
-                        .originName(filePaths.get(key))
+                        .uuidName(filePath.getUuidName())
+                        .originName(filePath.getOriginName())
                         .build();
                 ids.add(sourceRepository.save(source).getId());
             }
@@ -80,8 +83,8 @@ public class RecordService {
         return ids;
     }
 
-    public RecordResponseDto selectRecord(Long recordId) {
-        Record record = recordRepository.findByIdWithSources(recordId);
+    public RecordResponseDto selectRecord(Long userId, Long recordId) {
+        Record record = validateRecord(userId, recordId);
         List<Source> sources = new ArrayList<>();
         for (RecordSource rs : record.getRecordSources()) {
             sources.add(rs.getSource());
@@ -89,17 +92,23 @@ public class RecordService {
         return new RecordResponseDto(record.getId(), record.getMessage(), sources);
     }
 
-    public String deleteRecord(Long recordId) {
-        Record record = recordRepository.findById(recordId)
-                .orElseThrow(() -> new RuntimeException("Record is not existed."));
+    public void deleteRecord(Long userId, Long recordId) {
+        Record record = validateRecord(userId, recordId);
         recordRepository.delete(record);
-        return "record delete successful";
     }
 
-    public void validate(Long userId, Long flowId) {
+    public void validateFlow(Long userId, Long flowId) {
         Flow flow = flowRepository.findByIdWithUser(flowId);
-        if (!userId.equals(flow.getUser().getId())) {
-            throw new RuntimeException("Illegal Request");
+        if (flow == null || !userId.equals(flow.getUser().getId())) {
+            throw new UserApiException(UserApiError.NOT_ALLOWED_ACCESS);
         }
+    }
+
+    public Record validateRecord(Long userId, Long recordId) {
+        Record record = recordRepository.findByIdWithUser(recordId);
+        if(record == null || !userId.equals(record.getFlow().getUser().getId())) {
+            throw new UserApiException(UserApiError.NOT_ALLOWED_ACCESS);
+        }
+        return record;
     }
 }
