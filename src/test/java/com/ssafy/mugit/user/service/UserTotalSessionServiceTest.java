@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.mugit.user.dto.SessionDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,8 +33,8 @@ class UserTotalSessionServiceTest {
         // given
 
         // when
-        List<UserRedisDto> allLoginSessionIds = sut.findAllSession();
-        for (UserRedisDto ret : allLoginSessionIds) {
+        List<UserSessionDto> allLoginSessionIds = sut.findAllSession();
+        for (UserSessionDto ret : allLoginSessionIds) {
             System.out.println("ret = " + ret);
         }
 

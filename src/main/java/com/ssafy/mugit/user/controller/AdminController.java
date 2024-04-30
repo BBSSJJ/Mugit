@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.controller;
 
 import com.ssafy.mugit.global.web.dto.ListDto;
 import com.ssafy.mugit.global.web.dto.MessageDto;
-import com.ssafy.mugit.user.service.UserRedisDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import com.ssafy.mugit.user.service.UserTotalSessionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,15 +29,15 @@ public class AdminController {
     @Operation(summary = "세션 조회", description = "전체 세션을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "세션 조회 완료",
-                    content = @Content(schema = @Schema(implementation = UserRedisDto.class))),
+                    content = @Content(schema = @Schema(implementation = UserSessionDto.class))),
             @ApiResponse(responseCode = "401", description = "로그인 필요",
                     content = @Content(schema = @Schema(implementation = MessageDto.class))),
             @ApiResponse(responseCode = "403", description = "권한 부족",
                     content = @Content(schema = @Schema(implementation = MessageDto.class)))
     })
     @GetMapping("/sessions")
-    public ResponseEntity<ListDto<List<UserRedisDto>>> getSession() {
-        List<UserRedisDto> allSession = userTotalSessionService.findAllSession();
+    public ResponseEntity<ListDto<List<UserSessionDto>>> getSession() {
+        List<UserSessionDto> allSession = userTotalSessionService.findAllSession();
 
         return ResponseEntity.status(200)
                 .body(new ListDto<>(allSession));

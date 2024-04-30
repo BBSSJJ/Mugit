@@ -5,8 +5,10 @@ import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.web.api.OAuthApi;
 import com.ssafy.mugit.user.dto.UserInfoDto;
+import com.ssafy.mugit.user.dto.UserSessionDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
+import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +27,7 @@ public class UserLoginService {
     @Qualifier("OAuthRestTemplateApi")
     private final OAuthApi oAuthApi;
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final CookieUtil cookieUtil;
 
     @Transactional
@@ -41,10 +44,12 @@ public class UserLoginService {
         if (userInDB == null) return cookieUtil.getRegistCookieHeader(userInfo);
 
         // 로그인 시 세션 설정
-        UserRedisDto userRedisDto = new UserRedisDto(userInDB);
-        session.setAttribute(LOGIN_USER_KEY.getKey(), userRedisDto);
+        UserSessionDto userSessionDto = new UserSessionDto(userInDB);
+        session.setAttribute(LOGIN_USER_KEY.getKey(), userSessionDto);
 
-        return cookieUtil.getLoginCookieHeader(userInDB);
+        return cookieUtil.getLoginCookieHeader(userInDB,
+                followRepository.countMyFollowers(userInDB.getId()),
+                followRepository.countMyFollowings(userInDB.getId()));
     }
 
     private String getBearerToken(String token) {

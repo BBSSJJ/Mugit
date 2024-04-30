@@ -72,8 +72,8 @@ public class MockUserAcceptanceTest {
     @DisplayName("[인수] 테스트 로그인 시 정상 응답(200)")
     void testLoginSuccess() throws Exception {
         // given
-        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
-        user.regist(ProfileFixture.DEFAULT_PROFILE.getFixture());
+        User user = UserFixture.USER.getFixture();
+        user.regist(ProfileFixture.PROFILE.getFixture());
         userRepository.save(user);
 
 

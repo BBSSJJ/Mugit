@@ -1,7 +1,6 @@
 package com.ssafy.mugit.user.acceptance;
 
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
-import com.ssafy.mugit.user.controller.AdminController;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
@@ -13,8 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.DEFAULT_PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.DEFAULT_LOGIN_USER;
+import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,9 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AdminAcceptanceTest {
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    AdminController adminController;
 
     @Autowired
     UserRepository userRepository;
@@ -84,8 +80,8 @@ public class AdminAcceptanceTest {
     @DisplayName("[인수] 관리자 권한아닐때 전체 세션조회기능 사용 불가능")
     void testTotalSessionGetWithoutAdmin() throws Exception {
         // given
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        user.regist(DEFAULT_PROFILE.getFixture());
+        User user = USER.getFixture();
+        user.regist(PROFILE.getFixture());
         userRepository.save(user);
 
         Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))

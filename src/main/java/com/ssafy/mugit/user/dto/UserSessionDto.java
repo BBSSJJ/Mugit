@@ -1,4 +1,4 @@
-package com.ssafy.mugit.user.service;
+package com.ssafy.mugit.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -11,18 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonSerialize
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserRedisDto {
+public class UserSessionDto {
     private Long id;
     private String email;
     private RoleType role;
 
-    public UserRedisDto(User userInDB) {
+    public UserSessionDto(User userInDB) {
         this.id = userInDB.getId();
         this.email = userInDB.getEmail();
         this.role = userInDB.getRole();
     }
 
-    public UserRedisDto(Long id, String email, RoleType role) {
+    public UserSessionDto(Long id, String email, RoleType role) {
         this.id = id;
         this.email = email;
         this.role = role;

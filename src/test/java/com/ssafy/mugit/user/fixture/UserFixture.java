@@ -6,8 +6,9 @@ import com.ssafy.mugit.user.entity.type.RoleType;
 import com.ssafy.mugit.user.entity.type.SnsType;
 
 public enum UserFixture {
-    DEFAULT_LOGIN_USER(1L, "asdf1234", SnsType.GOOGLE, "test@test.com"),
-    DEFAULT_LOGIN_USER_2(2L, "qwer1234", SnsType.GOOGLE, "test2@test.com");
+    USER(1L, "asdf1234", SnsType.GOOGLE, "test@test.com"),
+    USER_2(2L, "qwer1234", SnsType.GOOGLE, "test2@test.com"),
+    USER_3(3L, "asdfzxcv1234", SnsType.GOOGLE, "test3@test.com");
 
     private final Long id;
     private final String snsId;
@@ -26,7 +27,9 @@ public enum UserFixture {
     }
 
     public User getFixture(Profile profile){
-        return new User(id, snsId, email, snsType, RoleType.ROLE_USER, profile);
+        User user = new User(id, snsId, email, snsType, RoleType.ROLE_USER, null);
+        user.regist(profile);
+        return user;
     }
 
 }

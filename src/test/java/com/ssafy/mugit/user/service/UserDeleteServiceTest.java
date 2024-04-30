@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.DEFAULT_PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.DEFAULT_LOGIN_USER;
+import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("delete")
@@ -30,8 +30,8 @@ class UserDeleteServiceTest {
     @BeforeEach
     void setUp() {
         sut = new UserDeleteService(userRepository);
-        User user = DEFAULT_LOGIN_USER.getFixture();
-        user.regist(DEFAULT_PROFILE.getFixture());
+        User user = USER.getFixture();
+        user.regist(PROFILE.getFixture());
         userRepository.save(user);
     }
 
@@ -40,7 +40,7 @@ class UserDeleteServiceTest {
     @Transactional
     void testDeleteAllEntityRelatedToUser() {
         // given
-        Long userId = DEFAULT_LOGIN_USER.getFixture().getId();
+        Long userId = USER.getFixture().getId();
         
         // when
         sut.deleteUserEntity(userId);

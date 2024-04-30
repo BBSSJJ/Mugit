@@ -4,6 +4,7 @@ import com.ssafy.mugit.user.dto.MockUserInfoDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.fixture.MockUserInfoFixture;
+import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
@@ -30,9 +31,12 @@ class MockUserFindServiceTest {
     @Autowired
     ProfileRepository profileRepository;
 
+    @Autowired
+    FollowRepository followRepository;
+
     @BeforeEach
     void setUp() {
-        sut = new MockUserService(userRepository, profileRepository, new CookieUtil());
+        sut = new MockUserService(userRepository, profileRepository, followRepository, new CookieUtil());
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.fixture.UserInfoFixture;
+import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.util.CookieUtil;
 import jakarta.servlet.http.HttpSession;
@@ -43,6 +44,9 @@ class UserLoginServiceTest {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    FollowRepository followRepository;
+
     CookieUtil cookieUtil;
 
     UserLoginService sut;
@@ -51,7 +55,7 @@ class UserLoginServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         cookieUtil = new CookieUtil();
-        sut = new UserLoginService(oAuthApi, userRepository, cookieUtil);
+        sut = new UserLoginService(oAuthApi, userRepository, followRepository, cookieUtil);
     }
 
     @Test
@@ -61,7 +65,7 @@ class UserLoginServiceTest {
         String token = "qwerasdf1234";
         SnsType snsType = SnsType.GOOGLE;
         UserInfoDto userInfo = UserInfoFixture.DEFAULT_GOOGLE_USER_INFO.getFixture();
-        userRepository.save(UserFixture.DEFAULT_LOGIN_USER.getFixture(ProfileFixture.DEFAULT_PROFILE.getFixture()));
+        userRepository.save(UserFixture.USER.getFixture(ProfileFixture.PROFILE.getFixture()));
         HttpSession session = new MockHttpSession();
 
         // when

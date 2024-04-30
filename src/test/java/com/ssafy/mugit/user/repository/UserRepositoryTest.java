@@ -22,8 +22,8 @@ class UserRepositoryTest {
     @DisplayName("User + Profile dto 조회 테스트")
     void testGetUserProfileDto() {
         // given
-        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
-        user.regist(ProfileFixture.DEFAULT_PROFILE.getFixture());
+        User user = UserFixture.USER.getFixture();
+        user.regist(ProfileFixture.PROFILE.getFixture());
         sut.save(user);
         String nickName = "leaf";
 

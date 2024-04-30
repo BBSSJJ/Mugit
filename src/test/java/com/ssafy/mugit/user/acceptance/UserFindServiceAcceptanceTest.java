@@ -42,8 +42,8 @@ public class UserFindServiceAcceptanceTest {
     @DisplayName("[인수] 닉네임으로 회원찾기 시 정상 응답(200)")
     void testFindUserPk() throws Exception {
         // given
-        User user = UserFixture.DEFAULT_LOGIN_USER.getFixture();
-        Profile profile = ProfileFixture.DEFAULT_PROFILE.getFixture();
+        User user = UserFixture.USER.getFixture();
+        Profile profile = ProfileFixture.PROFILE.getFixture();
         user.regist(profile);
         userRepository.save(user);
         String resultJson = objectMapper.writeValueAsString(new ResponseUserProfileDto(user, profile));

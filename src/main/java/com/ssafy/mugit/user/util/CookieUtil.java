@@ -22,7 +22,7 @@ public class CookieUtil {
     @Value("${server.servlet.session.timeout}")
     private long sessionTimeout;
 
-    public HttpHeaders getLoginCookieHeader(User user) {
+    public HttpHeaders getLoginCookieHeader(User user, Long followers, Long followings) {
 
         HttpHeaders cookieHeaders = new HttpHeaders();
         Profile profile = user.getProfile();
@@ -31,6 +31,8 @@ public class CookieUtil {
         setTimeoutCookieHeader(cookieHeaders, "nickName", profile.getNickName());
         setTimeoutCookieHeader(cookieHeaders, "profileText", profile.getProfileText());
         setTimeoutCookieHeader(cookieHeaders, "profileImage", profile.getProfileImagePath());
+        setTimeoutCookieHeader(cookieHeaders, "followers", followers.toString());
+        setTimeoutCookieHeader(cookieHeaders, "followings", followings.toString());
 
         return cookieHeaders;
     }
@@ -47,9 +49,9 @@ public class CookieUtil {
         return cookieHeaders;
     }
 
-    public HttpHeaders getLoginCookieAndDeleteRegistCookieHeader(User user) {
+    public HttpHeaders getLoginCookieAndDeleteRegistCookieHeader(User user, Long followers, Long followings) {
 
-        HttpHeaders cookieHeaders = getLoginCookieHeader(user);
+        HttpHeaders cookieHeaders = getLoginCookieHeader(user, followers, followings);
 
         // 회원가입 쿠키 삭제
         setDeleteCookieHeader(cookieHeaders, "needRegist");
