@@ -6,8 +6,10 @@ import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ResponseUserProfileDto {
 
     private Long id;
@@ -17,6 +19,8 @@ public class ResponseUserProfileDto {
     private String nickName;
     private String profileText;
     private String profileImagePath;
+    private Boolean isFollower;
+    private Boolean isFollowing;
 
     @QueryProjection
     public ResponseUserProfileDto(User user, Profile profile) {
@@ -39,5 +43,10 @@ public class ResponseUserProfileDto {
         this.nickName = "admin";
         this.profileText = "";
         this.profileImagePath = "";
+    }
+
+    public void setFollows(boolean isFollower, boolean isFollowing) {
+        this.isFollower = isFollower;
+        this.isFollowing = isFollowing;
     }
 }

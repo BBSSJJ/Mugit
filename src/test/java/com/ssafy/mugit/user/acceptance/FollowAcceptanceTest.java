@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.global.web.dto.ListDto;
 import com.ssafy.mugit.user.dto.FollowerDto;
+import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.FollowService;
@@ -203,5 +204,42 @@ public class FollowAcceptanceTest {
 
         //then 2
         perform2.andExpect(status().is(204));
+    }
+
+    @Test
+    @DisplayName("[인수] 프로필에서 팔로우하는지 여부 조회(200) / 본인 프로필 조회(400)")
+    void testFollowInProfile() throws Exception {
+        // given
+        long myId = USER.getFixture().getId();
+
+        // me <-> user2
+        User user2 = USER_2.getFixture(PROFILE_2.getFixture());
+        followService.follow(user2.getId(), myId);
+        followService.follow(myId, user2.getId());
+
+        // user3 -> me
+        User user3 = USER_3.getFixture(PROFILE_3.getFixture());
+        userRepository.save(user3);
+        followService.follow(user3.getId(), myId);
+
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+                .andReturn().getResponse().getCookies();
+
+        // when
+        ResultActions user2Result = mockMvc.perform(get("/api/users/" + user2.getId() + "/profiles/detail")
+                .cookie(loginCookie));
+        ResultActions user3Result = mockMvc.perform(get("/api/users/" + user3.getId() + "/profiles/detail")
+                .cookie(loginCookie));
+        ResultActions selfResult = mockMvc.perform(get("/api/users/" + myId + "/profiles/detail")
+                .cookie(loginCookie));
+        ResponseUserProfileDto dto2 = objectMapper.readValue(user2Result.andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), ResponseUserProfileDto.class);
+        ResponseUserProfileDto dto3 = objectMapper.readValue(user3Result.andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), ResponseUserProfileDto.class);
+
+        // then
+        assertThat(dto2.getIsFollower()).isTrue();
+        assertThat(dto2.getIsFollowing()).isTrue();
+        assertThat(dto3.getIsFollower()).isFalse();
+        assertThat(dto3.getIsFollowing()).isTrue();
+        selfResult.andExpect(status().isBadRequest());
     }
 }

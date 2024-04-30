@@ -21,10 +21,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
+import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
+import static com.ssafy.mugit.user.fixture.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -37,11 +38,14 @@ class UserProfileServiceTest {
     @Autowired
     ProfileRepository profileRepository;
 
+    @Autowired
+    FollowService followService;
+
     UserProfileService sut;
 
     @BeforeEach
     void setUp() {
-        sut = new UserProfileService(userRepository, profileRepository);
+        sut = new UserProfileService(userRepository, profileRepository, followService);
     }
 
 
@@ -112,5 +116,50 @@ class UserProfileServiceTest {
         assertThat(exception).isInstanceOf(UserApiException.class);
         UserApiException userApiException = (UserApiException) exception;
         assertThat(userApiException.getUserApiError()).isEqualTo(UserApiError.DUPLICATE_NICK_NAME);
+    }
+
+    @Tag("follow")
+    @Test
+    @DisplayName("[통합] 내가 팔로우중인지 / 나를 팔로우중인지 확인")
+    void testFollow() {
+        // given
+        User user = USER.getFixture(PROFILE.getFixture());
+        User follower = USER_2.getFixture(PROFILE_2.getFixture());
+        User following = USER_3.getFixture(PROFILE_3.getFixture());
+        userRepository.save(user);
+        userRepository.save(follower);
+        userRepository.save(following);
+
+        // 유저 1 -> 유저 2
+        followService.follow(user.getId(), follower.getId());
+
+        // 유저 3 -> 유저 1
+        followService.follow(following.getId(), user.getId());
+
+        // when
+        ResponseUserProfileDto followerProfile = sut.getProfileById(user.getId(), follower.getId());
+        ResponseUserProfileDto followingProfile = sut.getProfileById(user.getId(), following.getId());
+
+        // then
+        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollower", true);
+        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
+        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
+        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", true);
+    }
+
+    @Test
+    @DisplayName("[통합] 본인 프로필 조회")
+    void testMyProfile() {
+        // given
+        User user = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(user);
+
+        // when
+        Exception exception = assertThrows(Exception.class, () -> sut.getProfileById(user.getId(), user.getId()));
+
+        // then
+        assertThat(exception).isInstanceOf(UserApiException.class);
+        UserApiException userApiException = (UserApiException) exception;
+        assertThat(userApiException.getUserApiError()).isEqualTo(UserApiError.SELF_PROFILE);
     }
 }

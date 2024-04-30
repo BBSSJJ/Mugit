@@ -59,4 +59,8 @@ public class FollowService {
     public List<FollowerDto> getAllFollowings(long myId) {
         return followRepository.findAllFollowings(myId);
     }
+
+    public Boolean checkIsFollower(Long followerId, Long followingId) {
+        return followRepository.existsFollow(followerId, followingId);
+    }
 }
