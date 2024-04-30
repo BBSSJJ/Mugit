@@ -18,6 +18,7 @@ public class SecurityConfig {
     private final CustomAdminLoginFailureHandler customAdminLoginFailureHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDenialHandler customAccessDenialHandler;
+    private final CustomCorsConfiguration customCorsConfiguration;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,8 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(customAuthorizeHttpRequestsFilter.regist())
 
                 // Make Authentication Object by Redis Session
-                .addFilterBefore(customOncePerRequestFilter,
-                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customOncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
 
                 // form login
                 .formLogin((loginConfigurer) ->{
@@ -38,15 +38,16 @@ public class SecurityConfig {
                     )
 
                 // 401 handler
-                .exceptionHandling((exceptionHandler) ->
-                        exceptionHandler.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .exceptionHandling((exceptionHandler) -> exceptionHandler.authenticationEntryPoint(customAuthenticationEntryPoint))
 
                 // 403 handler
-                .exceptionHandling((exceptionHandler) ->
-                        exceptionHandler.accessDeniedHandler(customAccessDenialHandler))
+                .exceptionHandling((exceptionHandler) -> exceptionHandler.accessDeniedHandler(customAccessDenialHandler))
 
                 // CSRF Disable
                 .csrf(AbstractHttpConfigurer::disable)
+
+                // CORS Config
+                .cors((corsConfiguration) -> corsConfiguration.configurationSource(customCorsConfiguration.getSource()))
 
                 .build();
     }
