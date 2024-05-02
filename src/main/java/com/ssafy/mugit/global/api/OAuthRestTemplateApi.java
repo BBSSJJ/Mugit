@@ -1,8 +1,8 @@
-package com.ssafy.mugit.global.web.api;
+package com.ssafy.mugit.global.api;
 
+import com.ssafy.mugit.global.dto.GoogleUserInfoDto;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
-import com.ssafy.mugit.global.web.dto.GoogleUserInfoDto;
 import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import lombok.extern.slf4j.Slf4j;

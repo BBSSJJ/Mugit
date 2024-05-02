@@ -1,7 +1,7 @@
 package com.ssafy.mugit.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.UserSessionDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
+import static com.ssafy.mugit.global.dto.DataKeys.LOGIN_USER_KEY;
 import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_ADMIN;
 
 @Component

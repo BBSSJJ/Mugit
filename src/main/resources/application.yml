@@ -44,6 +44,8 @@ spring:
       host: ${SESSION_REDIS_HOST}
       password: ${SESSION_REDIS_PASSWORD}
       port: ${SESSION_REDIS_PORT}
+      repositories:
+        enabled: false
 
   web:
     resources:
@@ -80,8 +82,12 @@ server:
         max-age: ${SESSION_TIMEOUT}
         same-site: none
 
+# emitter
+emitter:
+  timeout:
+    3600000
+
+
 logging:
   level:
     root: ${ROOT_LOGGING_LEVEL}
-
-

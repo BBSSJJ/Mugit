@@ -1,7 +1,7 @@
 package com.ssafy.mugit.user.acceptance;
 
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
-import com.ssafy.mugit.global.web.api.OAuthApi;
+import com.ssafy.mugit.global.api.OAuthApi;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;

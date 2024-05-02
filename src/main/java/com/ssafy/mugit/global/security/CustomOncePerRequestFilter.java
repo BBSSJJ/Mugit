@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
+import static com.ssafy.mugit.global.dto.DataKeys.LOGIN_USER_KEY;
 import static java.util.Objects.isNull;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 

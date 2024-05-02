@@ -41,16 +41,4 @@ class UserTotalSessionServiceTest {
         // then
         assertThat(allLoginSessionIds).isNotNull();
     }
-
-    @Test
-    @DisplayName("[통합] 전체 세션 id 돌면서 회원정보 찾아오기")
-    void testFindTotalSessionId() {
-        // given
-
-        // when
-//        Set<Long> allLoginSessionIds = sut.findAllSessionId();
-
-        // then
-//        assertThat(allLoginSessionIds).isNull();
-    }
 }

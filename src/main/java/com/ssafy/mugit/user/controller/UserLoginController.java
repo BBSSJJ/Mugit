@@ -1,7 +1,7 @@
 package com.ssafy.mugit.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserLoginService;
 import io.swagger.v3.oas.annotations.Operation;

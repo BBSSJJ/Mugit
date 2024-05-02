@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.request.RequestRegistProfileDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserRegistService;

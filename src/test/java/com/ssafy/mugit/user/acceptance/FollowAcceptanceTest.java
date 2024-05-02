@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.acceptance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
-import com.ssafy.mugit.global.web.dto.ListDto;
+import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.User;

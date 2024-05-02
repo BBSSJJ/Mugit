@@ -1,4 +1,4 @@
-package com.ssafy.mugit.global.web.controller;
+package com.ssafy.mugit.global.controller;
 
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;

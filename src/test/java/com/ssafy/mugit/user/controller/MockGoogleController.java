@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.global.web.dto.GoogleUserInfoDto;
+import com.ssafy.mugit.global.dto.GoogleUserInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

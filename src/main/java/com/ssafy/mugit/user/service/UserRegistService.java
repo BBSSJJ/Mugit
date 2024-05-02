@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import static com.ssafy.mugit.auth.SessionKeys.LOGIN_USER_KEY;
+import static com.ssafy.mugit.global.dto.DataKeys.LOGIN_USER_KEY;
 
 @Service
 @RequiredArgsConstructor
