@@ -33,17 +33,15 @@ spring:
   session:
     redis:
       flush-mode: on_save
-      namespace: spring:session
+      namespace: mugit:session
 
   data:
     redis:
       host: ${TEST_SESSION_REDIS_HOST}
       password: ${TEST_SESSION_REDIS_PASSWORD}
       port: ${TEST_SESSION_REDIS_PORT}
-      timeout: 30000
-      database: 0
-      ssl:
-        enabled: true
+      repositories:
+        enabled: false
 
 cookie:
   domain: ${COOKIE_DOMAIN}
@@ -66,6 +64,11 @@ server:
         secure: true
         max-age: ${SESSION_TIMEOUT}
         same-site: none
+
+# emitter
+emitter:
+  timeout:
+    3600000
 
 # p6spy
 decorator:

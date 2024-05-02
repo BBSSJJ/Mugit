@@ -1,7 +1,6 @@
-package com.ssafy.mugit.global.web;
+package com.ssafy.mugit.global.exception;
 
-import com.ssafy.mugit.global.exception.UserApiException;
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

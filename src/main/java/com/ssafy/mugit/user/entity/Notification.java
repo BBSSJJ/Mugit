@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.ssafy.mugit.user.entity.type.NotificationType.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,7 +19,11 @@ public class Notification {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true, nullable = false)
-    private User user;
+    private User notified;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true, nullable = false)
+    private User notifier;
 
     @Column(name = "is_read", nullable = false)
     private Boolean isRead;
@@ -28,4 +34,22 @@ public class Notification {
 
     @Column(name = "message", nullable = false)
     private String message;
+
+    public Notification(User notifier, User notified, NotificationType type) {
+        switch (type){
+            case FOLLOW -> {
+                this.type = FOLLOW;
+                this.notifier = notifier;
+                this.notified = notified;
+                this.isRead = false;
+                this.message = notifier.getProfile().getNickName() + "님이 당신을 팔로우합니다.";
+            }
+            case LIKE -> {
+                this.type = LIKE;
+            }
+            case FLOW_RELEASE -> {
+                this.type = FLOW_RELEASE;
+            }
+        }
+    }
 }

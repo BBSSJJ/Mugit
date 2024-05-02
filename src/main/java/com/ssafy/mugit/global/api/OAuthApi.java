@@ -1,4 +1,4 @@
-package com.ssafy.mugit.global.web.api;
+package com.ssafy.mugit.global.api;
 
 import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;

@@ -40,7 +40,7 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Profile profile;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "notified", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<Notification> notifications = new ArrayList<>();
 
     // 회원가입 시 생성자

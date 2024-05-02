@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.service.UserFindService;
 import io.swagger.v3.oas.annotations.Operation;
