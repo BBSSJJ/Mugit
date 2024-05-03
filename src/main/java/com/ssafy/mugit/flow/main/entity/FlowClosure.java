@@ -2,11 +2,13 @@ package com.ssafy.mugit.flow.main.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "flow_closure")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class FlowClosure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +24,13 @@ public class FlowClosure {
     private Flow childFlow;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "root_id")
+    @JoinColumn(name = "root_flow_id")
     private Flow rootFlow;
 
     @Column(name = "depth")
     private Integer depth;
 
-    public FlowClosure(Flow parentFlow, Flow childFlow, Flow rootFlow, Integer depth){
+    public FlowClosure(Flow rootFlow, Flow parentFlow, Flow childFlow, Integer depth) {
         this.parentFlow = parentFlow;
         this.childFlow = childFlow;
         this.rootFlow = rootFlow;
