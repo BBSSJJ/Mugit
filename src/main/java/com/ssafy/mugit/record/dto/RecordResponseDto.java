@@ -11,5 +11,5 @@ import java.util.List;
 public class RecordResponseDto {
     private Long id;
     private String message;
-    private List<Source> sources;
+    private List<SourceInfoDto> sources;
 }

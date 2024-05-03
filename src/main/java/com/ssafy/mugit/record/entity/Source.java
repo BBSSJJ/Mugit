@@ -17,9 +17,6 @@ public class Source {
     @Column(name = "source_id")
     private Long id;
 
-    @Column(name = "original_name")
-    private String originName;
-
-    @Column(name = "uuid_name")
-    private String uuidName;
+    @Column(name = "source_path")
+    private String path;
 }
