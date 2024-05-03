@@ -1,8 +1,12 @@
 package com.ssafy.mugit.flow.main.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "flow_closure")
+@AllArgsConstructor
+@NoArgsConstructor
 public class FlowClosure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +27,11 @@ public class FlowClosure {
 
     @Column(name = "depth")
     private Integer depth;
+
+    public FlowClosure(Flow parentFlow, Flow childFlow, Flow rootFlow, Integer depth){
+        this.parentFlow = parentFlow;
+        this.childFlow = childFlow;
+        this.rootFlow = rootFlow;
+        this.depth = depth;
+    }
 }
