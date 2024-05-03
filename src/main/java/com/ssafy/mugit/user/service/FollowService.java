@@ -22,6 +22,7 @@ public class FollowService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public void follow(Long followingId, Long followerId) {
@@ -35,6 +36,9 @@ public class FollowService {
 
         Follow follow = new Follow(follower, following);
         followRepository.save(follow);
+
+        // 팔로우 알림 발송
+        notificationService.sendFollow(follower, following);
     }
 
     public void unfollow(Long followingId, Long followerId) {

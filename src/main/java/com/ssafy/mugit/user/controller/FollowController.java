@@ -5,7 +5,7 @@ import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.service.FollowService;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

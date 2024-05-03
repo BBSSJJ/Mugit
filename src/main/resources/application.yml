@@ -82,10 +82,10 @@ server:
         max-age: ${SESSION_TIMEOUT}
         same-site: none
 
-# emitter
-emitter:
-  timeout:
-    3600000
+message:
+  api:
+    base-uri: ${SSE_SERVER}
+    send-uri: /message
 
 
 logging:

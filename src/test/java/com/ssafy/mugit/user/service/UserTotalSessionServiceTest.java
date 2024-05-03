@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

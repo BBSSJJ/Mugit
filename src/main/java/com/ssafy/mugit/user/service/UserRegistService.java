@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.service;
 
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.user.dto.request.RequestRegistProfileDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;

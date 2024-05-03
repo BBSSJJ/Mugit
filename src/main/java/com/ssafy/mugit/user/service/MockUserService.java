@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.user.dto.MockUserInfoDto;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.FollowRepository;

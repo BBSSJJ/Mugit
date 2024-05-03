@@ -13,16 +13,16 @@ import static com.ssafy.mugit.user.entity.type.NotificationType.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notification {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "notification_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true, nullable = false)
+    @JoinColumn(nullable = false)
     private User notified;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true, nullable = false)
+    @JoinColumn(nullable = false)
     private User notifier;
 
     @Column(name = "is_read", nullable = false)

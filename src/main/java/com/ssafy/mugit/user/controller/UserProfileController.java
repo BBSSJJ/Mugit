@@ -2,7 +2,7 @@ package com.ssafy.mugit.user.controller;
 
 import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.user.dto.request.RequestModifyUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.service.UserProfileService;

@@ -1,7 +1,7 @@
 package com.ssafy.mugit.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;

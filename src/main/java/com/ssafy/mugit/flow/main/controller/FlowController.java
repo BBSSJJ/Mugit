@@ -7,7 +7,7 @@ import com.ssafy.mugit.flow.main.dto.request.RequestReleaseFlowDto;
 import com.ssafy.mugit.flow.main.service.FlowService;
 import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
