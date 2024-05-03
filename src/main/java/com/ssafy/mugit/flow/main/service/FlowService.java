@@ -1,5 +1,6 @@
 package com.ssafy.mugit.flow.main.service;
 
+import com.ssafy.mugit.flow.main.dto.FlowGraphDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestCreateNoteDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestRegistFlowDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestReleaseFlowDto;
@@ -34,6 +35,8 @@ public class FlowService {
 
     public void create(Long userId, RequestCreateNoteDto requestCreateNoteDto) {
         User user = userRepository.getReferenceById(userId);
+
+        // Flow 생성
         Flow note = new Flow(user,
                 requestCreateNoteDto.getTitle(),
                 requestCreateNoteDto.getMessage(),
@@ -42,15 +45,16 @@ public class FlowService {
                 requestCreateNoteDto.getCoverPath());
         flowRepository.save(note);
 
-        System.out.println("in service : " + requestCreateNoteDto.getHashtags());
-
+        // 필요한 Hashtag 목록 추가
         List<Hashtag> hashtags = hashtagService.update(requestCreateNoteDto.getHashtags());
 
+        // Flow Hashtag 연결테이블 생성
         flowHashtagService.addHashtags(note, hashtags);
 
-        flowClosureRepository.save(new FlowClosure(note, note, note, 0));
+        // Flow Closure 테이블에 추가
+        flowClosureRepository.save(new FlowClosure(note, note, note, 1));
 
-        //record 생성!
+        // Record 생성
     }
 
     public void regist(Long userId, RequestRegistFlowDto requestRegistFlowDto) {
@@ -66,16 +70,24 @@ public class FlowService {
 
         Flow newFlow = new Flow(user, requestRegistFlowDto.getTitle(), parentFlow.getMusicPath());
 
+        // 부모의 마지막 Record를 새로운 Flow의 Record 등록
         Record record = recordRepository.findLastRecordByFlowId(parentFlow.getId()).orElseThrow(/* TODO: 에러 처리 */);
 
+        // Flow Closure 테이블에 추가
+
+
         // record 수정
-//        Record newRecord = new Record(newFlow, null, true, record.getRecordSources());
-//        newFlow.getRecords().add(newRecord);
-
-        //flow closure repository에서 해당 record의 모든 부모들을 부모로 만드는 로직 생성
-
     }
 
     public void release(Long userId, RequestReleaseFlowDto requestReleaseFlowDto) {
+    }
+
+    public FlowGraphDto graph(Long flowId) {
+        // 해당 Flow가 속한 트리의 모든 노드들 가져오기
+        FlowClosure flowClosure = flowClosureRepository.findFlowClosureByChildFlowId(flowId).orElseThrow(/* TODO: 에러처리 */);
+        List<FlowClosure> flowClosures = flowClosureRepository.findFlowClosuresByRootFlow(flowClosure.getRootFlow());
+
+        FlowGraphUtil flowGraphUtil = new FlowGraphUtil();
+        return flowGraphUtil.makeGraph(flowClosures);
     }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.mugit.flow.main.controller;
 
+import com.ssafy.mugit.flow.main.dto.FlowGraphDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestCreateNoteDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestRegistFlowDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestReleaseFlowDto;
@@ -7,7 +8,6 @@ import com.ssafy.mugit.flow.main.service.FlowService;
 import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.UserSessionDto;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +37,10 @@ public class FlowController {
     public ResponseEntity<MessageDto> releaseFlow(@UserSession UserSessionDto user, RequestReleaseFlowDto requestReleaseFlowDto) {
         flowService.release(user.getId(), requestReleaseFlowDto);
         return ResponseEntity.status(200).body(new MessageDto("Flow 릴리즈 성공"));
+    }
+
+    @GetMapping("/api/flows/graph/{flowId}")
+    public ResponseEntity<FlowGraphDto> getGraph(@PathVariable("flowId") Long flowId) {
+        return ResponseEntity.status(200).body(flowService.graph(flowId));
     }
 }
