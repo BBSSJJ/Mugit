@@ -1,15 +1,22 @@
 package com.ssafy.mugit.flow.main.entity;
 
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import com.ssafy.mugit.user.entity.User;
+import com.ssafy.mugit.record.entity.Record;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "flow")
 @Getter
-public class Flow {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class Flow extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flow_id")
@@ -33,9 +40,31 @@ public class Flow {
     @Column(name = "views")
     private Integer views;
 
+    @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY)
+    private List<Record> records = new ArrayList<>();
+
     @OneToMany(mappedBy = "childFlow", fetch = FetchType.LAZY)
     private List<FlowClosure> relationship = new ArrayList<>();
 
     @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY)
     private List<FlowHashtag> hashtags = new ArrayList<>();
+
+    public Flow(User user, String title, String musicPath) {
+        this.user = user;
+        this.title = title;
+        this.isReleased = false;
+        this.musicPath = musicPath;
+        this.views = 0;
+    }
+
+    public Flow(User user, String title, String message, Authority authority, String musicPath, String coverPath) {
+        this.user = user;
+        this.title = title;
+        this.message = message;
+        this.authority = authority;
+        this.isReleased = false;
+        this.musicPath = musicPath;
+        this.coverPath = coverPath;
+        this.views = 0;
+    }
 }

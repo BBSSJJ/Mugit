@@ -18,4 +18,8 @@ public class FlowHashtag {
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 
+    public FlowHashtag(Flow flow, Hashtag hashtag) {
+        this.flow = flow;
+        this.hashtag = hashtag;
+    }
 }
