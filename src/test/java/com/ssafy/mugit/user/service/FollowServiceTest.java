@@ -5,9 +5,7 @@ import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.util.AcceptanceTestExecutionListener;
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.entity.Follow;
-import com.ssafy.mugit.user.entity.Notification;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.entity.type.NotificationType;
 import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,11 +41,14 @@ class FollowServiceTest {
     @Autowired
     FollowRepository followRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     FollowService sut;
 
     @BeforeEach
     void setUp() {
-        sut = new FollowService(userRepository, followRepository);
+        sut = new FollowService(userRepository, followRepository, notificationService);
 
         User user = USER.getFixture(PROFILE.getFixture());
         userRepository.save(user);

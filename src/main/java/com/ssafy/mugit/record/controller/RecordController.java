@@ -4,7 +4,7 @@ import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.record.dto.RecordRequestDto;
 import com.ssafy.mugit.record.service.RecordService;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

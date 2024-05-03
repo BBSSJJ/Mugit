@@ -1,5 +1,6 @@
 package com.ssafy.mugit.global.config;
 
+import com.ssafy.mugit.global.security.SessionUserParameterResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

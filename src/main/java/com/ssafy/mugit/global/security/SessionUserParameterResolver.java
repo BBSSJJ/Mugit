@@ -1,7 +1,8 @@
-package com.ssafy.mugit.global.config;
+package com.ssafy.mugit.global.security;
 
+import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.DataKeys;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

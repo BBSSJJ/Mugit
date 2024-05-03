@@ -40,6 +40,7 @@ public class OAuthRestTemplateApi implements OAuthApi {
     private GoogleUserInfoDto getGoogleUserInfo(String token) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
+
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<String> request = new HttpEntity<>(headers);
         URI uri = UriComponentsBuilder

@@ -1,4 +1,4 @@
-package com.ssafy.mugit.user.dto;
+package com.ssafy.mugit.global.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

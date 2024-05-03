@@ -5,7 +5,7 @@ import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.api.OAuthApi;
 import com.ssafy.mugit.user.dto.UserInfoDto;
-import com.ssafy.mugit.user.dto.UserSessionDto;
+import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.FollowRepository;
