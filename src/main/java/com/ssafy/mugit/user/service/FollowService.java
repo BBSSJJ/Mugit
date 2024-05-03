@@ -24,21 +24,21 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public void follow(Long followerId, Long followingId) {
+    public void follow(Long followingId, Long followerId) {
 
         // 팔로우 여부 확인
-        if (followRepository.existsFollow(followerId, followingId)) throw new UserApiException(ALREADY_FOLLOW);
+        if (followRepository.existsFollow(followingId, followerId)) throw new UserApiException(ALREADY_FOLLOW);
 
         // 팔로워, 팔로우 찾아오기
-        User follower = userRepository.findById(followerId).orElseThrow(() -> new UserApiException(NOT_FOUND));
-        User following = userRepository.findById(followingId).orElseThrow(() -> new UserApiException(NOT_FOUND));
+        User follower = userRepository.findById(followingId).orElseThrow(() -> new UserApiException(NOT_FOUND));
+        User following = userRepository.findById(followerId).orElseThrow(() -> new UserApiException(NOT_FOUND));
 
         Follow follow = new Follow(follower, following);
         followRepository.save(follow);
     }
 
-    public void unfollow(Long followerId, Long followingId) {
-        Follow followInDB = followRepository.findByFollowerIdAndFollowingId(followerId, followingId);
+    public void unfollow(Long followingId, Long followerId) {
+        Follow followInDB = followRepository.findByFollowerIdAndFollowingId(followingId, followerId);
         if (followInDB == null) throw new UserApiException(UserApiError.NOT_EXIST_FOLLOW);
 
         followRepository.delete(followInDB);
@@ -60,7 +60,7 @@ public class FollowService {
         return followRepository.findAllFollowings(myId);
     }
 
-    public Boolean checkIsFollower(Long followerId, Long followingId) {
-        return followRepository.existsFollow(followerId, followingId);
+    public Boolean checkIsFollower(Long followingId, Long followerId) {
+        return followRepository.existsFollow(followingId, followerId);
     }
 }

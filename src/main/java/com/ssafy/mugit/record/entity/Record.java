@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "record")
@@ -30,5 +31,12 @@ public class Record {
     private Boolean isOpen;
 
     @OneToMany(mappedBy = "record", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<RecordSource> recordSources;
+    private List<RecordSource> recordSources = new ArrayList<>();
+
+    public Record(Flow flow, String message, Boolean isOpen, List<RecordSource> recordSources){
+        this.flow = flow;
+        this.message = message;
+        this.isOpen = isOpen;
+        this.recordSources = recordSources;
+    }
 }

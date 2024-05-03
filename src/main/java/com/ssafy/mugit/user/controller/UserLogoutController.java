@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.service.UserLogoutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +32,8 @@ public class UserLogoutController {
                     content = @Content(schema = @Schema(implementation = MessageDto.class)))
     })
     @GetMapping("/logout")
-    public ResponseEntity<MessageDto> logout(HttpServletRequest request) {
-        HttpHeaders cookieHeader = userLogoutService.logout(request);
+    public ResponseEntity<MessageDto> logout(HttpSession session) {
+        HttpHeaders cookieHeader = userLogoutService.logout(session);
         return ResponseEntity.status(200)
                 .headers(cookieHeader)
                 .body(new MessageDto("로그아웃 완료"));

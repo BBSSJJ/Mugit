@@ -18,17 +18,17 @@ public class Follow {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User follower;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     private User following;
 
-    public Follow(User follower, User following) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User follower;
+
+    public Follow(User following, User follower) {
 
         // 본인 팔로우 방지
-        if (follower.getId().equals(following.getId())) throw new UserApiException(SELF_FOLLOW);
+        if (following.getId().equals(follower.getId())) throw new UserApiException(SELF_FOLLOW);
 
-        this.follower = follower;
-        this.following = following;
+        this.follower = following;
+        this.following = follower;
     }
 }

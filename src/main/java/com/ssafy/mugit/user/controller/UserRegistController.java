@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.request.RequestRegistProfileDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.service.UserRegistService;
@@ -35,10 +35,10 @@ public class UserRegistController {
     })
     @PostMapping("regist")
     public ResponseEntity<MessageDto> regist(
-            @CookieValue(value = "needRegist") String needRegist,
-            @CookieValue(value = "snsId") String snsId,
-            @CookieValue(value = "snsType") SnsType snsType,
-            @CookieValue(value = "email") String email,
+            @Schema(hidden = true) @CookieValue(value = "needRegist") String needRegist,
+            @Schema(hidden = true) @CookieValue(value = "snsId") String snsId,
+            @Schema(hidden = true) @CookieValue(value = "snsType") SnsType snsType,
+            @Schema(hidden = true) @CookieValue(value = "email") String email,
             @RequestBody RequestRegistProfileDto requestRegistProfileDto,
             HttpServletRequest request) {
         

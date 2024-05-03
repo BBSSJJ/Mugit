@@ -1,6 +1,6 @@
 package com.ssafy.mugit.user.fixture;
 
-import com.ssafy.mugit.global.web.dto.GoogleUserInfoDto;
+import com.ssafy.mugit.global.dto.GoogleUserInfoDto;
 
 public enum GoogleUserInfoFixture {
     DEFAULT_GOOGLE_USER_INFO("asdf1234", "test@test.com", "true", "sangyeop", "nam", "test/1234"),

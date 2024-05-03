@@ -1,13 +1,11 @@
-package com.ssafy.mugit.auth;
+package com.ssafy.mugit.global.dto;
 
-public enum SessionKeys {
+public enum DataKeys {
     LOGIN_USER_KEY("user");
 
     private final String key;
 
-    private final String SessionPrefix = "sessionAttr:";
-
-    SessionKeys(String key) {
+    DataKeys(String key) {
         this.key = key;
     }
 
@@ -16,6 +14,6 @@ public enum SessionKeys {
     }
 
     public String getSessionKey() {
-        return SessionPrefix + key;
+        return "sessionAttr:" + key;
     }
 }

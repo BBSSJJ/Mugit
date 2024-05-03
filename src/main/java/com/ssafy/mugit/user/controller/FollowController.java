@@ -1,8 +1,8 @@
 package com.ssafy.mugit.user.controller;
 
-import com.ssafy.mugit.auth.SessionKeys;
-import com.ssafy.mugit.global.web.dto.ListDto;
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.config.UserSession;
+import com.ssafy.mugit.global.dto.ListDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.service.FollowService;
 import com.ssafy.mugit.user.dto.UserSessionDto;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +33,11 @@ public class FollowController {
             @ApiResponse(responseCode = "404", description = "해당 사용자 없음", content = @Content(schema = @Schema(implementation = MessageDto.class)))})
     @PostMapping("/{id}/follows")
     public ResponseEntity<MessageDto> follow(
-            @PathVariable(name = "id") Long followeeId,
-            HttpSession session) {
+            @PathVariable(name = "id") Long followerId,
+            @UserSession UserSessionDto user) {
 
         // Session에서 본인 ID 찾아서 Follow
-        UserSessionDto userInSession = (UserSessionDto) session.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey());
-        followService.follow(userInSession.getId(), followeeId);
+        followService.follow(user.getId(), followerId);
 
         return ResponseEntity.status(201).body(new MessageDto("팔로우 완료"));
     }
@@ -49,11 +47,10 @@ public class FollowController {
             @ApiResponse(responseCode = "200", description = "팔로우 조회 완료", content = @Content(schema = @Schema(implementation = FollowerDto.class))),
             @ApiResponse(responseCode = "401", description = "권한 없음", content = @Content(schema = @Schema(implementation = MessageDto.class)))})
     @GetMapping("/followers")
-    public ResponseEntity<ListDto<List<FollowerDto>>> followers(HttpSession session) {
+    public ResponseEntity<ListDto<List<FollowerDto>>> followers(@UserSession UserSessionDto user) {
 
         // Session에서 본인 ID 찾기
-        UserSessionDto userInSession = (UserSessionDto) session.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey());
-        List<FollowerDto> allFollower = followService.getAllFollower(userInSession.getId());
+        List<FollowerDto> allFollower = followService.getAllFollower(user.getId());
 
         return ResponseEntity.status(200).body(new ListDto<>(allFollower));
     }
@@ -63,11 +60,10 @@ public class FollowController {
             @ApiResponse(responseCode = "200", description = "팔로잉 조회 완료", content = @Content(schema = @Schema(implementation = FollowerDto.class))),
             @ApiResponse(responseCode = "401", description = "권한 없음", content = @Content(schema = @Schema(implementation = MessageDto.class)))})
     @GetMapping("/followings")
-    public ResponseEntity<ListDto<List<FollowerDto>>> followings(HttpSession session) {
+    public ResponseEntity<ListDto<List<FollowerDto>>> followings(@UserSession UserSessionDto user) {
 
         // Session에서 본인 ID 찾기
-        UserSessionDto userInSession = (UserSessionDto) session.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey());
-        List<FollowerDto> allFollower = followService.getAllFollowings(userInSession.getId());
+        List<FollowerDto> allFollower = followService.getAllFollowings(user.getId());
 
         return ResponseEntity.status(200).body(new ListDto<>(allFollower));
     }
@@ -79,11 +75,10 @@ public class FollowController {
             @ApiResponse(responseCode = "401", description = "권한 없음", content = @Content(schema = @Schema(implementation = MessageDto.class)))})
     @DeleteMapping("{id}/follows")
     public ResponseEntity<MessageDto> unfollow(
-            @PathVariable(name = "id") Long followerId, HttpSession session) {
+            @PathVariable(name = "id") Long followerId, @UserSession UserSessionDto user) {
 
         // Session에서 본인 ID 찾기
-        UserSessionDto userInSession = (UserSessionDto) session.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey());
-        followService.unfollow(userInSession.getId(), followerId);
+        followService.unfollow(user.getId(), followerId);
 
         return ResponseEntity.status(200).body(new MessageDto("언팔로우 완료"));
     }

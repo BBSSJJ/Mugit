@@ -1,7 +1,7 @@
 package com.ssafy.mugit.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.mugit.global.web.dto.MessageDto;
+import com.ssafy.mugit.global.dto.MessageDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

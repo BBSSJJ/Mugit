@@ -1,7 +1,7 @@
 package com.ssafy.mugit.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.mugit.global.web.dto.SecurityExceptionDto;
+import com.ssafy.mugit.global.dto.SecurityExceptionDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.ssafy.mugit.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssafy.mugit.auth.SessionKeys;
-import com.ssafy.mugit.global.web.api.OAuthApi;
+import com.ssafy.mugit.global.dto.DataKeys;
+import com.ssafy.mugit.global.api.OAuthApi;
 import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
@@ -75,6 +75,6 @@ class UserLoginServiceTest {
 
         // then
         assertThat(cookies).contains(cookieUtil.getTimeoutCookie("isLogined", "true").toString());
-        assertThat(session.getAttribute(SessionKeys.LOGIN_USER_KEY.getKey())).isNotNull();
+        assertThat(session.getAttribute(DataKeys.LOGIN_USER_KEY.getKey())).isNotNull();
     }
 }
