@@ -4,9 +4,7 @@ import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
-import com.ssafy.mugit.record.dto.FilePathDto;
-import com.ssafy.mugit.record.dto.RecordRequestDto;
-import com.ssafy.mugit.record.dto.RecordResponseDto;
+import com.ssafy.mugit.record.dto.*;
 import com.ssafy.mugit.record.entity.Record;
 import com.ssafy.mugit.record.entity.RecordSource;
 import com.ssafy.mugit.record.entity.Source;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +30,19 @@ public class RecordService {
     private final FlowRepository flowRepository;
     private final RecordSourceRepository recordSourceRepository;
 
-    public void insertRecord(Long flowId, RecordRequestDto recordRequestDto) {
+    public void insertRecord(Long userId, Long flowId, RecordRequestDto recordRequestDto) {
 
-        // 1. 레코드 생성
+        // 1. 요청 검증
+        validateFlow(userId, flowId);
+
+        // 2. 레코드 생성
         Record record = createRecord(flowId, recordRequestDto.getMessage());
 
-        // 2. 소스 파일 아이디와 레코드 아이디 매핑
-        mappingRecordSource(record, recordRequestDto.getSourceIds());
+        // 3. 소스 파일 아이디와 레코드 아이디 매핑
+        mappingRecordSource(record, recordRequestDto.getPreSources());
 
-        // 3. 추가된 소스 생성 및 매핑
-        mappingRecordSource(record, createSource(recordRequestDto.getFilePaths()));
-
+        // 4. 추가된 소스 생성 및 매핑
+        mappingRecordSource(record, createSource(recordRequestDto.getNewSources()));
     }
 
     private Record createRecord(Long flowId, String message) {
@@ -55,39 +54,44 @@ public class RecordService {
         return recordRepository.save(record);
     }
 
-    private void mappingRecordSource(Record record, List<Long> sourceIds) {
-        if (sourceIds != null && !sourceIds.isEmpty()) {
-            for (Long sourceId : sourceIds) {
-                Source source = sourceRepository.getReferenceById(sourceId);
+    private void mappingRecordSource(Record record, List<PreSourceDto> preSources) {
+        if (preSources != null && !preSources.isEmpty()) {
+            for (PreSourceDto preSource : preSources) {
+                Source source = sourceRepository.getReferenceById(preSource.getId());
                 RecordSource recordSource = RecordSource.builder()
                         .record(record)
                         .source(source)
+                        .name(preSource.getName())
                         .build();
                 recordSourceRepository.save(recordSource);
             }
         }
     }
 
-    private List<Long> createSource(List<FilePathDto> filePaths) {
-        List<Long> ids = null;
-        if (filePaths != null && !filePaths.isEmpty()) {
-            ids = new ArrayList<>();
-            for (FilePathDto filePath : filePaths) {
+    private List<PreSourceDto> createSource(List<NewSourceDto> newSources) {
+        List<PreSourceDto> sources = null;
+        if (newSources != null && !newSources.isEmpty()) {
+            sources = new ArrayList<>();
+            for (NewSourceDto newSource : newSources) {
                 Source source = Source.builder()
-                        .uuidName(filePath.getUuidName())
-                        .originName(filePath.getOriginName())
+                        .path(newSource.getPath())
                         .build();
-                ids.add(sourceRepository.save(source).getId());
+                sources.add(new PreSourceDto(sourceRepository.save(source).getId(), newSource.getName()));
             }
         }
-        return ids;
+        return sources;
     }
 
     public RecordResponseDto selectRecord(Long userId, Long recordId) {
         Record record = validateRecord(userId, recordId);
-        List<Source> sources = new ArrayList<>();
+        List<SourceInfoDto> sources = new ArrayList<>();
         for (RecordSource rs : record.getRecordSources()) {
-            sources.add(rs.getSource());
+            SourceInfoDto sourceInfoDto = SourceInfoDto.builder()
+                    .id(rs.getSource().getId())
+                    .name(rs.getName())
+                    .path(rs.getSource().getPath())
+                    .build();
+            sources.add(sourceInfoDto);
         }
         return new RecordResponseDto(record.getId(), record.getMessage(), sources);
     }

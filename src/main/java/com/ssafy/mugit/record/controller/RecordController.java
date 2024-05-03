@@ -17,17 +17,11 @@ public class RecordController {
 
     private final RecordService recordService;
 
-    @GetMapping("/flows/{flowId}")
-    public ResponseEntity<?> validateFlowId(@PathVariable Long flowId,
-                                            @UserSession UserSessionDto user) {
-        recordService.validateFlow(user.getId(), flowId);
-        return new ResponseEntity<>(new MessageDto("Flow is validated"), HttpStatus.OK);
-    }
-
     @PostMapping("/flows/{flowId}")
     public ResponseEntity<?> createRecord(@PathVariable Long flowId,
-                                          @RequestBody RecordRequestDto recordRequestDto) {
-        recordService.insertRecord(flowId, recordRequestDto);
+                                          @RequestBody RecordRequestDto recordRequestDto,
+                                          @UserSession UserSessionDto user) {
+        recordService.insertRecord(user.getId(), flowId, recordRequestDto);
         return new ResponseEntity<>(new MessageDto("record create successful"), HttpStatus.OK);
     }
 

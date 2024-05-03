@@ -21,4 +21,7 @@ public class RecordSource {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_id")
     private Source source;
+
+    @Column(name = "source_name")
+    private String name;
 }
