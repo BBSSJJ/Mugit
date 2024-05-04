@@ -2,7 +2,6 @@ package com.ssafy.mugit.flow.main.controller;
 
 import com.ssafy.mugit.flow.main.dto.FlowGraphDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestCreateNoteDto;
-import com.ssafy.mugit.flow.main.dto.request.RequestRegistFlowDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestReleaseFlowDto;
 import com.ssafy.mugit.flow.main.service.FlowService;
 import com.ssafy.mugit.global.config.UserSession;
@@ -25,17 +24,17 @@ public class FlowController {
         return ResponseEntity.status(201).body(new MessageDto("Note 생성 성공"));
     }
 
-    @PostMapping()
+    @PostMapping("/parent/{parentId}")
     public ResponseEntity<MessageDto> registFlow(
-            @UserSession UserSessionDto user, RequestRegistFlowDto requestRegistFlowDto) {
-        flowService.regist(user.getId(), requestRegistFlowDto);
+            @UserSession UserSessionDto user, @PathVariable("parentId") Long parentId) {
+        flowService.regist(user.getId(), parentId);
         return ResponseEntity.status(201).body(new MessageDto("Flow 생성 성공"));
     }
 
     //릴리즈 시 부모의 플로우와 같은 경우에는 못하게 합시다..?
     @PatchMapping("/{flowId}")
-    public ResponseEntity<MessageDto> releaseFlow(@UserSession UserSessionDto user, RequestReleaseFlowDto requestReleaseFlowDto) {
-        flowService.release(user.getId(), requestReleaseFlowDto);
+    public ResponseEntity<MessageDto> releaseFlow(@UserSession UserSessionDto user, @PathVariable("flowId") Long flowId, @RequestBody RequestReleaseFlowDto requestReleaseFlowDto) {
+        flowService.release(user.getId(), flowId, requestReleaseFlowDto);
         return ResponseEntity.status(200).body(new MessageDto("Flow 릴리즈 성공"));
     }
 

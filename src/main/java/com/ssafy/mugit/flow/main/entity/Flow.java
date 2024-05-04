@@ -1,8 +1,8 @@
 package com.ssafy.mugit.flow.main.entity;
 
 import com.ssafy.mugit.global.entity.BaseTimeEntity;
-import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.record.entity.Record;
+import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -62,9 +62,18 @@ public class Flow extends BaseTimeEntity {
         this.title = title;
         this.message = message;
         this.authority = authority;
-        this.isReleased = false;
+        this.isReleased = true;
         this.musicPath = musicPath;
         this.coverPath = coverPath;
         this.views = 0;
+    }
+
+    public void releaseFlow(String title, String message, Authority authority, String musicPath, String coverPath) {
+        this.title = title;
+        this.message = message;
+        this.authority = authority;
+        this.musicPath = musicPath;
+        this.coverPath = coverPath;
+        this.isReleased = true;
     }
 }

@@ -1,10 +1,7 @@
 package com.ssafy.mugit.record.entity;
 
-import com.ssafy.mugit.record.entity.Record;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity(name = "source")
 @Getter
@@ -19,4 +16,8 @@ public class Source {
 
     @Column(name = "source_path")
     private String path;
+
+    public Source(String path) {
+        this.path = path;
+    }
 }

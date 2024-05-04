@@ -1,6 +1,7 @@
 package com.ssafy.mugit.record.entity;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Record {
+public class Record extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "record_id")
@@ -33,10 +34,20 @@ public class Record {
     @OneToMany(mappedBy = "record", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecordSource> recordSources = new ArrayList<>();
 
-    public Record(Flow flow, String message, Boolean isOpen, List<RecordSource> recordSources){
+    public Record(Flow flow, String message, Boolean isOpen, List<RecordSource> recordSources) {
         this.flow = flow;
         this.message = message;
         this.isOpen = isOpen;
+        this.recordSources = recordSources;
+    }
+
+    public Record(Flow flow, String message, Boolean isOpen) {
+        this.flow = flow;
+        this.message = message;
+        this.isOpen = isOpen;
+    }
+
+    public void initRecordSources(List<RecordSource> recordSources) {
         this.recordSources = recordSources;
     }
 }
