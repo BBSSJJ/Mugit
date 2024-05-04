@@ -24,4 +24,10 @@ public class RecordSource {
 
     @Column(name = "source_name")
     private String name;
+
+    public RecordSource(Record record, Source source, String name) {
+        this.record = record;
+        this.source = source;
+        this.name = name;
+    }
 }

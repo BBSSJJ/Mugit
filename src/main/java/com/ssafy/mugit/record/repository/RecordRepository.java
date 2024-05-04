@@ -10,10 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long>, CustomRecordRepository {
-//    @Query("SELECT r " +
-//            "FROM record r " +
-//            "WHERE r.flowId = :flowId " +
-//            "ORDER BY r.createdAt DESC " +
-//            "LIMIT 1")
+    @Query("SELECT r " +
+            "FROM record r " +
+            "LEFT JOIN record_source rs ON r.id = rs.record.id " +
+            "WHERE r.flow.id = :flowId " +
+            "ORDER BY r.createdAt DESC " +
+            "LIMIT 1")
     Optional<Record> findLastRecordByFlowId(Long flowId);
 }
