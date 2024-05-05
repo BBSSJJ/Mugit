@@ -9,6 +9,7 @@ import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.entity.FlowClosure;
 import com.ssafy.mugit.flow.main.repository.FlowClosureRepository;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
+import com.ssafy.mugit.flow.main.util.FlowGraphUtil;
 import com.ssafy.mugit.hashtag.entity.Hashtag;
 import com.ssafy.mugit.hashtag.service.HashtagService;
 import com.ssafy.mugit.record.entity.Record;

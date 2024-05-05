@@ -2,8 +2,14 @@ package com.ssafy.mugit.flow.main.entity;
 
 import com.ssafy.mugit.hashtag.entity.Hashtag;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "flow_hashtag")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class FlowHashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
