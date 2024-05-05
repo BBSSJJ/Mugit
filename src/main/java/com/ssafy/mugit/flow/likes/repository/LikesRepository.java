@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
@@ -13,4 +14,8 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
             "LEFT JOIN users u ON l.user.id = u.id " +
             "WHERE l.flow.id = :flowId")
     List<Likes> findAllByFlowId(Long flowId);
+
+    @Query("SELECT l FROM likes l " +
+            "WHERE l.user.id = :userId AND l.flow.id = :flowId")
+    Optional<Likes> findLikeByUserIdAndFlowId(Long userId, Long flowId);
 }

@@ -24,4 +24,9 @@ public class Likes {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flow_id")
     Flow flow;
+
+    public Likes(User user, Flow flow) {
+        this.user = user;
+        this.flow = flow;
+    }
 }
