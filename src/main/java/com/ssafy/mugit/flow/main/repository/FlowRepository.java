@@ -24,4 +24,23 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "LEFT JOIN com.ssafy.mugit.user.entity.Profile p ON p.user.id = u.id " +
             "WHERE f.isReleased = true AND f.authority != 'PRIVATE'")
     List<Flow> findFlows();
+
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN users u ON f.user.id = u.id " +
+            "LEFT JOIN com.ssafy.mugit.user.entity.Profile p ON p.user.id = u.id " +
+            "WHERE f.isReleased = true AND f.user.id = :userId")
+    List<Flow> findFlowsByUserId(Long userId);
+
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN users u ON f.user.id = u.id " +
+            "LEFT JOIN com.ssafy.mugit.user.entity.Profile p ON p.user.id = u.id " +
+            "WHERE f.isReleased = false AND f.user.id = :userId")
+    List<Flow> findWorkingFlowsByUserId(Long userId);
+
+    @Query("SELECT f FROM likes l " +
+            "LEFT JOIN flow f ON l.flow.id = f.id " +
+            "LEFT JOIN users u ON f.user.id = u.id " +
+            "LEFT JOIN com.ssafy.mugit.user.entity.Profile p ON p.user.id = u.id " +
+            "WHERE l.user.id = :userId")
+    List<Flow> findMyLikeFlows(Long userId);
 }

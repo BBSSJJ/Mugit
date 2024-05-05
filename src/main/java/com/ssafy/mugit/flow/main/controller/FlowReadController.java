@@ -31,4 +31,19 @@ public class FlowReadController {
     ResponseEntity<ListDto<List<FlowItemDto>>> getFlowList() {
         return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listFlow()));
     }
+
+    @GetMapping("/mine")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getMyFlowList(@UserSession UserSessionDto user) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listMyFlow(user.getId())));
+    }
+
+    @GetMapping("/working")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getMyWorkingFlowList(@UserSession UserSessionDto user) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listMyWorkingFlow(user.getId())));
+    }
+
+    @GetMapping("/likes")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getMyLikeFlowList(@UserSession UserSessionDto user) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listMyLikeFlow(user.getId())));
+    }
 }

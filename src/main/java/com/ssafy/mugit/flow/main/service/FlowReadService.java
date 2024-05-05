@@ -57,8 +57,21 @@ public class FlowReadService {
     }
 
     public List<FlowItemDto> listFlow() {
-        List<FlowItemDto> flows = flowRepository.findFlows().stream().map(FlowItemDto::new).toList();
+        return flowRepository.findFlows().stream().map(FlowItemDto::new).toList();
+    }
 
-        return flows;
+    public List<FlowItemDto> listMyFlow(Long userId) {
+        User user = userRepository.getReferenceById(userId);
+        return flowRepository.findFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+    }
+
+    public List<FlowItemDto> listMyWorkingFlow(Long userId) {
+        User user = userRepository.getReferenceById(userId);
+        return flowRepository.findWorkingFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+    }
+
+    public List<FlowItemDto> listMyLikeFlow(Long userId) {
+        User user = userRepository.getReferenceById(userId);
+        return flowRepository.findMyLikeFlows(user.getId()).stream().map(FlowItemDto::new).toList();
     }
 }
