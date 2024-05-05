@@ -1,11 +1,18 @@
 package com.ssafy.mugit.flow.review.entity;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "review")
-public class Review {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
@@ -21,4 +28,10 @@ public class Review {
 
     @Column(name = "content")
     String content;
+
+    public Review(User user, Flow flow, String content) {
+        this.user = user;
+        this.flow = flow;
+        this.content = content;
+    }
 }
