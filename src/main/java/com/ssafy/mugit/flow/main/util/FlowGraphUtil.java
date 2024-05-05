@@ -1,4 +1,4 @@
-package com.ssafy.mugit.flow.main.service;
+package com.ssafy.mugit.flow.main.util;
 
 import com.ssafy.mugit.flow.main.dto.FlowGraphDto;
 import com.ssafy.mugit.flow.main.entity.Flow;

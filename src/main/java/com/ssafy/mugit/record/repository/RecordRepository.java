@@ -13,6 +13,7 @@ public interface RecordRepository extends JpaRepository<Record, Long>, CustomRec
     @Query("SELECT r " +
             "FROM record r " +
             "LEFT JOIN record_source rs ON r.id = rs.record.id " +
+            "LEFT JOIN source s ON rs.source.id = s.id " +
             "WHERE r.flow.id = :flowId " +
             "ORDER BY r.createdAt DESC " +
             "LIMIT 1")

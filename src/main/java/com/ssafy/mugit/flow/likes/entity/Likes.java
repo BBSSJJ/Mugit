@@ -3,8 +3,14 @@ package com.ssafy.mugit.flow.likes.entity;
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "likes")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
