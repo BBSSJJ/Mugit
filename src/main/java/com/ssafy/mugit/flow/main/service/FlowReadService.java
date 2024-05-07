@@ -14,7 +14,10 @@ import com.ssafy.mugit.record.repository.RecordRepository;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,8 +61,9 @@ public class FlowReadService {
         return flowDto;
     }
 
-    public List<FlowItemDto> listFlow() {
-        return flowRepository.findFlows().stream().map(FlowItemDto::new).toList();
+    @Transactional(readOnly = true)
+    public Slice<FlowItemDto> listFlow(Pageable pageable) {
+        return flowRepository.findAll(pageable).map(FlowItemDto::new);
     }
 
     public List<FlowItemDto> listMyFlow(Long userId) {
