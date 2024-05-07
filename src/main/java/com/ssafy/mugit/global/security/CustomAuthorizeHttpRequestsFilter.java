@@ -29,8 +29,8 @@ public class CustomAuthorizeHttpRequestsFilter {
                 // 구글 Mock Controller
                 .requestMatchers("/oauth2/v2/userinfo").permitAll()
 
-                // flow 전체조회
-                .requestMatchers("/api/flows").permitAll()
+                // flow 관련 API 인증 해제
+                .requestMatchers("/api/flows/**").permitAll()
 
                 // 이외 API 요청은 전부 인증 필요
                 .requestMatchers("/api/**").authenticated()
