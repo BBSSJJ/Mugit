@@ -5,9 +5,7 @@ import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.user.controller.UserProfileController;
 import com.ssafy.mugit.user.dto.request.RequestModifyUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
-import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserProfileService;
@@ -18,12 +16,11 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
+import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
 import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +79,7 @@ public class UserProfileAcceptanceTest {
     @DisplayName("[인수] 로그인한 유저 본인 프로필 조회(200)")
     void testFindMyProfile() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234")).andReturn().getResponse().getCookies();
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token")).andReturn().getResponse().getCookies();
         String resultJson = objectMapper.writeValueAsString(new ResponseUserProfileDto(userInDB, userInDB.getProfile()));
 
         // when

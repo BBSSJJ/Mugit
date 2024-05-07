@@ -17,32 +17,41 @@ public class Notification {
     @Column(name = "notification_id")
     private Long id;
 
+    @Column(name = "is_read", nullable = false)
+    private Boolean isRead;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "notified_user_id", nullable = false)
     private User notified;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "notifier_user_id", nullable = false)
     private User notifier;
 
-    @Column(name = "is_read", nullable = false)
-    private Boolean isRead;
+    @Column(name = "cause_entity_id", nullable = false)
+    private Long causeEntityId;
+
+    @Column(name = "cause_entity_class", nullable = false)
+    private Class<?> causeEntityClass;
 
     @Column(name = "type", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private NotificationType type;
 
-    @Column(name = "message", nullable = false)
-    private String message;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-    public Notification(User notifier, User notified, NotificationType type) {
+
+    public Notification(User notified, User notifier, Long causeEntityId, Class<?> causeEntityClass, NotificationType type) {
         switch (type){
             case FOLLOW -> {
                 this.type = FOLLOW;
-                this.notifier = notifier;
                 this.notified = notified;
+                this.notifier = notifier;
                 this.isRead = false;
-                this.message = notifier.getProfile().getNickName() + "님이 당신을 팔로우합니다.";
+                this.causeEntityId = causeEntityId;
+                this.causeEntityClass = causeEntityClass;
+                this.description = notifier.getProfile().getNickName() + "님이 당신을 팔로우합니다.";
             }
             case LIKE -> {
                 this.type = LIKE;
@@ -51,5 +60,9 @@ public class Notification {
                 this.type = FLOW_RELEASE;
             }
         }
+    }
+
+    public void read() {
+        this.isRead = true;
     }
 }

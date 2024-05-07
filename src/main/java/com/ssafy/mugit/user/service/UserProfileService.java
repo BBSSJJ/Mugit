@@ -22,7 +22,7 @@ public class UserProfileService {
     public ResponseUserProfileDto getProfileById(Long userId) {
         // 해당 프로필 조회 + 예외처리
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
-        if (userDto == null) throw new UserApiException(UserApiError.NOT_FOUND);
+        if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
         return userDto;
     }
 
@@ -31,7 +31,7 @@ public class UserProfileService {
         if (myId.equals(userId)) throw new UserApiException(UserApiError.SELF_PROFILE);
         // 해당 프로필 조회 + 예외처리
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
-        if (userDto == null) throw new UserApiException(UserApiError.NOT_FOUND);
+        if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
         // 팔로우 여부 설정
         userDto.setFollows(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId));
         return userDto;

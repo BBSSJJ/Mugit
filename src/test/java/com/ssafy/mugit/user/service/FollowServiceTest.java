@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.ssafy.mugit.global.exception.error.UserApiError.NOT_EXIST_FOLLOW;
-import static com.ssafy.mugit.global.exception.error.UserApiError.NOT_FOUND;
+import static com.ssafy.mugit.global.exception.error.UserApiError.USER_NOT_FOUND;
 import static com.ssafy.mugit.user.fixture.FollowerFixture.FOLLOWER_USER_2;
 import static com.ssafy.mugit.user.fixture.FollowerFixture.FOLLOWER_USER_3;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
@@ -82,7 +82,7 @@ class FollowServiceTest {
         // then
         assertThat(exception).isInstanceOf(UserApiException.class);
         UserApiException apiException = (UserApiException) exception;
-        assertThat(apiException.getUserApiError()).isEqualTo(NOT_FOUND);
+        assertThat(apiException.getUserApiError()).isEqualTo(USER_NOT_FOUND);
     }
 
     @Test

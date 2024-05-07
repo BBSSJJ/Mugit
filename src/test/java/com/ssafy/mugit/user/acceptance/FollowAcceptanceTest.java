@@ -20,12 +20,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ssafy.mugit.user.fixture.FollowerFixture.FOLLOWER_USER_2;
-import static com.ssafy.mugit.user.fixture.FollowerFixture.FOLLOWER_USER_3;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
 import static com.ssafy.mugit.user.fixture.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,29 +45,28 @@ public class FollowAcceptanceTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    User follower;
-    User followee;
+    User followingUser;
+    User followeeUser;
     @Autowired
     private FollowRepository followRepository;
 
     @BeforeEach
     void setUp() {
-        follower = USER.getFixture(PROFILE.getFixture());
-        userRepository.save(follower);
+        followingUser = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(followingUser);
 
-        followee = USER_2.getFixture(PROFILE_2.getFixture());
-        userRepository.save(followee);
+        followeeUser = USER_2.getFixture(PROFILE_2.getFixture());
+        userRepository.save(followeeUser);
     }
 
     @Test
     @DisplayName("[인수] 타인 팔로우 요청(201)")
     void testFollow() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
-                .andReturn().getResponse().getCookies();
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token")).andReturn().getResponse().getCookies();
 
         // when
-        ResultActions perform = mockMvc.perform(post("/api/users/" + followee.getId() + "/follows")
+        ResultActions perform = mockMvc.perform(post("/api/users/" + followeeUser.getId() + "/follows")
                 .cookie(loginCookie));
 
         // then
@@ -81,7 +77,7 @@ public class FollowAcceptanceTest {
     @DisplayName("[인수] 본인 팔로우 요청(400)")
     void testFollowMyself() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
                 .andReturn().getResponse().getCookies();
 
         Long followeeId = USER.getFixture().getId();
@@ -98,7 +94,7 @@ public class FollowAcceptanceTest {
     @DisplayName("[인수] 없는 유저 팔로우 요청(404)")
     void testFollowNotInDB() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
                 .andReturn().getResponse().getCookies();
         long followingId = -1L;
 
@@ -114,8 +110,8 @@ public class FollowAcceptanceTest {
     @DisplayName("[인수] 로그인 시 팔로우, 팔로잉 유저 수 조회(200, login)")
     void testLoginFollow() throws Exception {
         // given
-        long followerId = follower.getId();
-        long followeeId = followee.getId();
+        long followerId = followingUser.getId();
+        long followeeId = followeeUser.getId();
 
         // me <-> user2
         followService.follow(followeeId, followerId);
@@ -142,24 +138,24 @@ public class FollowAcceptanceTest {
     @DisplayName("[인수] 팔로우 / 팔로잉 유저 전체 조회(200)")
     void testAllFollowers() throws Exception {
         // given
-        long myId = follower.getId();
+        long myId = followingUser.getId();
 
         // me <-> followee
-        followService.follow(followee.getId(), myId);
-        followService.follow(myId, followee.getId());
+        followService.follow(followeeUser.getId(), myId);
+        followService.follow(myId, followeeUser.getId());
 
         // me -> followee2
         User followee2 = USER_3.getFixture(PROFILE_3.getFixture());
         userRepository.save(followee2);
         followService.follow(myId, followee2.getId());
 
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
                 .andReturn().getResponse().getCookies();
 
-        List<FollowerDto> followers = Arrays.asList(new FollowerDto(followee), new FollowerDto(followee2));
+        List<FollowerDto> followers = Arrays.asList(new FollowerDto(followeeUser), new FollowerDto(followee2));
         String expectFollowersBody = objectMapper.writeValueAsString(new ListDto<>(followers));
 
-        List<FollowerDto> followings = List.of(new FollowerDto(followee));
+        List<FollowerDto> followings = List.of(new FollowerDto(followeeUser));
         String expectFollowingsBody = objectMapper.writeValueAsString(new ListDto<>(followings));
 
         // when
@@ -177,8 +173,8 @@ public class FollowAcceptanceTest {
     @DisplayName("[인수] 팔로우 정상삭제(200)")
     void testFollowDelete() throws Exception {
         // given
-        long myId = follower.getId();
-        long friend = followee.getId();
+        long myId = followingUser.getId();
+        long friend = followeeUser.getId();
 
         // me <-> friend
         followService.follow(friend, myId);
@@ -207,22 +203,22 @@ public class FollowAcceptanceTest {
     @DisplayName("[인수] 프로필에서 팔로우하는지 여부 조회(200)")
     void testFollowInProfile() throws Exception {
         // given
-        long myId = follower.getId();
+        long myId = followingUser.getId();
 
         // me <-> followee
-        followService.follow(followee.getId(), myId);
-        followService.follow(myId, followee.getId());
+        followService.follow(followeeUser.getId(), myId);
+        followService.follow(myId, followeeUser.getId());
 
         // follower2 -> me
         User follower2 = USER_3.getFixture(PROFILE_3.getFixture());
         userRepository.save(follower2);
         followService.follow(follower2.getId(), myId);
 
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
                 .andReturn().getResponse().getCookies();
 
         // when
-        ResultActions followeeResult = mockMvc.perform(get("/api/users/" + followee.getId() + "/profiles/detail").cookie(loginCookie));
+        ResultActions followeeResult = mockMvc.perform(get("/api/users/" + followeeUser.getId() + "/profiles/detail").cookie(loginCookie));
         ResultActions follower2Result = mockMvc.perform(get("/api/users/" + follower2.getId() + "/profiles/detail").cookie(loginCookie));
         ResponseUserProfileDto followeeDto = objectMapper.readValue(followeeResult.andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), ResponseUserProfileDto.class);
         ResponseUserProfileDto follower2Dto = objectMapper.readValue(follower2Result.andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), ResponseUserProfileDto.class);

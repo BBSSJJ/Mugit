@@ -15,7 +15,7 @@ public class UserFindService {
 
     public ResponseUserProfileDto findUserByNickName(String nickName) {
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByNickName(nickName);
-        if (userDto == null) throw new UserApiException(UserApiError.NOT_FOUND);
+        if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
         return userDto;
     }
 }
