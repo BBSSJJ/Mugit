@@ -1,4 +1,4 @@
-package com.ssafy.mugit.global.dto;
+package com.ssafy.mugit.global.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

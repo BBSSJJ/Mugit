@@ -50,7 +50,7 @@ public class FollowController {
     public ResponseEntity<ListDto<List<FollowerDto>>> followers(@UserSession UserSessionDto user) {
 
         // Session에서 본인 ID 찾기
-        List<FollowerDto> allFollower = followService.getAllFollower(user.getId());
+        List<FollowerDto> allFollower = followService.getAllFollowers(user.getId());
 
         return ResponseEntity.status(200).body(new ListDto<>(allFollower));
     }

@@ -1,7 +1,7 @@
 package com.ssafy.mugit.notification.dto;
 
-import com.ssafy.mugit.user.entity.Notification;
-import com.ssafy.mugit.user.entity.type.NotificationType;
+import com.ssafy.mugit.notification.entity.Notification;
+import com.ssafy.mugit.notification.entity.NotificationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

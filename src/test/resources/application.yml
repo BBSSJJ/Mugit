@@ -33,7 +33,7 @@ spring:
   session:
     redis:
       flush-mode: on_save
-      namespace: mugit:session
+      namespace: mugit
 
   data:
     redis:
@@ -64,6 +64,12 @@ server:
         secure: true
         max-age: ${SESSION_TIMEOUT}
         same-site: none
+
+message:
+  api:
+    base-uri: localhost:8080
+    send-uri: /message
+
 
 # emitter
 emitter:

@@ -22,10 +22,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DEFAULT_MODIFY_USER_INFO_DTO;
+import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
+import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
 import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -49,30 +51,27 @@ public class UserProfileAcceptanceTest {
 
     @Autowired
     UserRepository userRepository;
+
     @Autowired
-    private ProfileRepository profileRepository;
+    ProfileRepository profileRepository;
+
+    User userInDB;
 
     @BeforeEach
     void setUp() {
-        User user = USER.getFixture();
-        Profile profile = ProfileFixture.PROFILE.getFixture();
-        user.regist(profile);
-        userRepository.save(user);
+        userInDB = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(userInDB);
     }
 
     @Test
     @DisplayName("[인수] 로그인 안한 유저 타인 프로필 조회(200)")
     void testFindUserPk() throws Exception {
         // given
-        String resultJson = objectMapper.writeValueAsString(
-                new ResponseUserProfileDto(
-                        USER.getFixture(),
-                        ProfileFixture.PROFILE.getFixture()));
-        long userId = 1L;
+        String resultJson = objectMapper.writeValueAsString(new ResponseUserProfileDto(userInDB, userInDB.getProfile()));
+        long userId = userInDB.getId();
 
         // when
-        ResultActions perform = mockMvc.perform(get("/api/users/" + userId + "/profiles/detail")
-                .contentType(MediaType.APPLICATION_JSON));
+        ResultActions perform = mockMvc.perform(get("/api/users/" + userId + "/profiles/detail").contentType(APPLICATION_JSON));
 
         // then
         perform.andExpect(status().isOk())
@@ -83,16 +82,11 @@ public class UserProfileAcceptanceTest {
     @DisplayName("[인수] 로그인한 유저 본인 프로필 조회(200)")
     void testFindMyProfile() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
-                .andReturn().getResponse().getCookies();
-        String resultJson = objectMapper.writeValueAsString(
-                new ResponseUserProfileDto(
-                        USER.getFixture(),
-                        ProfileFixture.PROFILE.getFixture()));
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234")).andReturn().getResponse().getCookies();
+        String resultJson = objectMapper.writeValueAsString(new ResponseUserProfileDto(userInDB, userInDB.getProfile()));
 
         // when
-        ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail")
-                .contentType(MediaType.APPLICATION_JSON)
+        ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail").contentType(APPLICATION_JSON)
                 .cookie(loginCookie));
 
         // then
@@ -105,8 +99,7 @@ public class UserProfileAcceptanceTest {
     void testFindMyProfileWithoutLogin() throws Exception {
         // given
         // when
-        ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail")
-                .contentType(MediaType.APPLICATION_JSON));
+        ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail").contentType(APPLICATION_JSON));
 
         // then
         perform.andExpect(status().isUnauthorized());
@@ -116,37 +109,33 @@ public class UserProfileAcceptanceTest {
     @DisplayName("[인수] 본인 회원정보 정상 수정(200)")
     void testModifyMyProfile() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
-                .andReturn().getResponse().getCookies();
-        RequestModifyUserInfoDto dto = DEFAULT_MODIFY_USER_INFO_DTO.getFixture();
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token")).andReturn().getResponse().getCookies();
+        RequestModifyUserInfoDto dto = MODIFY_USER_INFO_DTO_01.getFixture();
         String body = objectMapper.writeValueAsString(dto);
 
         // when
         ResultActions perform = mockMvc.perform(patch("/api/users/profiles")
                 .cookie(loginCookie)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body));
-        Profile profileInDB = profileRepository.findByUserId(USER.getFixture().getId());
+                .contentType(APPLICATION_JSON).content(body));
 
         // then
-        perform.andExpect(status().isOk())
-                .andExpect(content().json("{\"message\":\"프로필 수정완료\"}"));
-        assertThat(profileInDB.getNickName()).isEqualTo(dto.getNickName());
-        assertThat(profileInDB.getProfileText()).isEqualTo(dto.getProfileText());
-        assertThat(profileInDB.getProfileImagePath()).isEqualTo(dto.getProfileImagePath());
+        perform.andExpect(status().isOk()).andExpect(content().json("{\"message\":\"프로필 수정완료\"}"));
+        ResponseUserProfileDto userProfile = userRepository.findUserProfileDtoByUserId(userInDB.getId());
+        assertThat(userProfile.getNickName()).isEqualTo(dto.getNickName());
+        assertThat(userProfile.getProfileText()).isEqualTo(dto.getProfileText());
+        assertThat(userProfile.getProfileImagePath()).isEqualTo(dto.getProfileImagePath());
     }
 
     @Test
     @DisplayName("[인수] 로그인 없이 회원정보 수정(401)")
     void testModifyMyProfileWithoutLogin() throws Exception {
         // given
-        RequestModifyUserInfoDto dto = DEFAULT_MODIFY_USER_INFO_DTO.getFixture();
+        RequestModifyUserInfoDto dto = MODIFY_USER_INFO_DTO_01.getFixture();
         String body = objectMapper.writeValueAsString(dto);
 
         // when
         ResultActions perform = mockMvc.perform(patch("/api/users/profiles")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(body));
 
         // then
@@ -157,18 +146,12 @@ public class UserProfileAcceptanceTest {
     @DisplayName("[인수] 중복 프로필 수정(409)")
     void testModifyDuplicateProfile() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
-                .andReturn().getResponse().getCookies();
-        RequestModifyUserInfoDto dto = DUPLICATE_MODIFY_USER_INFO_DTO.getFixture();
-        String body = objectMapper.writeValueAsString(dto);
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token")).andReturn().getResponse().getCookies();
+        String body = objectMapper.writeValueAsString(DUPLICATE_MODIFY_USER_INFO_DTO.getFixture());
 
         // when
-        ResultActions perform = mockMvc.perform(patch("/api/users/profiles")
-                .cookie(loginCookie)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body));
-        Profile profileInDB = profileRepository.findByUserId(USER.getFixture().getId());
+        mockMvc.perform(patch("/api/users/profiles").cookie(loginCookie).contentType(APPLICATION_JSON).content(body));
+        ResultActions perform = mockMvc.perform(patch("/api/users/profiles").cookie(loginCookie).contentType(APPLICATION_JSON).content(body));
 
         // then
         perform.andExpect(status().is(409))

@@ -13,7 +13,7 @@ import static com.ssafy.mugit.global.exception.error.UserApiError.SELF_FOLLOW;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Follow {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "follow_id")
     private Long id;
 
@@ -21,14 +21,14 @@ public class Follow {
     private User following;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User follower;
+    private User followee;
 
-    public Follow(User following, User follower) {
+    public Follow(User following, User followee) {
 
         // 본인 팔로우 방지
-        if (following.getId().equals(follower.getId())) throw new UserApiException(SELF_FOLLOW);
+        if (following.getId().equals(followee.getId())) throw new UserApiException(SELF_FOLLOW);
 
-        this.follower = following;
-        this.following = follower;
+        this.following = following;
+        this.followee = followee;
     }
 }

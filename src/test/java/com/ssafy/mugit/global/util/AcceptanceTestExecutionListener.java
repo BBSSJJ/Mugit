@@ -1,7 +1,5 @@
 package com.ssafy.mugit.global.util;
 
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
@@ -12,18 +10,19 @@ public class AcceptanceTestExecutionListener extends AbstractTestExecutionListen
 
     @Override
     public void afterTestMethod(final TestContext testContext) {
-        final JdbcTemplate jdbcTemplate = getJdbcTemplate(testContext);
-        final List<String> truncateQueries = getTruncateQueries(jdbcTemplate);
-
+        final JdbcTemplate jdbcTemplate = testContext.getApplicationContext().getBean(JdbcTemplate.class);
+        final List<String> truncateQueries = getTruncateQuery(jdbcTemplate);
+        final List<String> populateQueries = getPopulateQuery(jdbcTemplate);
         truncateTables(jdbcTemplate, truncateQueries);
+        populateTables(jdbcTemplate, populateQueries);
     }
 
-    private List<String> getTruncateQueries(final JdbcTemplate jdbcTemplate) {
+    private List<String> getTruncateQuery(final JdbcTemplate jdbcTemplate) {
         return jdbcTemplate.queryForList("SELECT CONCAT('TRUNCATE TABLE ', TABLE_NAME, ';') AS list FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mugit_test_db'", String.class);
     }
 
-    private JdbcTemplate getJdbcTemplate(final TestContext testContext) {
-        return testContext.getApplicationContext().getBean(JdbcTemplate.class);
+    private List<String> getPopulateQuery(final JdbcTemplate jdbcTemplate) {
+        return jdbcTemplate.queryForList("SELECT CONCAT('INSERT INTO ', TABLE_NAME, ' VALUES (1);') AS list FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mugit_test_db' AND TABLE_NAME LIKE '%_seq'", String.class);
     }
 
     private void truncateTables(final JdbcTemplate jdbcTemplate, final List<String> truncateQueries) {
@@ -32,8 +31,10 @@ public class AcceptanceTestExecutionListener extends AbstractTestExecutionListen
         execute(jdbcTemplate, "SET FOREIGN_KEY_CHECKS = 1");
     }
 
-    private void execute(final JdbcTemplate jdbcTemplate, final String query) {
-        jdbcTemplate.execute(query);
+    private void populateTables(JdbcTemplate jdbcTemplate, List<String> populateQueries) {
+        populateQueries.forEach(v -> execute(jdbcTemplate, v));
     }
+
+    private void execute(final JdbcTemplate jdbcTemplate, final String query) {jdbcTemplate.execute(query);}
 
 }

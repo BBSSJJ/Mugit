@@ -1,4 +1,4 @@
-package com.ssafy.mugit.user.entity.type;
+package com.ssafy.mugit.notification.entity;
 
 public enum NotificationType {
 

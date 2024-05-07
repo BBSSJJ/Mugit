@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Test</title>
+    <style type="text/css">
+        .title {
+            text-align: center;
+            font-size: 7rem;
+        }
+
+        .center-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sse-connection-container {
+            width: 40vw;
+            text-align: start;
+            padding-top: 1rem;
+        }
+
+        .login-container {
+            width: 20vw;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .login-input {
+            margin-bottom: 1rem;
+            max-width: 5vw;
+        }
+
+        .btn {
+            display: block;
+            margin: auto;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.6rem;
+            background-color: #1f6377;
+            color: white;
+            border-radius: 1rem;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+            background-color: #0e90d2;
+        }
+
+        .sse-connect {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        #sse-not-connected {
+            color: #942a25;
+        }
+
+        #sse-connected {
+            color: #1ad99e;
+            display: none;
+        }
+
+        .sse-list-container {
+            background-color: #1ad99e;
+            text-align: center;
+            margin: 2rem 10rem;
+            padding: 5px 0;
+        }
+
+        #sse-list {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<h1 class="title">SSE Test</h1>
+<div class="center-container">
+    <div class="sse-connection-container"></div>
+    <div class="login-container">
+        <form id="login-form">
+            <label for="pk">PK 입력 : </label>
+            <input id="pk" type="text" class="login-input" placeholder="1">
+            <button type="submit" class="btn">로그인</button>
+        </form>
+    </div>
+    <div class="sse-connection-container">
+        <p id="sse-not-connected" class="sse-connect">SSE 미연결</p>
+        <p id="sse-connected" class="sse-connect">SSE 연결됨</p>
+    </div>
+</div>
+<div class="sse-list-container">
+    <h2 class="sub-title">[ Server 전송목록 ]</h2>
+    <ul id="sse-list"></ul>
+</div>
+<!-- Script -->
+<script type="text/javascript">
+    // constance
+    const WAS_SERVER_BASE_URL = "http://localhost:8080"
+    const SSE_SERVER_BASE_URL = "http://localhost:8082"
+    const LOGIN_API_PATH = "/api/users/mocks/login"
+    const SSE_CONNECT_API_PATH = "/sse/subscribe"
+
+    // elements
+    const loginForm = document.getElementById("login-form")
+    const notConnected = document.getElementById("sse-not-connected")
+    const connected = document.getElementById("sse-connected")
+    const sseList = document.getElementById("sse-list")
+
+    // functions
+    const connectHandler = function (e) {
+        notConnected.style.display = "none"
+        connected.style.display = "block"
+    }
+    const errorHandler = function (e) {
+        connected.style.display = "none"
+        notConnected.style.display = "block"
+    }
+    const openHandler = function (e) {
+        connected.style.display = "none"
+        notConnected.style.display = "block"
+    }
+    const followHandler = function (e) {
+        const newElement = document.createElement("li");
+        newElement.innerHTML = "message: " + e.data;
+        sseList.appendChild(newElement);
+    }
+    const login = async (e) => {
+        e.preventDefault()
+        const param = new URLSearchParams({pk: document.getElementById("pk").value});
+        const response = await fetch(WAS_SERVER_BASE_URL + LOGIN_API_PATH + `?${param}`, {method: "GET"})
+        if (response.ok) {
+            const eventSource = new EventSource(SSE_SERVER_BASE_URL + SSE_CONNECT_API_PATH, {withCredentials: true})
+            eventSource.addEventListener("connect", connectHandler)
+            eventSource.addEventListener("error", errorHandler)
+            eventSource.addEventListener("open", openHandler)
+            eventSource.addEventListener("follow", followHandler)
+        }
+    }
+
+    // events
+    loginForm.addEventListener("submit", login)
+
+</script>
+
+</body>
+</html>

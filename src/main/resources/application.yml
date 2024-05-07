@@ -37,7 +37,7 @@ spring:
   session:
     redis:
       flush-mode: on_save
-      namespace: spring:session
+      namespace: mugit
 
   data:
     redis:

@@ -15,7 +15,7 @@ public interface FollowCustomRepository {
 
     List<FollowerDto> findAllFollowings(long myId);
 
-    boolean existsFollow(Long followerId, Long followingId);
+    boolean existsFollow(Long followingId, Long followeeId);
 
-    Follow findByFollowerIdAndFollowingId(Long followerId, Long followingId);
+    Follow findByFollowingIdAndFolloweeId(Long followingId, Long followeeId);
 }

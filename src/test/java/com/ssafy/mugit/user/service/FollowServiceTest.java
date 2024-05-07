@@ -2,7 +2,10 @@ package com.ssafy.mugit.user.service;
 
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
+import com.ssafy.mugit.global.message.MessageBus;
 import com.ssafy.mugit.global.util.AcceptanceTestExecutionListener;
+import com.ssafy.mugit.notification.repository.NotificationRepository;
+import com.ssafy.mugit.notification.service.NotificationService;
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.entity.Follow;
 import com.ssafy.mugit.user.entity.User;
@@ -12,9 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag("follow")
-@SpringBootTest
+@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 class FollowServiceTest {
@@ -42,29 +46,38 @@ class FollowServiceTest {
     FollowRepository followRepository;
 
     @Autowired
+    NotificationRepository notificationRepository;
+
+    @Mock
+    MessageBus messageBus;
+
     NotificationService notificationService;
 
     FollowService sut;
 
+    User following;
+    User followee;
+
     @BeforeEach
     void setUp() {
+        notificationService = new NotificationService(messageBus, notificationRepository);
         sut = new FollowService(userRepository, followRepository, notificationService);
 
-        User user = USER.getFixture(PROFILE.getFixture());
-        userRepository.save(user);
+        following = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(following);
 
-        User user2 = USER_2.getFixture(PROFILE_2.getFixture());
-        userRepository.save(user2);
+        followee = USER_2.getFixture(PROFILE_2.getFixture());
+        userRepository.save(followee);
     }
 
     @Test
     @DisplayName("[통합] 존재하지 않는 유저 팔로우 시 오류")
     void testFollowNotRegistered() {
         // given
-        User me = USER.getFixture();
+        Long followerId = following.getId();
 
         // when
-        Exception exception = assertThrows(Exception.class, () -> sut.follow(me.getId(), -1L));
+        Exception exception = assertThrows(Exception.class, () -> sut.follow(followerId, -1L));
 
         // then
         assertThat(exception).isInstanceOf(UserApiException.class);
@@ -77,13 +90,10 @@ class FollowServiceTest {
     @DisplayName("[통합] 한번 팔로우한 유저 다시 팔로우 시 오류")
     void testFollowAgain() {
         // given
-        User follower = USER.getFixture();
-        User followee = USER_2.getFixture();
-
-        sut.follow(follower.getId(), followee.getId());
+        sut.follow(following.getId(), followee.getId());
 
         // when
-        Exception exception = assertThrows(Exception.class, () -> sut.follow(follower.getId(), followee.getId()));
+        Exception exception = assertThrows(Exception.class, () -> sut.follow(following.getId(), followee.getId()));
 
         // then
         assertThat(exception).isInstanceOf(UserApiException.class);
@@ -94,34 +104,30 @@ class FollowServiceTest {
     @DisplayName("[통합] 팔로우 후 DB에 정상 저장되는지 확인")
     void testFollowDB() {
         // given
-        User follower = USER.getFixture();
-        User followee = USER_2.getFixture();
+        sut.follow(following.getId(), followee.getId());
+
         // when
-        sut.follow(follower.getId(), followee.getId());
         List<Follow> all = followRepository.findAll();
         Follow follow = all.get(0);
 
         // then
         assertThat(all.size()).isEqualTo(1);
-        assertThat(follow.getFollower().getId()).isEqualTo(follower.getId());
-        assertThat(follow.getFollowing().getId()).isEqualTo(followee.getId());
+        assertThat(follow.getFollowee().getId()).isEqualTo(followee.getId());
+        assertThat(follow.getFollowing().getId()).isEqualTo(following.getId());
     }
 
     @Test
     @DisplayName("[통합] 본인이 팔로우하고 있는 유저 수 조회")
     void testMyTotalFollowerCount() {
         // given
-        long myId = USER.getFixture().getId();
+        sut.follow(following.getId(), followee.getId());
 
-        long followerId = USER_2.getFixture().getId();
-        sut.follow(myId, followerId);
-
-        User user3 = USER_3.getFixture();
-        userRepository.save(user3);
-        sut.follow(myId, user3.getId());
+        User followee2 = USER_3.getFixture();
+        userRepository.save(followee2);
+        sut.follow(following.getId(), followee2.getId());
 
         // when
-        Long total = sut.getAllFollowerCount(myId);
+        Long total = followRepository.countMyFollowers(following.getId());
 
         // then
         assertThat(total).isEqualTo(2L);
@@ -131,13 +137,10 @@ class FollowServiceTest {
     @DisplayName("[통합] 본인을 팔로우하고 있는 유저 수 조회")
     void testMyTotalFollowingCount() {
         // given
-        long myId = USER.getFixture().getId();
-
-        long followerId = USER_2.getFixture().getId();
-        sut.follow(followerId, myId);
+        sut.follow(followee.getId(), following.getId());
 
         // when
-        Long total = sut.getAllFollowingCount(myId);
+        Long total = followRepository.countMyFollowings(following.getId());
 
         // then
         assertThat(total).isEqualTo(1L);
@@ -148,39 +151,33 @@ class FollowServiceTest {
     @Transactional
     void testMyTotalFollower() {
         // given
-        long myId = USER.getFixture().getId();
-        long followerId = USER_2.getFixture().getId();
+        sut.follow(following.getId(), followee.getId());
 
-        sut.follow(myId, followerId);
-
-        User user3 = USER_3.getFixture(PROFILE_3.getFixture());
-        userRepository.save(user3);
-        sut.follow(myId, user3.getId());
+        User followee2 = USER_3.getFixture(PROFILE_3.getFixture());
+        userRepository.save(followee2);
+        sut.follow(following.getId(), followee2.getId());
 
         // when
-        List<FollowerDto> total = sut.getAllFollower(myId);
+        List<FollowerDto> total = sut.getAllFollowers(following.getId());
 
         // then
         assertThat(total.size()).isEqualTo(2);
         assertThat(total)
-                .anyMatch(follower -> follower.equals(FOLLOWER_USER_2.getFixture()))
-                .anyMatch(follower -> follower.equals(FOLLOWER_USER_3.getFixture()));
+                .anySatisfy(follower -> assertThat(follower).usingRecursiveComparison().ignoringFields("followerId").isEqualTo(FOLLOWER_USER_2.getFixture()))
+                .anySatisfy(follower -> assertThat(follower).usingRecursiveComparison().ignoringFields("followerId").isEqualTo(FOLLOWER_USER_3.getFixture()));
     }
 
     @Test
     @DisplayName("[통합] 팔로우 정상삭제")
     void testDeleteFollow() {
         // given
-        User me = USER.getFixture(PROFILE.getFixture());
-        User follower = USER_2.getFixture(PROFILE_2.getFixture());
-
-        sut.follow(me.getId(), follower.getId());
-        Long allFollowerCount = sut.getAllFollowerCount(me.getId());
+        sut.follow(following.getId(), followee.getId());
+        Long allFollowerCount = followRepository.countMyFollowings(followee.getId());
         assertThat(allFollowerCount).isEqualTo(1L);
 
         // when
-        sut.unfollow(me.getId(), follower.getId());
-        allFollowerCount = sut.getAllFollowerCount(me.getId());
+        sut.unfollow(following.getId(), followee.getId());
+        allFollowerCount = followRepository.countMyFollowings(followee.getId());
 
         // then
         assertThat(allFollowerCount).isEqualTo(0L);
@@ -190,14 +187,11 @@ class FollowServiceTest {
     @DisplayName("[통합] 존재하지 않는 팔로우")
     void testDeleteFollowNotExist() {
         // given
-        User me = USER.getFixture(PROFILE.getFixture());
-        User follower = USER_2.getFixture(PROFILE_2.getFixture());
-
-        Long allFollowerCount = sut.getAllFollowerCount(me.getId());
+        Long allFollowerCount = followRepository.countMyFollowers(following.getId());
         assertThat(allFollowerCount).isEqualTo(0L);
 
         // when
-        Exception exception = assertThrows(Exception.class, () -> sut.unfollow(me.getId(), follower.getId()));
+        Exception exception = assertThrows(Exception.class, () -> sut.unfollow(following.getId(), followee.getId()));
 
         // then
         assertThat(exception).isInstanceOf(UserApiException.class);
@@ -209,17 +203,18 @@ class FollowServiceTest {
     @DisplayName("[통합] 프로필 팔로우여부 확인")
     void testFollowProfile() {
         // given
-        User me = USER.getFixture(PROFILE.getFixture());
-        User follower = USER_2.getFixture(PROFILE_2.getFixture());
-        User following = USER_3.getFixture(PROFILE_3.getFixture());
+        User follower2 = USER_3.getFixture(PROFILE_3.getFixture());
+        userRepository.save(follower2);
 
-        userRepository.save(following);
-        sut.follow(me.getId(), follower.getId());
-        sut.follow(following.getId(), me.getId());
+        // follower -> followee
+        sut.follow(following.getId(), followee.getId());
+
+        // follower2 -> follower
+        sut.follow(follower2.getId(), following.getId());
 
         // when
-        Boolean isFollower = sut.checkIsFollower(me.getId(), follower.getId());
-        Boolean isFollowing = sut.checkIsFollower(me.getId(), following.getId());
+        Boolean isFollower = sut.checkIsFollower(following.getId(), followee.getId());
+        Boolean isFollowing = sut.checkIsFollower(following.getId(), follower2.getId());
 
         // then
         assertThat(isFollower).isTrue();

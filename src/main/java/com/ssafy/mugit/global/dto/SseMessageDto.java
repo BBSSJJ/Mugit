@@ -1,6 +1,6 @@
-package com.ssafy.mugit.notification.dto;
+package com.ssafy.mugit.global.dto;
 
-import com.ssafy.mugit.global.dto.SseEvent;
+import com.ssafy.mugit.global.entity.SseEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

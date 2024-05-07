@@ -26,15 +26,24 @@ public class HtmlController {
     }
 
     @GetMapping("/sns-login")
-    String snsLogin() { return "/sns-login"; }
+    String snsLogin() {
+        return "/sns-login";
+    }
 
     @GetMapping("/sns-regist")
-    String snsRegist() { return "/sns-regist"; }
+    String snsRegist() {
+        return "/sns-regist";
+    }
 
     @GetMapping("/manage-user")
     String manageUser(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "/manage-user";
+    }
+
+    @GetMapping("/sse")
+    String sse() {
+        return "/sse";
     }
 }

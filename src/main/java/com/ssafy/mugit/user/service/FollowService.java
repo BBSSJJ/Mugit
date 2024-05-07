@@ -2,6 +2,7 @@ package com.ssafy.mugit.user.service;
 
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
+import com.ssafy.mugit.notification.service.NotificationService;
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.entity.Follow;
 import com.ssafy.mugit.user.entity.User;
@@ -25,38 +26,30 @@ public class FollowService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void follow(Long followingId, Long followerId) {
+    public void follow(Long followingId, Long followeeId) {
 
         // 팔로우 여부 확인
-        if (followRepository.existsFollow(followingId, followerId)) throw new UserApiException(ALREADY_FOLLOW);
+        if (followRepository.existsFollow(followingId, followeeId)) throw new UserApiException(ALREADY_FOLLOW);
 
-        // 팔로워, 팔로우 찾아오기
-        User follower = userRepository.findById(followingId).orElseThrow(() -> new UserApiException(NOT_FOUND));
-        User following = userRepository.findById(followerId).orElseThrow(() -> new UserApiException(NOT_FOUND));
+        // 팔로잉(팔로우 하는 사람), 팔로이(팔로우 당하는 사람) 찾아오기
+        User following = userRepository.findById(followingId).orElseThrow(() -> new UserApiException(NOT_FOUND));
+        User followee = userRepository.findById(followeeId).orElseThrow(() -> new UserApiException(NOT_FOUND));
 
-        Follow follow = new Follow(follower, following);
+        Follow follow = new Follow(following, followee);
         followRepository.save(follow);
 
         // 팔로우 알림 발송
-        notificationService.sendFollow(follower, following);
+        notificationService.sendFollow(following, followee);
     }
 
-    public void unfollow(Long followingId, Long followerId) {
-        Follow followInDB = followRepository.findByFollowerIdAndFollowingId(followingId, followerId);
+    public void unfollow(Long followingId, Long followeeId) {
+        Follow followInDB = followRepository.findByFollowingIdAndFolloweeId(followingId, followeeId);
         if (followInDB == null) throw new UserApiException(UserApiError.NOT_EXIST_FOLLOW);
 
         followRepository.delete(followInDB);
     }
 
-    public Long getAllFollowerCount(long myId) {
-        return followRepository.countMyFollowers(myId);
-    }
-
-    public Long getAllFollowingCount(long myId) {
-        return followRepository.countMyFollowings(myId);
-    }
-
-    public List<FollowerDto> getAllFollower(long myId) {
+    public List<FollowerDto> getAllFollowers(long myId) {
         return followRepository.findAllFollowers(myId);
     }
 
@@ -64,7 +57,15 @@ public class FollowService {
         return followRepository.findAllFollowings(myId);
     }
 
-    public Boolean checkIsFollower(Long followingId, Long followerId) {
-        return followRepository.existsFollow(followingId, followerId);
+    public Boolean checkIsFollower(Long followingId, Long followeeId) {
+        return followRepository.existsFollow(followingId, followeeId);
+    }
+
+    public Long countMyFollowers(Long id) {
+        return followRepository.countMyFollowers(id);
+    }
+
+    public Long countMyFollowings(Long id) {
+        return followRepository.countMyFollowings(id);
     }
 }

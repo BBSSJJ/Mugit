@@ -1,18 +1,18 @@
-package com.ssafy.mugit.user.service;
+package com.ssafy.mugit.notification.service;
 
-import com.ssafy.mugit.global.dto.SseEvent;
+import com.ssafy.mugit.global.entity.SseEvent;
 import com.ssafy.mugit.global.message.MessageBus;
 import com.ssafy.mugit.notification.dto.NotificationDto;
-import com.ssafy.mugit.notification.dto.SseMessageDto;
-import com.ssafy.mugit.user.entity.Notification;
+import com.ssafy.mugit.global.dto.SseMessageDto;
+import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.repository.NotificationRepository;
+import com.ssafy.mugit.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ssafy.mugit.user.entity.type.NotificationType.FOLLOW;
+import static com.ssafy.mugit.notification.entity.NotificationType.FOLLOW;
 
 @Component
 @RequiredArgsConstructor

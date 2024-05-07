@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.service;
 
+import com.ssafy.mugit.notification.service.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
