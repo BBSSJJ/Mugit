@@ -20,10 +20,10 @@ import com.ssafy.mugit.record.repository.RecordSourceRepository;
 import com.ssafy.mugit.record.repository.SourceRepository;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,6 +70,8 @@ public class FlowService {
 
         // Flow Closure 테이블에 추가
 //        flowClosureRepository.save(new FlowClosure(note, note, note, 1));
+        // Flow의 부모, 루트 추가
+        note.initParentAndRoot(note, null);
 
         // Record 생성
         Source source = new Source(musicPath);
@@ -81,6 +83,7 @@ public class FlowService {
         record.getRecordSources().add(recordSource);
     }
 
+    @Transactional
     public void regist(Long userId, Long parentId) {
 
         User user = userRepository.getReferenceById(userId);
@@ -100,15 +103,16 @@ public class FlowService {
         // 부모의 마지막 Record를 새로운 Flow의 Record 등록
         Record record = recordRepository.findLastRecordByFlowId(parentFlow.getId()).orElseThrow(/* TODO : 에러 처리 */);
         List<RecordSource> recordSources = record.getRecordSources();
-        List<RecordSource> newRecordSources = new ArrayList<>();
+        List<RecordSource> newRecordSources = newRecord.getRecordSources();
         recordSources.forEach((recordSource) -> {
             newRecordSources.add(new RecordSource(newRecord, recordSource.getSource(), recordSource.getName()));
         });
-        recordSourceRepository.saveAll(newRecordSources);
         newRecord.initRecordSources(newRecordSources);
 
-        // Flow Closure 테이블에 추가
 
+        // Flow Closure 테이블에 추가
+        // Flow의 부모, 루트 추가
+        newFlow.initParentAndRoot(parentFlow.getRootFlow(), parentFlow);
     }
 
     public void release(Long userId, Long flowId, RequestReleaseFlowDto requestReleaseFlowDto) {

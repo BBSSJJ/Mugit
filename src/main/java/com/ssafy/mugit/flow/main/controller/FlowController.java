@@ -1,6 +1,5 @@
 package com.ssafy.mugit.flow.main.controller;
 
-import com.ssafy.mugit.flow.main.dto.FlowGraphDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestCreateNoteDto;
 import com.ssafy.mugit.flow.main.dto.request.RequestReleaseFlowDto;
 import com.ssafy.mugit.flow.main.service.FlowService;
@@ -38,8 +37,8 @@ public class FlowController {
         return ResponseEntity.status(200).body(new MessageDto("Flow 릴리즈 성공"));
     }
 
-    @GetMapping("/api/flows/graph/{flowId}")
-    public ResponseEntity<FlowGraphDto> getGraph(@PathVariable("flowId") Long flowId) {
-        return ResponseEntity.status(200).body(flowService.graph(flowId));
-    }
+//    @GetMapping("/api/flows/graph/{flowId}")
+//    public ResponseEntity<FlowGraphDto> getGraph(@PathVariable("flowId") Long flowId) {
+//        return ResponseEntity.status(200).body(flowService.graph(flowId));
+//    }
 }

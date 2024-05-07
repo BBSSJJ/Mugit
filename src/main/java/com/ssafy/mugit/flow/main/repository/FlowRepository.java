@@ -43,4 +43,6 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "LEFT JOIN com.ssafy.mugit.user.entity.Profile p ON p.user.id = u.id " +
             "WHERE l.user.id = :userId")
     List<Flow> findMyLikeFlows(Long userId);
+
+    List<Flow> findFlowsByRootFlow(Flow rootFlow);
 }
