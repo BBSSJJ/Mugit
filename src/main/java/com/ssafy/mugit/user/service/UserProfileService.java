@@ -39,13 +39,12 @@ public class UserProfileService {
 
     @Transactional
     public void updateProfile(Long userId, RequestModifyUserInfoDto dto) {
-        // pk 검사
-        if (userId == null) throw new UserApiException(UserApiError.NOT_AUTHORIZED_USER);
-        // 중복 검사
-        if (profileRepository.existsByNickName(dto.getNickName()))
+        // 프로필 조회
+        Profile profileInDB = profileRepository.findByUserId(userId);
+        // 본인 닉네임이 아니면서 존재하는 닉네임 중복 처리
+        if (!profileInDB.getNickName().equals(dto.getNickName()) && profileRepository.existsByNickName(dto.getNickName()))
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);
         // 업데이트
-        Profile profileInDB = profileRepository.findByUserId(userId);
         profileInDB.update(dto.getNickName(), dto.getProfileText(), dto.getProfileImagePath());
     }
 }

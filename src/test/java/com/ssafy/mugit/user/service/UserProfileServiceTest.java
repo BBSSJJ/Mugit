@@ -95,12 +95,12 @@ class UserProfileServiceTest {
     @DisplayName("[통합] 중복 프로필 수정 시 오류")
     void testModifyProfileDuplication() {
         // given
-        User user = USER.getFixture();
-        Profile profile = PROFILE.getFixture();
-        user.regist(profile);
+        User user = USER.getFixture(PROFILE.getFixture());
+        User user2 = USER_2.getFixture(PROFILE_2.getFixture());
         userRepository.save(user);
+        userRepository.save(user2);
 
-        Long userId = user.getId();
+        Long userId = user2.getId();
         RequestModifyUserInfoDto dto = DUPLICATE_MODIFY_USER_INFO_DTO.getFixture();
 
         // when
@@ -155,5 +155,25 @@ class UserProfileServiceTest {
         assertThat(exception).isInstanceOf(UserApiException.class);
         UserApiException userApiException = (UserApiException) exception;
         assertThat(userApiException.getUserApiError()).isEqualTo(UserApiError.SELF_PROFILE);
+    }
+
+    @Transactional
+    @Test
+    @DisplayName("[통합] 본인 프로필 변경 시 본인 이름이면 200")
+    void testChangeMyNickName() {
+        // given
+        User user = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(user);
+
+        RequestModifyUserInfoDto dto = DUPLICATE_MODIFY_USER_INFO_DTO.getFixture();
+
+        // when
+        sut.updateProfile(user.getId(), dto);
+        Profile profileInDB = profileRepository.findByUserId(user.getId());
+
+        // then
+        assertThat(profileInDB).isNotNull();
+        assertThat(profileInDB).usingRecursiveComparison()
+                .ignoringFields("id", "user", "DEFAULT_PROFILE_IMAGE_PATH", "DEFAULT_PROFILE_TEXT").isEqualTo(dto);
     }
 }
