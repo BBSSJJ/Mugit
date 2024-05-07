@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -16,12 +17,12 @@ import java.net.URI;
 @Component
 @Slf4j
 public class OAuthWebClientApi implements OAuthApi {
-    private final WebClientFactory webClientFactory;
+    private final WebClient.Builder webClientBuilder;
     private final String userInfoUrl;
 
-    public OAuthWebClientApi(@Autowired WebClientFactory webClientFactory,
+    public OAuthWebClientApi(@Autowired WebClient.Builder webClientBuilder,
                              @Value("${oauth.google.userinfo.url}") String userInfoUrl) {
-        this.webClientFactory = webClientFactory;
+        this.webClientBuilder = webClientBuilder;
         this.userInfoUrl = userInfoUrl;
     }
 
@@ -42,7 +43,7 @@ public class OAuthWebClientApi implements OAuthApi {
                 .build()
                 .toUri();
 
-        return webClientFactory.getGoogleTokenWebClient()
+        return webClientBuilder.build()
                 .get()
                 .uri(uri)
                 .retrieve()

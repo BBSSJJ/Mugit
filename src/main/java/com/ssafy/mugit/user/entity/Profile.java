@@ -16,7 +16,7 @@ public class Profile {
     private final String DEFAULT_PROFILE_IMAGE_PATH = "DEFAULT_IMAGE_URL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "profile_id")
     private Long id;
 

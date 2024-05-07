@@ -37,7 +37,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 
 	compileOnly 'org.projectlombok:lombok'
 

@@ -1,15 +1,14 @@
 package com.ssafy.mugit.user.entity;
 
-import com.ssafy.mugit.user.entity.type.NotificationType;
+import com.ssafy.mugit.notification.entity.Notification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.ssafy.mugit.user.entity.type.NotificationType.FOLLOW;
+import static com.ssafy.mugit.notification.entity.NotificationType.FOLLOW;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
 import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static com.ssafy.mugit.user.fixture.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class NotificationEntityTest {
 

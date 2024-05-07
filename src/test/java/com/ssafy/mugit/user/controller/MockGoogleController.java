@@ -16,7 +16,7 @@ public class MockGoogleController {
     public ResponseEntity<GoogleUserInfoDto> getUserInfo(@RequestParam(value = "access_token") String accessToken) {
         GoogleUserInfoDto userInfo = DEFAULT_GOOGLE_USER_INFO.getFixture();
         GoogleUserInfoDto notRegisteredUserInfo = NOT_REGISTERED_USER_INFO.getFixture();
-        if (accessToken.equals("qwerasdf1234")) return ResponseEntity.ok(userInfo);
+        if (accessToken.equals("qwerasdf1234") || accessToken.equals("valid_token")) return ResponseEntity.ok(userInfo);
         else if (accessToken.equals("not registered user token")) return ResponseEntity.ok(notRegisteredUserInfo);
         else return ResponseEntity.status(401).body(null);
     }

@@ -27,12 +27,13 @@ class UserDeleteServiceTest {
     @Autowired
     UserRepository userRepository;
 
+    User userInDB;
+
     @BeforeEach
     void setUp() {
         sut = new UserDeleteService(userRepository);
-        User user = USER.getFixture();
-        user.regist(PROFILE.getFixture());
-        userRepository.save(user);
+        userInDB = USER.getFixture(PROFILE.getFixture());
+        userRepository.save(userInDB);
     }
 
     @Test
@@ -40,7 +41,7 @@ class UserDeleteServiceTest {
     @Transactional
     void testDeleteAllEntityRelatedToUser() {
         // given
-        Long userId = USER.getFixture().getId();
+        Long userId = userInDB.getId();
         
         // when
         sut.deleteUserEntity(userId);

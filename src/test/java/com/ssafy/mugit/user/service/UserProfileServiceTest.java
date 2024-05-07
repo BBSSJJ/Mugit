@@ -7,7 +7,6 @@ import com.ssafy.mugit.user.dto.request.RequestModifyUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.fixture.ModifyUserInfoFixture;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +19,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
 import static com.ssafy.mugit.user.fixture.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+@Tag("profile")
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
@@ -49,7 +49,6 @@ class UserProfileServiceTest {
     }
 
 
-    @Tag("profile")
     @Test
     @DisplayName("[통합] 유저 PK로 ResponseProfileDto 생성")
     void testCreateUserProfileDto() {
@@ -59,10 +58,8 @@ class UserProfileServiceTest {
         user.regist(profile);
         userRepository.save(user);
 
-        Long userId = 1L;
-
         // when
-        ResponseUserProfileDto userDto = sut.getProfileById(userId);
+        ResponseUserProfileDto userDto = sut.getProfileById(user.getId());
 
         // then
         assertThat(userDto).isNotNull();
@@ -70,7 +67,6 @@ class UserProfileServiceTest {
         assertThat(userDto.getNickName()).isEqualTo(profile.getNickName());
     }
 
-    @Tag("profile")
     @Test
     @Transactional
     @DisplayName("[통합] ProfileRepository 활용 Profile 정보 수정")
@@ -81,12 +77,11 @@ class UserProfileServiceTest {
         user.regist(profile);
         userRepository.save(user);
 
-        Long userId = user.getId();
-        RequestModifyUserInfoDto dto = ModifyUserInfoFixture.DEFAULT_MODIFY_USER_INFO_DTO.getFixture();
+        RequestModifyUserInfoDto dto = MODIFY_USER_INFO_DTO_01.getFixture();
 
         // when
-        sut.updateProfile(userId, dto);
-        Profile profileInDB = profileRepository.findByUserId(userId);
+        sut.updateProfile(user.getId(), dto);
+        Profile profileInDB = profileRepository.findByUserId(user.getId());
 
         // then
         assertThat(profileInDB).isNotNull();
@@ -95,7 +90,6 @@ class UserProfileServiceTest {
         assertThat(profileInDB.getProfileImagePath()).isEqualTo(dto.getProfileImagePath());
     }
 
-    @Tag("profile")
     @Test
     @Transactional
     @DisplayName("[통합] 중복 프로필 수정 시 오류")

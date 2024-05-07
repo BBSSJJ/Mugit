@@ -9,5 +9,8 @@ ARG JAR_FILE=build/libs/*.jar
 
 COPY ${JAR_FILE} /app/
 
+# 로컬에서 Docker 실행시 Env 파일 복사 필요
+#COPY ./env/backend/.env /app/env/backend/.env
+
 # 애플리케이션 실행
 CMD ["java", "-jar", "backend.jar"]

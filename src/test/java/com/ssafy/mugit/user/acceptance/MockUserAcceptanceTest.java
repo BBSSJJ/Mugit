@@ -3,6 +3,7 @@ package com.ssafy.mugit.user.acceptance;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.user.controller.MockUserController;
+import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.MockUserInfoFixture;
 import com.ssafy.mugit.user.fixture.ProfileFixture;
@@ -17,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,19 +42,6 @@ public class MockUserAcceptanceTest {
     @Autowired
     UserRepository userRepository;
 
-
-    /**
-     * 차후 관리자 기능 도입시 쿠키 획득용
-     Cookie[] adminCookies;
-     @BeforeEach
-    void setUp() throws Exception {
-        adminCookies = mockMvc.perform(get("/login")
-                        .param("username", "mugit")
-                        .param("password", "Mugit502!"))
-                .andReturn().getResponse().getCookies();
-    }
-     */
-
     @Test
     @DisplayName("[인수] 테스트 회원가입 시 정상 응답(201)")
     void testRegistSuccess() throws Exception {
@@ -69,18 +59,19 @@ public class MockUserAcceptanceTest {
     }
 
     @Test
-    @DisplayName("[인수] 테스트 로그인 시 정상 응답(200)")
+    @DisplayName("[인수] pk 조회 후 테스트 로그인 시 정상 응답(200)")
     void testLoginSuccess() throws Exception {
         // given
-        User user = UserFixture.USER.getFixture();
-        user.regist(ProfileFixture.PROFILE.getFixture());
+        User user = USER.getFixture(PROFILE.getFixture());
         userRepository.save(user);
-
+        String userDtoString = mockMvc.perform(get("/api/users/nick/" + user.getProfile().getNickName())).andReturn()
+                .getResponse().getContentAsString();
+        ResponseUserProfileDto userProfile = objectMapper.readValue(userDtoString, ResponseUserProfileDto.class);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/mocks/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("pk", "1"));
+                .param("pk", String.valueOf(userProfile.getId())));
 
         // then
         perform.andExpect(status().isOk())

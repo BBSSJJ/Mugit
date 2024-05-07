@@ -27,7 +27,7 @@ public class UserLoginService {
     @Qualifier("OAuthRestTemplateApi")
     private final OAuthApi oAuthApi;
     private final UserRepository userRepository;
-    private final FollowRepository followRepository;
+    private final FollowService followService;
     private final CookieUtil cookieUtil;
 
     @Transactional
@@ -48,8 +48,8 @@ public class UserLoginService {
         session.setAttribute(LOGIN_USER_KEY.getKey(), userSessionDto);
 
         return cookieUtil.getLoginCookieHeader(userInDB,
-                followRepository.countMyFollowers(userInDB.getId()),
-                followRepository.countMyFollowings(userInDB.getId()));
+                followService.countMyFollowers(userInDB.getId()),
+                followService.countMyFollowings(userInDB.getId()));
     }
 
     private String getBearerToken(String token) {

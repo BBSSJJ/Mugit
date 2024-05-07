@@ -1,11 +1,11 @@
 package com.ssafy.mugit.notification.fixture;
 
-import com.ssafy.mugit.user.entity.Notification;
+import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.entity.type.NotificationType;
+import com.ssafy.mugit.notification.entity.NotificationType;
 import lombok.RequiredArgsConstructor;
 
-import static com.ssafy.mugit.user.entity.type.NotificationType.FOLLOW;
+import static com.ssafy.mugit.notification.entity.NotificationType.FOLLOW;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
 import static com.ssafy.mugit.user.fixture.UserFixture.USER;

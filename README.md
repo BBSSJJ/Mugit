@@ -18,10 +18,10 @@ docker run -it --name mysql_mugit_test -p 3308:3308 -e MYSQL_DATABASE=mugit_test
 docker pull redis:alpine3.19
 
 # 운영용
-docker run -it --name redis_session -p 6379:6379 -d redis:alpine3.19
+docker run -it --name redis_session -p 6379:6379 -d redis:alpine3.19 --requirepass {Redis 비밀번호}
 
 # 테스트용
-docker run -it --name redis_test_session -p 6380:6379 -d redis:alpine3.19
+docker run -it --name redis_test_session -p 6380:6379 -d redis:alpine3.19 --requirepass {Redis 비밀번호}
 ```
 
 ## WAS 생성

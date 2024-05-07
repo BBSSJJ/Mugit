@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.entity;
 
+import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.user.entity.type.RoleType;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import jakarta.persistence.*;
@@ -19,7 +20,7 @@ import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_USER;
 @AllArgsConstructor
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
     private Long id;
 
