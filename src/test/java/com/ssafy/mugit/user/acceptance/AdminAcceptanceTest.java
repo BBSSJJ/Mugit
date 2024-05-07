@@ -84,7 +84,7 @@ public class AdminAcceptanceTest {
         user.regist(PROFILE.getFixture());
         userRepository.save(user);
 
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
                 .andReturn().getResponse().getCookies();
 
         // when

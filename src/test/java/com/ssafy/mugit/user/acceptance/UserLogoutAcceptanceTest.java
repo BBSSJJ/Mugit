@@ -54,7 +54,7 @@ public class UserLogoutAcceptanceTest {
     @DisplayName("[인수] 로그인 후 로그아웃 시, 정상 응답 반환")
     void testLogoutSuccess() throws Exception {
         // given
-        String token = "qwerasdf1234";
+        String token = "valid_token";
         mockMvc.perform(get("/api/users/login")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(handler -> {
@@ -86,7 +86,7 @@ public class UserLogoutAcceptanceTest {
     @DisplayName("[인수] 로그아웃 후 로그아웃 요청 시, 401 반환")
     void testLogoutTwice() throws Exception {
         // given
-        String token = "qwerasdf1234";
+        String token = "valid_token";
         mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
 
                 // 로그인

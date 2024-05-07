@@ -44,7 +44,7 @@ public class UserLoginAcceptanceTest {
     @DisplayName("[인수] 정상 로그인 테스트")
     void testLoginSuccess() throws Exception {
         // given
-        String token = "qwerasdf1234";
+        String token = "valid_token";
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/login")

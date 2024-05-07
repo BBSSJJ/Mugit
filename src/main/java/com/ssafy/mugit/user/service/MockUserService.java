@@ -55,7 +55,7 @@ public class MockUserService {
 
         // DB에 해당 사용자 없을 때
         User userInDB = userRepository.findById(userPk)
-                .orElseThrow(() -> new UserApiException(UserApiError.NOT_FOUND));
+                .orElseThrow(() -> new UserApiException(UserApiError.USER_NOT_FOUND));
 
         // 세션에 해당 사용자 기록
         UserSessionDto userSessionDto = new UserSessionDto(userInDB);

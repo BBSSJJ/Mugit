@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.ssafy.mugit.global.exception.error.UserApiError.ALREADY_FOLLOW;
-import static com.ssafy.mugit.global.exception.error.UserApiError.NOT_FOUND;
+import static com.ssafy.mugit.global.exception.error.UserApiError.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -26,20 +26,20 @@ public class FollowService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void follow(Long followingId, Long followeeId) {
+    public void follow(Long followingUserId, Long followeeUserId) {
 
         // 팔로우 여부 확인
-        if (followRepository.existsFollow(followingId, followeeId)) throw new UserApiException(ALREADY_FOLLOW);
+        if (followRepository.existsFollow(followingUserId, followeeUserId)) throw new UserApiException(ALREADY_FOLLOW);
 
         // 팔로잉(팔로우 하는 사람), 팔로이(팔로우 당하는 사람) 찾아오기
-        User following = userRepository.findById(followingId).orElseThrow(() -> new UserApiException(NOT_FOUND));
-        User followee = userRepository.findById(followeeId).orElseThrow(() -> new UserApiException(NOT_FOUND));
+        User followingUser = userRepository.findById(followingUserId).orElseThrow(() -> new UserApiException(USER_NOT_FOUND));
+        User followeeUser = userRepository.findById(followeeUserId).orElseThrow(() -> new UserApiException(USER_NOT_FOUND));
 
-        Follow follow = new Follow(following, followee);
+        Follow follow = new Follow(followingUser, followeeUser);
         followRepository.save(follow);
 
         // 팔로우 알림 발송
-        notificationService.sendFollow(following, followee);
+        notificationService.sendFollow(followingUser, followeeUser);
     }
 
     public void unfollow(Long followingId, Long followeeId) {

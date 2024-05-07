@@ -55,7 +55,7 @@ public class UserDeleteAcceptanceTest {
     @DisplayName("[인수] 회원탈퇴 시 해당유저, 프로필 정상 삭제 확인(200)")
     void testDeleteUser() throws Exception {
         // given
-        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer qwerasdf1234"))
+        Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token"))
                 .andReturn().getResponse().getCookies();
         
         // when

@@ -1,6 +1,5 @@
 package com.ssafy.mugit.user.entity;
 
-import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.user.entity.type.RoleType;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import jakarta.persistence.*;
@@ -8,9 +7,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_USER;
 
@@ -40,9 +36,6 @@ public class User {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Profile profile;
-
-    @OneToMany(mappedBy = "notified", orphanRemoval = true, cascade = CascadeType.ALL)
-    private final List<Notification> notifications = new ArrayList<>();
 
     // 회원가입 시 생성자
     public User(String snsId, String email, SnsType snsType) {
