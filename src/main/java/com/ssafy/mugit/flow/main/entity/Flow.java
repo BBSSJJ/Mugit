@@ -40,6 +40,18 @@ public class Flow extends BaseTimeEntity {
     @Column(name = "views")
     private Integer views;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "root_flow_id")
+    private Flow rootFlow;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_flow_id")
+    private Flow parentFlow;
+
+    @OneToMany(mappedBy = "parentFlow", fetch = FetchType.LAZY)
+    private List<Flow> childFlows = new ArrayList<>();
+
+
     @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY)
     private List<Record> records = new ArrayList<>();
 
@@ -75,5 +87,10 @@ public class Flow extends BaseTimeEntity {
         this.musicPath = musicPath;
         this.coverPath = coverPath;
         this.isReleased = true;
+    }
+
+    public void initParentAndRoot(Flow rootFlow, Flow parentFlow) {
+        this.rootFlow = rootFlow;
+        this.parentFlow = parentFlow;
     }
 }

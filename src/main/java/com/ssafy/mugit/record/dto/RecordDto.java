@@ -15,7 +15,7 @@ public class RecordDto {
     Long id;
     String message;
     Boolean isOpen;
-    List<SourceNameDto> sources = new ArrayList<>();
+    List<SourceInfoDto> sources = new ArrayList<>();
 
     public RecordDto(Record record) {
         this.id = record.getId();
@@ -23,7 +23,7 @@ public class RecordDto {
         this.isOpen = record.getIsOpen();
         this.sources = new ArrayList<>();
         record.getRecordSources().forEach(recordSource -> {
-            this.sources.add(new SourceNameDto(recordSource.getSource().getId(),
+            this.sources.add(new SourceInfoDto(recordSource.getSource().getId(),
                     recordSource.getName(),
                     recordSource.getSource().getPath()));
         });
