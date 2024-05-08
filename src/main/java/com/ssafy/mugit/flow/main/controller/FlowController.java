@@ -6,6 +6,7 @@ import com.ssafy.mugit.flow.main.service.FlowService;
 import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class FlowController {
     private final FlowService flowService;
 
+    @Operation(summary = "Note 생성", description = "첫 Note를 생성")
     @PostMapping("/note")
     public ResponseEntity<MessageDto> createNote(
             @UserSession UserSessionDto user, @RequestBody RequestCreateNoteDto requestCreateNoteDto) {
@@ -23,6 +25,7 @@ public class FlowController {
         return ResponseEntity.status(201).body(new MessageDto("Note 생성 성공"));
     }
 
+    @Operation(summary = "Flow 생성", description = "부모 Flow로부터 새로운 Flow 생성")
     @PostMapping("/parent/{parentId}")
     public ResponseEntity<MessageDto> registFlow(
             @UserSession UserSessionDto user, @PathVariable("parentId") Long parentId) {
@@ -31,14 +34,10 @@ public class FlowController {
     }
 
     //릴리즈 시 부모의 플로우와 같은 경우에는 못하게 합시다..?
+    @Operation(summary = "Flow 릴리즈", description = "Flow 릴리즈, files에는 file-server로부터 받아온 응답 그대로 넣어서 보내면 됩니다.")
     @PatchMapping("/{flowId}")
     public ResponseEntity<MessageDto> releaseFlow(@UserSession UserSessionDto user, @PathVariable("flowId") Long flowId, @RequestBody RequestReleaseFlowDto requestReleaseFlowDto) {
         flowService.release(user.getId(), flowId, requestReleaseFlowDto);
         return ResponseEntity.status(200).body(new MessageDto("Flow 릴리즈 성공"));
     }
-
-//    @GetMapping("/api/flows/graph/{flowId}")
-//    public ResponseEntity<FlowGraphDto> getGraph(@PathVariable("flowId") Long flowId) {
-//        return ResponseEntity.status(200).body(flowService.graph(flowId));
-//    }
 }
