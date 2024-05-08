@@ -9,6 +9,7 @@ import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -45,7 +46,7 @@ class UserProfileServiceTest {
 
     @BeforeEach
     void setUp() {
-        sut = new UserProfileService(userRepository, profileRepository, followService);
+        sut = new UserProfileService(userRepository, profileRepository, followService, new UserCookieUtil());
     }
 
 

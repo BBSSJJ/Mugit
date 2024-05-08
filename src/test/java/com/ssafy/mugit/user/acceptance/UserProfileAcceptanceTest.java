@@ -19,6 +19,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
@@ -28,8 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @Tag("profile")
@@ -117,11 +119,17 @@ public class UserProfileAcceptanceTest {
                 .contentType(APPLICATION_JSON).content(body));
 
         // then
-        perform.andExpect(status().isOk()).andExpect(content().json("{\"message\":\"프로필 수정완료\"}"));
         ResponseUserProfileDto userProfile = userRepository.findUserProfileDtoByUserId(userInDB.getId());
         assertThat(userProfile.getNickName()).isEqualTo(dto.getNickName());
         assertThat(userProfile.getProfileText()).isEqualTo(dto.getProfileText());
         assertThat(userProfile.getProfileImagePath()).isEqualTo(dto.getProfileImagePath());
+
+        perform.andExpect(status().isOk())
+                .andExpect(cookie().value("nickName", URLEncoder.encode(userProfile.getNickName(), StandardCharsets.UTF_8)))
+                .andExpect(cookie().value("profileText", URLEncoder.encode(userProfile.getProfileText(), StandardCharsets.UTF_8)))
+                .andExpect(cookie().value("profileImagePath", URLEncoder.encode(userProfile.getProfileImagePath(), StandardCharsets.UTF_8)))
+                .andExpect(content().json("{\"message\":\"프로필 수정완료\"}"));
+
     }
 
     @Test

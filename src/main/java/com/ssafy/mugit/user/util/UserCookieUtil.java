@@ -3,7 +3,7 @@ package com.ssafy.mugit.user.util;
 import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -13,8 +13,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Component
-@RequiredArgsConstructor
-public class CookieUtil {
+@Setter
+public class UserCookieUtil {
 
     @Value("${cookie.domain}")
     private String domainUrl;
@@ -24,14 +24,10 @@ public class CookieUtil {
 
     public HttpHeaders getLoginCookieHeader(User user, Long followers, Long followings) {
 
-        HttpHeaders cookieHeaders = new HttpHeaders();
-        Profile profile = user.getProfile();
+        HttpHeaders cookieHeaders = getProfileCookieHeader(user.getProfile());
 
         setTimeoutCookieHeader(cookieHeaders, "isLogined", "true");
-        setTimeoutCookieHeader(cookieHeaders, "userID", user.getId().toString());
-        setTimeoutCookieHeader(cookieHeaders, "nickName", profile.getNickName());
-        setTimeoutCookieHeader(cookieHeaders, "profileText", profile.getProfileText());
-        setTimeoutCookieHeader(cookieHeaders, "profileImage", profile.getProfileImagePath());
+        setTimeoutCookieHeader(cookieHeaders, "userId", user.getId().toString());
         setTimeoutCookieHeader(cookieHeaders, "followers", followers.toString());
         setTimeoutCookieHeader(cookieHeaders, "followings", followings.toString());
 
@@ -46,6 +42,17 @@ public class CookieUtil {
         setSessionCookieHeader(cookieHeaders, "snsId", userInfo.getSnsId());
         setSessionCookieHeader(cookieHeaders, "snsType", userInfo.getSnsType().toString());
         setSessionCookieHeader(cookieHeaders, "email", userInfo.getEmail());
+
+        return cookieHeaders;
+    }
+
+    public HttpHeaders getProfileCookieHeader(Profile profileInDB) {
+
+        HttpHeaders cookieHeaders = new HttpHeaders();
+
+        setTimeoutCookieHeader(cookieHeaders, "nickName", profileInDB.getNickName());
+        setTimeoutCookieHeader(cookieHeaders, "profileText", profileInDB.getProfileText());
+        setTimeoutCookieHeader(cookieHeaders, "profileImagePath", profileInDB.getProfileImagePath());
 
         return cookieHeaders;
     }
@@ -70,7 +77,7 @@ public class CookieUtil {
         setDeleteCookieHeader(cookieHeaders, "isLogined");
         setDeleteCookieHeader(cookieHeaders, "nickName");
         setDeleteCookieHeader(cookieHeaders, "profileText");
-        setDeleteCookieHeader(cookieHeaders, "profileImage");
+        setDeleteCookieHeader(cookieHeaders, "profileImagePath");
 
         return cookieHeaders;
     }

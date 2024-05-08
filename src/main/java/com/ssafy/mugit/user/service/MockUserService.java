@@ -1,18 +1,19 @@
 package com.ssafy.mugit.user.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.user.dto.MockUserInfoDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
+import com.ssafy.mugit.user.dto.response.ResponseMockLoginDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class MockUserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final FollowRepository followRepository;
-    private final CookieUtil cookieUtil;
+    private final UserCookieUtil userCookieUtil;
 
     @Transactional
     public User createUserByUserInfo(MockUserInfoDto userInfo) {
@@ -51,7 +52,7 @@ public class MockUserService {
             throw new UserApiException(UserApiError.DUPLICATE_NICK_NAME);
     }
 
-    public HttpHeaders login(Long userPk, HttpSession session) throws JsonProcessingException {
+    public Pair<HttpHeaders, ResponseMockLoginDto> login(Long userPk, HttpSession session) {
 
         // DB에 해당 사용자 없을 때
         User userInDB = userRepository.findById(userPk)
@@ -60,8 +61,12 @@ public class MockUserService {
         // 세션에 해당 사용자 기록
         UserSessionDto userSessionDto = new UserSessionDto(userInDB);
         session.setAttribute(LOGIN_USER_KEY.getKey(), userSessionDto);
-        return cookieUtil.getLoginCookieHeader(userInDB,
+        return Pair.of(userCookieUtil.getLoginCookieHeader(userInDB,
                 followRepository.countMyFollowers(userInDB.getId()),
-                followRepository.countMyFollowings(userInDB.getId()));
+                followRepository.countMyFollowings(userInDB.getId())),
+                new ResponseMockLoginDto(userInDB,
+                        session.getId(),
+                        followRepository.countMyFollowers(userPk),
+                        followRepository.countMyFollowings(userPk)));
     }
 }

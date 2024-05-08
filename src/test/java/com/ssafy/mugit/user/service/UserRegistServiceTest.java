@@ -4,7 +4,7 @@ import com.ssafy.mugit.global.util.AcceptanceTestExecutionListener;
 import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ class UserRegistServiceTest {
     @Autowired
     FollowRepository followRepository;
 
-    CookieUtil cookieUtil;
+    UserCookieUtil userCookieUtil;
 
     UserRegistService sut;
 
     @BeforeEach
     void setUp() {
-        cookieUtil = new CookieUtil();
-        sut = new UserRegistService(userRepository, profileRepository, followRepository, cookieUtil);
+        userCookieUtil = new UserCookieUtil();
+        sut = new UserRegistService(userRepository, profileRepository, followRepository, userCookieUtil);
     }
 }
