@@ -21,7 +21,7 @@ public class CustomCorsConfiguration {
 
         configuration.addExposedHeader(SET_COOKIE);
         configuration.addAllowedHeader("*");
-        configuration.setAllowedMethods(asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
