@@ -9,6 +9,9 @@ import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.record.dto.RecordDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
 @RequestMapping("/api/flows")
@@ -30,8 +35,8 @@ public class FlowReadController {
     }
 
     @GetMapping()
-    ResponseEntity<ListDto<List<FlowItemDto>>> getFlowList() {
-        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listFlow()));
+    ResponseEntity<Slice<FlowItemDto>> getFlowList(@PageableDefault(size = 12, sort = "createdAt", direction = DESC) Pageable pageable) {
+        return ResponseEntity.status(200).body(flowReadService.listFlow(pageable));
     }
 
     @GetMapping("/mine")
