@@ -13,7 +13,7 @@ public class Profile {
     @Transient
     private final String DEFAULT_PROFILE_TEXT = "텍스트를 입력하세요.";
     @Transient
-    private final String DEFAULT_PROFILE_IMAGE_PATH = "DEFAULT_IMAGE_URL";
+    private final String DEFAULT_PROFILE_IMAGE_PATH = "https://mugit.site/files/008494eb-b272-4c83-919b-677378107fd2.jpg";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
