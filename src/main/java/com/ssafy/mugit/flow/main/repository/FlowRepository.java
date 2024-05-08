@@ -67,8 +67,8 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "LEFT JOIN FETCH u.profile p " +
             "LEFT JOIN FETCH f.hashtags ht " +
             "LEFT JOIN FETCH ht.hashtag h " +
-            "WHERE p.nickName =: keyword " +
-            "OR h.name = :keyword " +
-            "OR f.title = :keyword")
+            "WHERE p.nickName LIKE %:keyword% " +
+            "OR h.name LIKE %:keyword% " +
+            "OR f.title LIKE %:keyword%")
     Page<Flow> findFlowsByKeyword(Pageable pageable, String keyword);
 }
