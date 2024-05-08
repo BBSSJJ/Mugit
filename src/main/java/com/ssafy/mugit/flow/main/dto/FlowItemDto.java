@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +21,7 @@ public class FlowItemDto {
     String musicPath;
     String coverPath;
     String createdAt;
+    List<String> hashtags = new ArrayList<>();
 
     public FlowItemDto(Flow flow) {
         this.id = flow.getId();
@@ -27,5 +31,9 @@ public class FlowItemDto {
         this.musicPath = flow.getMusicPath();
         this.coverPath = flow.getCoverPath();
         this.createdAt = flow.getCreatedAt().toString();
+        this.hashtags = new ArrayList<>();
+        flow.getHashtags().forEach(flowHashtag -> {
+            this.hashtags.add(flowHashtag.getHashtag().getName());
+        });
     }
 }
