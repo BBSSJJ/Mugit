@@ -4,12 +4,15 @@ import com.ssafy.mugit.flow.main.dto.FlowDetailDto;
 import com.ssafy.mugit.flow.main.dto.FlowGraphTmpDto;
 import com.ssafy.mugit.flow.main.dto.FlowItemDto;
 import com.ssafy.mugit.flow.main.service.FlowReadService;
+import com.ssafy.mugit.flow.util.FlowCookieUtil;
 import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.record.dto.RecordDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -28,11 +31,16 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class FlowReadController {
 
     private final FlowReadService flowReadService;
+    private final FlowCookieUtil flowCookieUtil;
 
     @Operation(summary = "Flow 상세 조회", description = "Flow 상세 정보를 조회")
     @GetMapping("/{flowId}")
-    ResponseEntity<FlowDetailDto> getFlow(@UserSession UserSessionDto user, @PathVariable Long flowId) {
-        return ResponseEntity.status(200).body(flowReadService.findFlow(user.getId(), flowId));
+    ResponseEntity<FlowDetailDto> getFlow(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @UserSession UserSessionDto user,
+            @PathVariable Long flowId) {
+        return ResponseEntity.status(200).body(flowReadService.findFlow(user.getId(), flowId, flowCookieUtil.firstRead(request, response, flowId)));
     }
 
     @Operation(summary = "전체 Flow", description = "기본값으로 size=12, sort='createdAt'으로 되어있으므로 page 변수만 보내면 됩니다.")

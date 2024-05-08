@@ -93,4 +93,8 @@ public class Flow extends BaseTimeEntity {
         this.rootFlow = rootFlow;
         this.parentFlow = parentFlow;
     }
+
+    public void updateViews(Integer views) {
+        this.views = views;
+    }
 }

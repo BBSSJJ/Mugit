@@ -29,15 +29,20 @@ public class FlowReadService {
     private final LikesRepository likesRepository;
     private final UserRepository userRepository;
 
-    public FlowDetailDto findFlow(Long userId, Long flowId) {
+    @Transactional
+    public FlowDetailDto findFlow(Long userId, Long flowId, Boolean firstRead) {
         User user = null;
         Flow flow = flowRepository.findFlowById(flowId).orElseThrow(/* TODO : 에러 처리 */);
         if (userId != null) {
             user = userRepository.getReferenceById(userId);
         }
 
+        // 조회수 증가, 쿠키 생성
+        if (firstRead) {
+            flow.updateViews(flow.getViews() + 1);
+        }
+
         FlowDetailDto flowDto = new FlowDetailDto(flow);
-        System.out.println(flowDto);
 
         // 권한 검사
 
