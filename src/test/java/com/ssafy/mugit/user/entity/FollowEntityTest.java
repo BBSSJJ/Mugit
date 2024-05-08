@@ -26,7 +26,7 @@ class FollowEntityTest {
         // then
         assertThat(follow).isNotNull();
         assertThat(follow.getFollowee()).isInstanceOf(User.class);
-        assertThat(follow.getFollowing()).isInstanceOf(User.class);
+        assertThat(follow.getFollower()).isInstanceOf(User.class);
     }
 
     @Test

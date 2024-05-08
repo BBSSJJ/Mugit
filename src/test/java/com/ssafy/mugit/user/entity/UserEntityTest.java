@@ -46,7 +46,7 @@ class UserEntityTest {
         assertThat(tempUser.getProfile().getProfileText())
                 .isEqualTo("텍스트를 입력하세요.");
         assertThat(tempUser.getProfile().getProfileImagePath())
-                .isEqualTo("DEFAULT_IMAGE_URL");
+                .isEqualTo("https://mugit.site/files/008494eb-b272-4c83-919b-677378107fd2.jpg");
     }
 
     @Tag("regist")

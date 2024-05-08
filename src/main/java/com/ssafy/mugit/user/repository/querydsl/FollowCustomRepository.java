@@ -17,5 +17,5 @@ public interface FollowCustomRepository {
 
     boolean existsFollow(Long followingId, Long followeeId);
 
-    Follow findByFollowingIdAndFolloweeId(Long followingId, Long followeeId);
+    Follow findByFollowerIdAndFolloweeId(Long followingId, Long followeeId);
 }

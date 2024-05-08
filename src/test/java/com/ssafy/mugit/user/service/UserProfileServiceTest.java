@@ -139,8 +139,10 @@ class UserProfileServiceTest {
         assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
         assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
         assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", true);
+        assertThat(followerProfile.getFollowerCount()).isEqualTo(0L);
+        assertThat(followerProfile.getFollowingCount()).isEqualTo(1L);
         assertThat(followingProfile.getFollowerCount()).isEqualTo(1L);
-        assertThat(followingProfile.getFollowingCount()).isEqualTo(1L);
+        assertThat(followingProfile.getFollowingCount()).isEqualTo(0L);
     }
 
     @Test
@@ -151,12 +153,12 @@ class UserProfileServiceTest {
         userRepository.save(user);
 
         // when
-        Exception exception = assertThrows(Exception.class, () -> sut.getProfileById(user.getId(), user.getId()));
+        ResponseUserProfileDto userDto = sut.getProfileById(user.getId(), user.getId());
 
         // then
-        assertThat(exception).isInstanceOf(UserApiException.class);
-        UserApiException userApiException = (UserApiException) exception;
-        assertThat(userApiException.getUserApiError()).isEqualTo(UserApiError.SELF_PROFILE);
+        assertThat(userDto).isNotNull();
+        assertThat(userDto.getId()).isEqualTo(user.getId());
+        assertThat(userDto.getNickName()).isEqualTo(PROFILE.getFixture().getNickName());
     }
 
     @Transactional

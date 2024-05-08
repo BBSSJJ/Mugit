@@ -26,14 +26,14 @@ public class FollowService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void follow(Long followingUserId, Long followeeUserId) {
+    public void follow(Long followerId, Long followeeId) {
 
         // 팔로우 여부 확인
-        if (followRepository.existsFollow(followingUserId, followeeUserId)) throw new UserApiException(ALREADY_FOLLOW);
+        if (followRepository.existsFollow(followerId, followeeId)) throw new UserApiException(ALREADY_FOLLOW);
 
-        // 팔로잉(팔로우 하는 사람), 팔로이(팔로우 당하는 사람) 찾아오기
-        User followingUser = userRepository.findById(followingUserId).orElseThrow(() -> new UserApiException(USER_NOT_FOUND));
-        User followeeUser = userRepository.findById(followeeUserId).orElseThrow(() -> new UserApiException(USER_NOT_FOUND));
+        // 팔로워(팔로우 하는 사람), 팔로이(팔로우 당하는 사람) 찾아오기
+        User followingUser = userRepository.findById(followerId).orElseThrow(() -> new UserApiException(USER_NOT_FOUND));
+        User followeeUser = userRepository.findById(followeeId).orElseThrow(() -> new UserApiException(USER_NOT_FOUND));
 
         Follow follow = new Follow(followingUser, followeeUser);
         followRepository.save(follow);
@@ -42,8 +42,8 @@ public class FollowService {
         notificationService.sendFollow(followingUser, followeeUser);
     }
 
-    public void unfollow(Long followingId, Long followeeId) {
-        Follow followInDB = followRepository.findByFollowingIdAndFolloweeId(followingId, followeeId);
+    public void unfollow(Long followerId, Long followeeId) {
+        Follow followInDB = followRepository.findByFollowerIdAndFolloweeId(followerId, followeeId);
         if (followInDB == null) throw new UserApiException(UserApiError.NOT_EXIST_FOLLOW);
 
         followRepository.delete(followInDB);

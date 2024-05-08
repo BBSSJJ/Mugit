@@ -21,11 +21,11 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository {
     }
 
     @Override
-    public Long countMyFollowers(long myId) {  // 내가 팔로우하는 사람(나 : 팔로잉)
+    public Long countMyFollowers(long myId) {  // 내가 팔로우하는 사람(나 : 팔로워)
         return queryFactory
                 .select(follow.count())
                 .from(follow)
-                .where(follow.following.id.eq(myId)).fetchOne();
+                .where(follow.follower.id.eq(myId)).fetchOne();
     }
 
     @Override
@@ -37,13 +37,13 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository {
     }
 
     @Override
-    public List<FollowerDto> findAllFollowers(long myId) {  // 내가 팔로우하는 사람(나 : 팔로잉)
+    public List<FollowerDto> findAllFollowers(long myId) {  // 내가 팔로우하는 사람(나 : 팔로워)
         return queryFactory
                 .select(new QFollowerDto(user))
                 .from(follow)
                 .leftJoin(follow.followee)
                 .leftJoin(follow.followee.profile)
-                .where(follow.following.id.eq(myId)).fetch();
+                .where(follow.follower.id.eq(myId)).fetch();
     }
 
     @Override
@@ -51,28 +51,28 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository {
         return queryFactory
                 .select(new QFollowerDto(user))
                 .from(follow)
-                .leftJoin(follow.following)
-                .leftJoin(follow.following.profile)
+                .leftJoin(follow.follower)
+                .leftJoin(follow.follower.profile)
                 .where(follow.followee.id.eq(myId)).fetch();
     }
 
 
     @Override
-    public boolean existsFollow(Long followingId, Long followeeId) {  // 팔로이를 팔로잉하는지 확인
+    public boolean existsFollow(Long followerId, Long followeeId) {  // 팔로이의 팔로워인지 확인
         Integer ret = queryFactory
                 .selectOne()
                 .from(follow)
-                .where(follow.following.id.eq(followingId)
+                .where(follow.follower.id.eq(followerId)
                         .and(follow.followee.id.eq(followeeId)))
                 .fetchFirst();
         return ret != null;
     }
 
     @Override
-    public Follow findByFollowingIdAndFolloweeId(Long followingId, Long followeeId) {  // 팔로이를 팔로잉하는지 확인
+    public Follow findByFollowerIdAndFolloweeId(Long followerId, Long followeeId) {  // 팔로이의 팔로워인지 확인
         return queryFactory
                 .selectFrom(follow)
                 .where(follow.followee.id.eq(followeeId)
-                        .and(follow.following.id.eq(followingId))).fetchOne();
+                        .and(follow.follower.id.eq(followerId))).fetchOne();
     }
 }

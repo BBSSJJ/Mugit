@@ -27,14 +27,12 @@ public class UserProfileService {
     }
 
     public ResponseUserProfileDto getProfileById(Long myId, Long userId) {
-        // 본인 프로필 조회 예외처리
-        if (myId.equals(userId)) throw new UserApiException(UserApiError.SELF_PROFILE);
         // 해당 프로필 조회 + 예외처리
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
         if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
         // 팔로우 여부 설정
         userDto.setFollows(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId),
-                followService.countMyFollowers(myId), followService.countMyFollowings(myId));
+                followService.countMyFollowers(userId), followService.countMyFollowings(userId));
         return userDto;
     }
 

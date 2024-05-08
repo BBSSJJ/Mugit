@@ -113,7 +113,7 @@ class FollowServiceTest {
         // then
         assertThat(all.size()).isEqualTo(1);
         assertThat(follow.getFollowee().getId()).isEqualTo(followee.getId());
-        assertThat(follow.getFollowing().getId()).isEqualTo(following.getId());
+        assertThat(follow.getFollower().getId()).isEqualTo(following.getId());
     }
 
     @Test
