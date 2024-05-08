@@ -139,10 +139,44 @@ class UserProfileServiceTest {
         assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
         assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
         assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", true);
-        assertThat(followerProfile.getFollowerCount()).isEqualTo(0L);
-        assertThat(followerProfile.getFollowingCount()).isEqualTo(1L);
-        assertThat(followingProfile.getFollowerCount()).isEqualTo(1L);
-        assertThat(followingProfile.getFollowingCount()).isEqualTo(0L);
+        assertThat(followerProfile.getFollowerCount()).isEqualTo(1L);
+        assertThat(followerProfile.getFollowingCount()).isEqualTo(0L);
+        assertThat(followingProfile.getFollowerCount()).isEqualTo(0L);
+        assertThat(followingProfile.getFollowingCount()).isEqualTo(1L);
+    }
+
+
+    @Tag("follow")
+    @Test
+    @DisplayName("[통합] 로그인 안했을때도 팔로우 관련 정보 조회")
+    void testFollowWithoutLogin() {
+        // given
+        User user = USER.getFixture(PROFILE.getFixture());
+        User follower = USER_2.getFixture(PROFILE_2.getFixture());
+        User following = USER_3.getFixture(PROFILE_3.getFixture());
+        userRepository.save(user);
+        userRepository.save(follower);
+        userRepository.save(following);
+
+        // 유저 1 -> 유저 2
+        followService.follow(user.getId(), follower.getId());
+
+        // 유저 3 -> 유저 1
+        followService.follow(following.getId(), user.getId());
+
+        // when
+        ResponseUserProfileDto followerProfile = sut.getProfileById(follower.getId());
+        ResponseUserProfileDto followingProfile = sut.getProfileById(following.getId());
+
+        // then
+        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollower", false);
+        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
+        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
+        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", false);
+        assertThat(followerProfile.getFollowerCount()).isEqualTo(1L);
+        assertThat(followerProfile.getFollowingCount()).isEqualTo(0L);
+        assertThat(followingProfile.getFollowerCount()).isEqualTo(0L);
+        assertThat(followingProfile.getFollowingCount()).isEqualTo(1L);
     }
 
     @Test
@@ -159,6 +193,7 @@ class UserProfileServiceTest {
         assertThat(userDto).isNotNull();
         assertThat(userDto.getId()).isEqualTo(user.getId());
         assertThat(userDto.getNickName()).isEqualTo(PROFILE.getFixture().getNickName());
+        assertThat(userDto.getIsMyProfile()).isTrue();
     }
 
     @Transactional

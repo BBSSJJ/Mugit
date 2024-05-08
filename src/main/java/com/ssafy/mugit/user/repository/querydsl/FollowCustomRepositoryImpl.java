@@ -21,15 +21,7 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository {
     }
 
     @Override
-    public Long countMyFollowers(long myId) {  // 내가 팔로우하는 사람(나 : 팔로워)
-        return queryFactory
-                .select(follow.count())
-                .from(follow)
-                .where(follow.follower.id.eq(myId)).fetchOne();
-    }
-
-    @Override
-    public Long countMyFollowings(long myId) {  // 나를 팔로우하는 사람(나 : 팔로이)
+    public Long countMyFollowers(long myId) {  // 나를 팔로잉하는 사람 숫자(나 : 팔로이)
         return queryFactory
                 .select(follow.count())
                 .from(follow)
@@ -37,7 +29,15 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository {
     }
 
     @Override
-    public List<FollowerDto> findAllFollowers(long myId) {  // 내가 팔로우하는 사람(나 : 팔로워)
+    public Long countMyFollowings(long myId) {  // 내가 팔로잉하는 사람(나 : 팔로워)
+        return queryFactory
+                .select(follow.count())
+                .from(follow)
+                .where(follow.follower.id.eq(myId)).fetchOne();
+    }
+
+    @Override
+    public List<FollowerDto> findAllFollowers(long myId) {  // 내가 팔로잉하는 사람(나 : 팔로워)
         return queryFactory
                 .select(new QFollowerDto(user))
                 .from(follow)
@@ -47,7 +47,7 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository {
     }
 
     @Override
-    public List<FollowerDto> findAllFollowings(long myId) {  // 나를 팔로우하는 사람(나 : 팔로이)
+    public List<FollowerDto> findAllFollowings(long myId) {  // 나를 팔로잉하는 사람(나 : 팔로이)
         return queryFactory
                 .select(new QFollowerDto(user))
                 .from(follow)

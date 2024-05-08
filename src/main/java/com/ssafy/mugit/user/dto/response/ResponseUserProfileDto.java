@@ -5,10 +5,11 @@ import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class ResponseUserProfileDto {
 
@@ -23,6 +24,8 @@ public class ResponseUserProfileDto {
     private Boolean isFollowing;
     private Long followerCount;
     private Long followingCount;
+    @Setter
+    private Boolean isMyProfile;
 
     @QueryProjection
     public ResponseUserProfileDto(User user, Profile profile) {
@@ -33,6 +36,7 @@ public class ResponseUserProfileDto {
         this.nickName = profile.getNickName();
         this.profileText = profile.getProfileText();
         this.profileImagePath = profile.getProfileImagePath();
+        this.isMyProfile = false;
     }
 
     // 관리자 DTO 생성용
@@ -47,10 +51,13 @@ public class ResponseUserProfileDto {
         this.profileImagePath = "";
     }
 
-    public void setFollows(boolean isFollower, boolean isFollowing, long followerCount, long followingCount) {
-        this.isFollower = isFollower;
-        this.isFollowing = isFollowing;
+    public void setFollowCount(long followerCount, long followingCount) {
         this.followerCount = followerCount;
         this.followingCount = followingCount;
+    }
+
+    public void setIsFollow(boolean isFollower, boolean isFollowing) {
+        this.isFollower = isFollower;
+        this.isFollowing = isFollowing;
     }
 }
