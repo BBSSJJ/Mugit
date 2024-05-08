@@ -6,6 +6,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static java.util.Arrays.asList;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @Component
 public class CustomCorsConfiguration {
@@ -18,6 +19,7 @@ public class CustomCorsConfiguration {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://localhost:8080");
 
+        configuration.addExposedHeader(SET_COOKIE);
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
