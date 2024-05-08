@@ -2,12 +2,11 @@ package com.ssafy.mugit.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.api.OAuthApi;
-import com.ssafy.mugit.notification.service.NotificationService;
 import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +45,7 @@ class UserLoginServiceTest {
     @Autowired
     FollowRepository followRepository;
 
-    CookieUtil cookieUtil;
+    UserCookieUtil userCookieUtil;
 
     UserLoginService sut;
 
@@ -56,8 +55,8 @@ class UserLoginServiceTest {
     @BeforeEach
     void setUp() {
         mock();
-        cookieUtil = new CookieUtil();
-        sut = new UserLoginService(oAuthApi, userRepository, followService, cookieUtil);
+        userCookieUtil = new UserCookieUtil();
+        sut = new UserLoginService(oAuthApi, userRepository, followService, userCookieUtil);
         userRepository.save(USER.getFixture(PROFILE.getFixture()));
     }
 
@@ -77,7 +76,7 @@ class UserLoginServiceTest {
         List<String> cookies = cookieHeader.get(SET_COOKIE);
 
         // then
-        assertThat(cookies).contains(cookieUtil.getTimeoutCookie("isLogined", "true").toString());
+        assertThat(cookies).contains(userCookieUtil.getTimeoutCookie("isLogined", "true").toString());
         assertThat(session.getAttribute(LOGIN_USER_KEY.getKey())).isNotNull();
     }
 }

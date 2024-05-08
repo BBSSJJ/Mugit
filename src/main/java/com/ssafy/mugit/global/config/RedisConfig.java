@@ -31,8 +31,9 @@ public class RedisConfig {
     public LettuceConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
         redisStandaloneConfiguration.setPassword(password);
-        //        lettuceConnectionFactory.setEagerInitialization(true);
-        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
+        lettuceConnectionFactory.setEagerInitialization(true);
+        return lettuceConnectionFactory;
     }
 
     @Bean

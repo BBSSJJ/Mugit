@@ -7,7 +7,7 @@ import com.ssafy.mugit.user.fixture.ProfileFixture;
 import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserLogoutService;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserLogoutAcceptanceTest {
 
     @Autowired
-    CookieUtil cookieUtil;
+    UserCookieUtil userCookieUtil;
 
     @Autowired
     UserLogoutService userLogoutService;
@@ -72,7 +72,7 @@ public class UserLogoutAcceptanceTest {
                                     if ("isLogined".equals(cookie.getName())) cookies2[0] = cookie;
                                     if ("nickName".equals(cookie.getName())) cookies2[1] = cookie;
                                     if ("profileText".equals(cookie.getName())) cookies2[2] = cookie;
-                                    if ("profileImage".equals(cookie.getName())) cookies2[3] = cookie;
+                                    if ("profileImagePath".equals(cookie.getName())) cookies2[3] = cookie;
                                 }
                                 assertThat(cookies2[0].getValue()).isEmpty();
                                 assertThat(cookies2[2].getValue()).isEmpty();

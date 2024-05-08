@@ -10,7 +10,7 @@ import com.ssafy.mugit.user.entity.type.SnsType;
 import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +25,7 @@ public class UserRegistService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final FollowRepository followRepository;
-    private final CookieUtil cookieUtil;
+    private final UserCookieUtil userCookieUtil;
 
     public HttpHeaders registAndSetLogin(String snsId, SnsType snsType, String email, RequestRegistProfileDto requestRegistProfileDto, HttpServletRequest request) {
 
@@ -41,7 +41,7 @@ public class UserRegistService {
         request.getSession().setAttribute(LOGIN_USER_KEY.getKey(), new UserSessionDto(registeredUser));
 
         // 로그인 쿠키 + 회원가입 쿠키 초기화
-        return cookieUtil.getLoginCookieAndDeleteRegistCookieHeader(registeredUser,
+        return userCookieUtil.getLoginCookieAndDeleteRegistCookieHeader(registeredUser,
                 followRepository.countMyFollowers(registeredUser.getId()),
                 followRepository.countMyFollowings(registeredUser.getId()));
     }

@@ -3,6 +3,7 @@ package com.ssafy.mugit.user.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.user.dto.MockUserInfoDto;
+import com.ssafy.mugit.user.dto.response.ResponseMockLoginDto;
 import com.ssafy.mugit.user.service.MockUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,18 +44,18 @@ public class MockUserController {
     @Operation(summary = "로그인(Mock)", description = "(Mock)로그인을 요청한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Mock 로그인 완료",
-                    content = @Content(schema = @Schema(implementation = MessageDto.class))),
+                    content = @Content(schema = @Schema(implementation = ResponseMockLoginDto.class))),
             @ApiResponse(responseCode = "404", description = "해당 사용자 없음",
                     content = @Content(schema = @Schema(implementation = MessageDto.class)))
     })
     @GetMapping("/login")
-    public ResponseEntity<MessageDto> login(@RequestParam(name = "pk") Long userPk, HttpSession session) throws JsonProcessingException {
+    public ResponseEntity<ResponseMockLoginDto> login(@RequestParam(name = "pk") Long userPk, HttpSession session) throws JsonProcessingException {
 
         // 사용자 로그인 : 사용자 session 등록 및 cookie 반환
-        HttpHeaders cookieHeaders = mockUserService.login(userPk, session);
+        Pair<HttpHeaders, ResponseMockLoginDto> headerAndDto = mockUserService.login(userPk, session);
 
         return ResponseEntity.status(200)
-                .headers(cookieHeaders)
-                .body(new MessageDto("Mock 로그인 완료"));
+                .headers(headerAndDto.getFirst())
+                .body(headerAndDto.getSecond());
     }
 }

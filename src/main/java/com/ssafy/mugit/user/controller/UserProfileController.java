@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,8 +54,8 @@ public class UserProfileController {
     public ResponseEntity<MessageDto> updateUserProfile(@UserSession UserSessionDto user, @RequestBody RequestModifyUserInfoDto dto) {
 
         // 사용자 id 찾아서 프로필 업데이트
-        userProfileService.updateProfile(user.getId(), dto);
+        HttpHeaders headers = userProfileService.updateProfile(user.getId(), dto);
 
-        return ResponseEntity.ok().body(new MessageDto("프로필 수정완료"));
+        return ResponseEntity.status(200).headers(headers).body(new MessageDto("프로필 수정완료"));
     }
 }

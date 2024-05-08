@@ -12,20 +12,20 @@ public enum ProfileFixture {
     private final Long id;
     private final String nickName;
     private final String profileText;
-    private final String profileImage;
+    private final String profileImagePath;
 
-    ProfileFixture(Long id, String nickName, String profileText, String profileImage) {
+    ProfileFixture(Long id, String nickName, String profileText, String profileImagePath) {
         this.id = id;
         this.nickName = nickName;
         this.profileText = profileText;
-        this.profileImage = profileImage;
+        this.profileImagePath = profileImagePath;
     }
 
     public Profile getFixture(){
-        return new Profile(id, nickName, profileText, profileImage, null);
+        return new Profile(id, nickName, profileText, profileImagePath, null);
     }
 
     public Profile getFixture(User user){
-        return new Profile(id, nickName, profileText, profileImage, user);
+        return new Profile(id, nickName, profileText, profileImagePath, user);
     }
 }
