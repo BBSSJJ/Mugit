@@ -29,9 +29,13 @@ public class Review extends BaseTimeEntity {
     @Column(name = "content")
     String content;
 
-    public Review(User user, Flow flow, String content) {
+    @Column(name = "timeline")
+    String timeline;
+
+    public Review(User user, Flow flow, String content, String timeline) {
         this.user = user;
         this.flow = flow;
         this.content = content;
+        this.timeline = timeline;
     }
 }

@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequestCreateReviewDto {
     String content;
+    String timeline;
 }

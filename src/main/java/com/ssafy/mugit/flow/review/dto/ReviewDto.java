@@ -13,10 +13,12 @@ public class ReviewDto {
     Long id;
     UserProfileDto user;
     String content;
+    String timeline;
 
     public ReviewDto(Review review) {
         this.id = review.getId();
         this.user = new UserProfileDto(review.getUser());
         this.content = review.getContent();
+        this.timeline = review.getTimeline();
     }
 }
