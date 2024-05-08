@@ -34,7 +34,10 @@ public class CustomAuthorizeHttpRequestsFilter {
                 .requestMatchers("/api/flows/**").permitAll()
 
                 // review Get 요청 API 인증 해제
-                .requestMatchers(HttpMethod.GET, "/api/records/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
+
+                // like 요청 API 인증 해제
+                .requestMatchers("/api/likes/**").permitAll()
 
                 // 이외 API 요청은 전부 인증 필요
                 .requestMatchers("/api/**").authenticated()
