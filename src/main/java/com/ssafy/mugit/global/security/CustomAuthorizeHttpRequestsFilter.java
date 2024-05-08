@@ -1,5 +1,6 @@
 package com.ssafy.mugit.global.security;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
@@ -31,6 +32,9 @@ public class CustomAuthorizeHttpRequestsFilter {
 
                 // flow 관련 API 인증 해제
                 .requestMatchers("/api/flows/**").permitAll()
+
+                // review Get 요청 API 인증 해제
+                .requestMatchers(HttpMethod.GET, "/api/records/**").permitAll()
 
                 // 이외 API 요청은 전부 인증 필요
                 .requestMatchers("/api/**").authenticated()
