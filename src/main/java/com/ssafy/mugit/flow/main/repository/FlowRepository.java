@@ -27,7 +27,7 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
 //            "WHERE f.isReleased = true AND f.authority != 'PRIVATE'")
 //    List<Flow> findFlows();
 
-    @Query("SELECT f FROM flow f " +
+    @Query("SELECT DISTINCT f FROM flow f " +
             "LEFT JOIN FETCH f.user u " +
             "LEFT JOIN FETCH u.profile " +
             "WHERE f.isReleased = true AND f.authority != 'PRIVATE'")
@@ -53,4 +53,22 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
     List<Flow> findMyLikeFlows(Long userId);
 
     List<Flow> findFlowsByRootFlow(Flow rootFlow);
+
+    @Query("SELECT DISTINCT f FROM flow f " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile " +
+            "LEFT JOIN FETCH f.hashtags ht " +
+            "LEFT JOIN FETCH ht.hashtag h " +
+            "WHERE h.name = :hashtag")
+    Page<Flow> findFlowsByHashtag(Pageable pageable, String hashtag);
+
+    @Query("SELECT DISTINCT f FROM flow f " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile p " +
+            "LEFT JOIN FETCH f.hashtags ht " +
+            "LEFT JOIN FETCH ht.hashtag h " +
+            "WHERE p.nickName =: keyword " +
+            "OR h.name = :keyword " +
+            "OR f.title = :keyword")
+    Page<Flow> findFlowsByKeyword(Pageable pageable, String keyword);
 }

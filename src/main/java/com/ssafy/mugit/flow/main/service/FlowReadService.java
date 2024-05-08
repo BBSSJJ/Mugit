@@ -96,4 +96,12 @@ public class FlowReadService {
 
         return new FlowGraphTmpDto(rootFlow);
     }
+
+    public Slice<FlowItemDto> getFlowsByGenre(Pageable pageable, String hashtag) {
+        return flowRepository.findFlowsByHashtag(pageable, hashtag).map(FlowItemDto::new);
+    }
+
+    public Slice<FlowItemDto> getFlowsByKeyword(Pageable pageable, String keyword) {
+        return flowRepository.findFlowsByKeyword(pageable, keyword).map(FlowItemDto::new);
+    }
 }
