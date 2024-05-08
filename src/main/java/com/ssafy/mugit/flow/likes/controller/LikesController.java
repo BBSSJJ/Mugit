@@ -5,6 +5,7 @@ import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/likes")
 @RequiredArgsConstructor
+@Tag(name = "Likes", description = "좋아요와 관련한 API입니다.")
 public class LikesController {
     private final LikesService likesService;
 

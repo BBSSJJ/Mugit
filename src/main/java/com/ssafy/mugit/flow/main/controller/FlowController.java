@@ -7,6 +7,7 @@ import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/flows")
 @RequiredArgsConstructor
+@Tag(name = "Flow", description = "플로우와 관련한 API입니다.")
 public class FlowController {
     private final FlowService flowService;
 

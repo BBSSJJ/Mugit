@@ -8,6 +8,7 @@ import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@Tag(name = "Review", description = "리뷰와 관련한 API입니다.")
 public class ReviewController {
     private final ReviewService reviewService;
 

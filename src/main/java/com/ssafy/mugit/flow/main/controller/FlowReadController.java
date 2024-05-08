@@ -9,6 +9,7 @@ import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.record.dto.RecordDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -23,6 +24,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RestController
 @RequestMapping("/api/flows")
 @RequiredArgsConstructor
+@Tag(name = "Flow(Read)", description = "플로우 조회와 관련한 API입니다.")
 public class FlowReadController {
 
     private final FlowReadService flowReadService;
