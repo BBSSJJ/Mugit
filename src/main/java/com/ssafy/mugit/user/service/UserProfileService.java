@@ -33,7 +33,8 @@ public class UserProfileService {
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
         if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
         // 팔로우 여부 설정
-        userDto.setFollows(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId));
+        userDto.setFollows(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId),
+                followService.countMyFollowers(myId), followService.countMyFollowings(myId));
         return userDto;
     }
 

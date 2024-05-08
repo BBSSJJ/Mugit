@@ -19,10 +19,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
 import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
 import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
 import static com.ssafy.mugit.user.fixture.UserFixture.USER;
+import static com.ssafy.mugit.user.fixture.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -144,10 +145,10 @@ public class UserProfileAcceptanceTest {
     void testModifyDuplicateProfile() throws Exception {
         // given
         Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token")).andReturn().getResponse().getCookies();
-        String body = objectMapper.writeValueAsString(DUPLICATE_MODIFY_USER_INFO_DTO.getFixture());
+        String body = objectMapper.writeValueAsString(MODIFY_USER_INFO_DTO_01.getFixture());
+        userRepository.save(USER_2.getFixture(PROFILE_2.getFixture()));
 
         // when
-        mockMvc.perform(patch("/api/users/profiles").cookie(loginCookie).contentType(APPLICATION_JSON).content(body));
         ResultActions perform = mockMvc.perform(patch("/api/users/profiles").cookie(loginCookie).contentType(APPLICATION_JSON).content(body));
 
         // then

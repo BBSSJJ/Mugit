@@ -114,7 +114,7 @@ class UserProfileServiceTest {
 
     @Tag("follow")
     @Test
-    @DisplayName("[통합] 내가 팔로우중인지 / 나를 팔로우중인지 확인")
+    @DisplayName("[통합] 팔로우 관련 정보 조회")
     void testFollow() {
         // given
         User user = USER.getFixture(PROFILE.getFixture());
@@ -139,6 +139,8 @@ class UserProfileServiceTest {
         assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
         assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
         assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", true);
+        assertThat(followingProfile.getFollowerCount()).isEqualTo(1L);
+        assertThat(followingProfile.getFollowingCount()).isEqualTo(1L);
     }
 
     @Test

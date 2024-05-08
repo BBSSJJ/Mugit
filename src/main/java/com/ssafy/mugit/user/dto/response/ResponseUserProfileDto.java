@@ -21,6 +21,8 @@ public class ResponseUserProfileDto {
     private String profileImagePath;
     private Boolean isFollower;
     private Boolean isFollowing;
+    private Long followerCount;
+    private Long followingCount;
 
     @QueryProjection
     public ResponseUserProfileDto(User user, Profile profile) {
@@ -45,8 +47,10 @@ public class ResponseUserProfileDto {
         this.profileImagePath = "";
     }
 
-    public void setFollows(boolean isFollower, boolean isFollowing) {
+    public void setFollows(boolean isFollower, boolean isFollowing, long followerCount, long followingCount) {
         this.isFollower = isFollower;
         this.isFollowing = isFollowing;
+        this.followerCount = followerCount;
+        this.followingCount = followingCount;
     }
 }

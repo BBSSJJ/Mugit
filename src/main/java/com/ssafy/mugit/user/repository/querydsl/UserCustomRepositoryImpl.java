@@ -3,7 +3,6 @@ package com.ssafy.mugit.user.repository.querydsl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.mugit.user.dto.response.QResponseUserProfileDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
-import com.ssafy.mugit.user.entity.Profile;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
