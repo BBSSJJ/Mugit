@@ -28,6 +28,7 @@ public class CookieUtil {
         Profile profile = user.getProfile();
 
         setTimeoutCookieHeader(cookieHeaders, "isLogined", "true");
+        setTimeoutCookieHeader(cookieHeaders, "userID", user.getId().toString());
         setTimeoutCookieHeader(cookieHeaders, "nickName", profile.getNickName());
         setTimeoutCookieHeader(cookieHeaders, "profileText", profile.getProfileText());
         setTimeoutCookieHeader(cookieHeaders, "profileImage", profile.getProfileImagePath());

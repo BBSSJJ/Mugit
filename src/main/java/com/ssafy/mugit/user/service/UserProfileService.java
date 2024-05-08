@@ -32,7 +32,7 @@ public class UserProfileService {
         // 1명 조회할때와 동일한 로직 사용
         ResponseUserProfileDto userDto = getProfileById(userId);
         // 본인 조회했는지 확인
-        userDto.setIsMyProfile(true);
+        if (myId.equals(userId)) userDto.setIsMyProfile(true);
         // 팔로우 여부 + 숫자 설정
         userDto.setIsFollow(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId));
         return userDto;
