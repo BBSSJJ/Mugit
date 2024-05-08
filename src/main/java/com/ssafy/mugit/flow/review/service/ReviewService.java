@@ -24,10 +24,14 @@ public class ReviewService {
         User user = userRepository.getReferenceById(userId);
         Flow flow = flowRepository.getReferenceById(flowId);
         String content = requestCreateReviewDto.getContent();
+        String timeline = requestCreateReviewDto.getTimeline();
         if (content == null) {
             /* TODO : 에러 처리 */
         }
-        Review review = new Review(user, flow, requestCreateReviewDto.getContent());
+        if (timeline == null) {
+            timeline = "0:00";
+        }
+        Review review = new Review(user, flow, content, timeline);
         reviewRepository.save(review);
     }
 
