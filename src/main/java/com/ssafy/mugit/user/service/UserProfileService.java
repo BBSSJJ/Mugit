@@ -23,16 +23,18 @@ public class UserProfileService {
         // 해당 프로필 조회 + 예외처리
         ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
         if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
+        // 팔로우 숫자 설정
+        userDto.setFollowCount(followService.countMyFollowers(userId), followService.countMyFollowings(userId));
         return userDto;
     }
 
     public ResponseUserProfileDto getProfileById(Long myId, Long userId) {
-        // 해당 프로필 조회 + 예외처리
-        ResponseUserProfileDto userDto = userRepository.findUserProfileDtoByUserId(userId);
-        if (userDto == null) throw new UserApiException(UserApiError.USER_NOT_FOUND);
-        // 팔로우 여부 설정
-        userDto.setFollows(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId),
-                followService.countMyFollowers(userId), followService.countMyFollowings(userId));
+        // 1명 조회할때와 동일한 로직 사용
+        ResponseUserProfileDto userDto = getProfileById(userId);
+        // 본인 조회했는지 확인
+        userDto.setIsMyProfile(true);
+        // 팔로우 여부 + 숫자 설정
+        userDto.setIsFollow(followService.checkIsFollower(myId, userId), followService.checkIsFollower(userId, myId));
         return userDto;
     }
 
