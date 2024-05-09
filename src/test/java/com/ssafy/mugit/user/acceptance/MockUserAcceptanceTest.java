@@ -7,8 +7,6 @@ import com.ssafy.mugit.user.dto.response.ResponseMockLoginDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.fixture.MockUserInfoFixture;
-import com.ssafy.mugit.user.fixture.ProfileFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.MockUserService;
 import jakarta.servlet.http.Cookie;
@@ -16,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -116,6 +115,7 @@ public class MockUserAcceptanceTest {
         String body = mockMvc.perform(get("/api/users/mocks/login").contentType(MediaType.APPLICATION_JSON)
                 .param("pk", String.valueOf(user.getId()))).andReturn().getResponse().getContentAsString();
         ResponseMockLoginDto responseMockLoginDto = objectMapper.readValue(body, ResponseMockLoginDto.class);
+        System.out.println("responseMockLoginDto = " + responseMockLoginDto);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail")

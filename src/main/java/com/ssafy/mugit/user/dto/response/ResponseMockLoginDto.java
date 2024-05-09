@@ -1,18 +1,15 @@
 package com.ssafy.mugit.user.dto.response;
 
-import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import lombok.ToString;
 
-import java.net.HttpCookie;
 import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class ResponseMockLoginDto {
     private String sessionId;
     private Long userId;

@@ -47,6 +47,8 @@ public class GlobalExceptionHandler {
             case NOT_EXIST_READABLE_NOTIFICATION ->
                     new ResponseEntity<>(new MessageDto("안읽은 알림 없음"), HttpStatus.NOT_FOUND);
             case NOTIFICATION_NOT_FOUNT -> new ResponseEntity<>(new MessageDto("해당 알림 없음"), HttpStatus.NOT_FOUND);
+            case DELETE_RECORD_NOT_IN_MUGITORY -> new ResponseEntity<>(new MessageDto("뮤기토리에 존재하지 않는 레코드 삭제"), HttpStatus.NOT_FOUND);
+            case ALREADY_RECORDED_TO_MUGITORY -> new ResponseEntity<>(new MessageDto("뮤기토리에 이미 등록된 레코드 재등록"), HttpStatus.CONFLICT);
         };
     }
 

@@ -129,8 +129,8 @@ public class FollowAcceptanceTest {
         // then
         perform.andExpect(cookie().exists("followers"))
                 .andExpect(cookie().exists("followings"))
-                .andExpect(cookie().value("followers", "2"))
-                .andExpect(cookie().value("followings", "1"))
+                .andExpect(cookie().value("followers", "1"))
+                .andExpect(cookie().value("followings", "2"))
                 .andExpect(status().is(200));
     }
 
@@ -189,7 +189,7 @@ public class FollowAcceptanceTest {
                 .cookie(loginCookie));
         // then
         perform.andExpect(status().isOk());
-        assertThat(followRepository.countMyFollowers(myId)).isEqualTo(0);
+        assertThat(followRepository.countMyFollowings(myId)).isEqualTo(0);
 
         // when2
         ResultActions perform2 = mockMvc.perform(delete("/api/users/" + friend + "/follows")
