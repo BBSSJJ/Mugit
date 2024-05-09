@@ -2,15 +2,16 @@ package com.ssafy.mugit.record.service;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
-import com.ssafy.mugit.global.exception.UserApiException;
-import com.ssafy.mugit.global.exception.error.UserApiError;
-import com.ssafy.mugit.record.dto.*;
+import com.ssafy.mugit.record.dto.NewSourceDto;
+import com.ssafy.mugit.record.dto.PreSourceDto;
+import com.ssafy.mugit.record.dto.RecordRequestDto;
 import com.ssafy.mugit.record.entity.Record;
 import com.ssafy.mugit.record.entity.RecordSource;
 import com.ssafy.mugit.record.entity.Source;
 import com.ssafy.mugit.record.repository.RecordRepository;
 import com.ssafy.mugit.record.repository.RecordSourceRepository;
 import com.ssafy.mugit.record.repository.SourceRepository;
+import com.ssafy.mugit.record.util.ValidateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,17 +24,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class RecordService {
+public class RecordInsertService {
 
     private final SourceRepository sourceRepository;
     private final RecordRepository recordRepository;
     private final FlowRepository flowRepository;
     private final RecordSourceRepository recordSourceRepository;
+    private final ValidateUtil validateUtil;
 
     public void insertRecord(Long userId, Long flowId, RecordRequestDto recordRequestDto) {
 
         // 1. 요청 검증
-        validateFlow(userId, flowId);
+        validateUtil.validateFlow(userId, flowId);
 
         // 2. 레코드 생성
         Record record = createRecord(flowId, recordRequestDto.getMessage());
@@ -80,39 +82,5 @@ public class RecordService {
             }
         }
         return sources;
-    }
-
-    public RecordResponseDto selectRecord(Long userId, Long recordId) {
-        Record record = validateRecord(userId, recordId);
-        List<SourceInfoDto> sources = new ArrayList<>();
-        for (RecordSource rs : record.getRecordSources()) {
-            SourceInfoDto sourceInfoDto = SourceInfoDto.builder()
-                    .id(rs.getSource().getId())
-                    .name(rs.getName())
-                    .path(rs.getSource().getPath())
-                    .build();
-            sources.add(sourceInfoDto);
-        }
-        return new RecordResponseDto(record.getId(), record.getMessage(), sources);
-    }
-
-    public void deleteRecord(Long userId, Long recordId) {
-        Record record = validateRecord(userId, recordId);
-        recordRepository.delete(record);
-    }
-
-    public void validateFlow(Long userId, Long flowId) {
-        Flow flow = flowRepository.findByIdWithUser(flowId);
-        if (flow == null || !userId.equals(flow.getUser().getId())) {
-            throw new UserApiException(UserApiError.NOT_ALLOWED_ACCESS);
-        }
-    }
-
-    public Record validateRecord(Long userId, Long recordId) {
-        Record record = recordRepository.findByIdWithUser(recordId);
-        if(record == null || !userId.equals(record.getFlow().getUser().getId())) {
-            throw new UserApiException(UserApiError.NOT_ALLOWED_ACCESS);
-        }
-        return record;
     }
 }
