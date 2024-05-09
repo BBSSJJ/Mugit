@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag("follow")
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 class FollowServiceTest {
 
@@ -70,6 +68,7 @@ class FollowServiceTest {
         userRepository.save(followee);
     }
 
+    @Transactional
     @Test
     @DisplayName("[통합] 존재하지 않는 유저 팔로우 시 오류")
     void testFollowNotRegistered() {
@@ -127,7 +126,7 @@ class FollowServiceTest {
         sut.follow(following.getId(), followee2.getId());
 
         // when
-        Long total = followRepository.countMyFollowers(following.getId());
+        Long total = followRepository.countMyFollowings(following.getId());
 
         // then
         assertThat(total).isEqualTo(2L);
@@ -140,7 +139,7 @@ class FollowServiceTest {
         sut.follow(followee.getId(), following.getId());
 
         // when
-        Long total = followRepository.countMyFollowings(following.getId());
+        Long total = followRepository.countMyFollowers(following.getId());
 
         // then
         assertThat(total).isEqualTo(1L);
@@ -172,12 +171,12 @@ class FollowServiceTest {
     void testDeleteFollow() {
         // given
         sut.follow(following.getId(), followee.getId());
-        Long allFollowerCount = followRepository.countMyFollowings(followee.getId());
+        Long allFollowerCount = followRepository.countMyFollowers(followee.getId());
         assertThat(allFollowerCount).isEqualTo(1L);
 
         // when
         sut.unfollow(following.getId(), followee.getId());
-        allFollowerCount = followRepository.countMyFollowings(followee.getId());
+        allFollowerCount = followRepository.countMyFollowers(followee.getId());
 
         // then
         assertThat(allFollowerCount).isEqualTo(0L);

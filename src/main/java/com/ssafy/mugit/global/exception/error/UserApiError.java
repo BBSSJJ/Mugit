@@ -19,7 +19,9 @@ public enum UserApiError {
     SELF_PROFILE("본인의 프로필을 조회했습니다."),
     NOT_ALLOWED_ACCESS("접근 권한이 없습니다."),
     NOT_EXIST_READABLE_NOTIFICATION("읽을 수 있는 알림이 존재하지 않습니다."),
-    NOTIFICATION_NOT_FOUNT("해당 알림을 찾을 수 없습니다.");
+    NOTIFICATION_NOT_FOUNT("해당 알림을 찾을 수 없습니다."),
+    DELETE_RECORD_NOT_IN_MUGITORY("뮤기토리에 없는 레코드를 삭제했습니다."),
+    ALREADY_RECORDED_TO_MUGITORY("이미 뮤기토리에 등록된 레코드입니다.");
 
     private final String message;
 }

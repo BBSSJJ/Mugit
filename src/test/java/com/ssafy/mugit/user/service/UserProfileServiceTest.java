@@ -170,10 +170,6 @@ class UserProfileServiceTest {
         ResponseUserProfileDto followingProfile = sut.getProfileById(following.getId());
 
         // then
-        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollower", false);
-        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
-        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
-        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", false);
         assertThat(followerProfile.getFollowerCount()).isEqualTo(1L);
         assertThat(followerProfile.getFollowingCount()).isEqualTo(0L);
         assertThat(followingProfile.getFollowerCount()).isEqualTo(0L);

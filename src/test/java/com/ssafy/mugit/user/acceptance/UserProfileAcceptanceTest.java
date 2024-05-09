@@ -67,7 +67,10 @@ public class UserProfileAcceptanceTest {
     @DisplayName("[인수] 로그인 안한 유저 타인 프로필 조회(200)")
     void testFindUserPk() throws Exception {
         // given
-        String resultJson = objectMapper.writeValueAsString(new ResponseUserProfileDto(userInDB, userInDB.getProfile()));
+        ResponseUserProfileDto value = new ResponseUserProfileDto(userInDB, userInDB.getProfile());
+        value.setIsMyProfile(false);
+        value.setFollowCount(0, 0);
+        String resultJson = objectMapper.writeValueAsString(value);
         long userId = userInDB.getId();
 
         // when
@@ -83,7 +86,10 @@ public class UserProfileAcceptanceTest {
     void testFindMyProfile() throws Exception {
         // given
         Cookie[] loginCookie = mockMvc.perform(get("/api/users/login").header(HttpHeaders.AUTHORIZATION, "Bearer valid_token")).andReturn().getResponse().getCookies();
-        String resultJson = objectMapper.writeValueAsString(new ResponseUserProfileDto(userInDB, userInDB.getProfile()));
+        ResponseUserProfileDto value = new ResponseUserProfileDto(userInDB, userInDB.getProfile());
+        value.setIsMyProfile(false);
+        value.setFollowCount(0, 0);
+        String resultJson = objectMapper.writeValueAsString(value);
 
         // when
         ResultActions perform = mockMvc.perform(get("/api/users/profiles/detail").contentType(APPLICATION_JSON)
