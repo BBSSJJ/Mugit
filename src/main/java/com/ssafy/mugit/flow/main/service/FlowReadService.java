@@ -8,6 +8,8 @@ import com.ssafy.mugit.flow.main.dto.FlowItemDto;
 import com.ssafy.mugit.flow.main.entity.Authority;
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
+import com.ssafy.mugit.global.exception.FlowApiException;
+import com.ssafy.mugit.global.exception.error.FlowApiError;
 import com.ssafy.mugit.record.dto.RecordDto;
 import com.ssafy.mugit.record.entity.Record;
 import com.ssafy.mugit.record.repository.RecordRepository;
@@ -32,7 +34,7 @@ public class FlowReadService {
     @Transactional
     public FlowDetailDto findFlow(Long userId, Long flowId, Boolean firstRead) {
         User user = null;
-        Flow flow = flowRepository.findFlowById(flowId).orElseThrow(/* TODO : 에러 처리 */);
+        Flow flow = flowRepository.findFlowById(flowId).orElseThrow(() -> new FlowApiException(FlowApiError.NOT_EXIST_FLOW));
         if (userId != null) {
             user = userRepository.getReferenceById(userId);
         }
@@ -45,9 +47,12 @@ public class FlowReadService {
         FlowDetailDto flowDto = new FlowDetailDto(flow);
 
         // 권한 검사
+        if (flow.getAuthority() == Authority.PRIVATE) {
+            throw new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS);
+        }
 
         // Record 조회
-        Record record = recordRepository.findLastRecordByFlowId(flowId).orElseThrow(/* TODO : 에러 처리 */);
+        Record record = recordRepository.findLastRecordByFlowId(flowId).orElseThrow(() -> new FlowApiException(FlowApiError.NO_RECORD));
         flowDto.initRecord(new RecordDto(record));
 
         // Like 조회
@@ -71,26 +76,30 @@ public class FlowReadService {
         return flowRepository.findAll(pageable).map(FlowItemDto::new);
     }
 
-    public List<FlowItemDto> listMyFlow(Long userId) {
+    public List<FlowItemDto> listReleasedFlow(Long myId, Long userId) {
         User user = userRepository.getReferenceById(userId);
-        return flowRepository.findFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        if (myId.equals(userId)) {
+            return flowRepository.findAllByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        } else {
+            return flowRepository.findFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        }
     }
 
-    public List<FlowItemDto> listMyWorkingFlow(Long userId) {
+    public List<FlowItemDto> listUnreleasedFlow(Long myId, Long userId) {
+        if (!myId.equals(userId)) {
+            throw new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS);
+        }
         User user = userRepository.getReferenceById(userId);
-        return flowRepository.findWorkingFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        return flowRepository.findUnreleasedFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
     }
 
-    public List<FlowItemDto> listMyLikeFlow(Long userId) {
+    public List<FlowItemDto> listLikesFlow(Long userId) {
         User user = userRepository.getReferenceById(userId);
-        return flowRepository.findMyLikeFlows(user.getId()).stream().map(FlowItemDto::new).toList();
+        return flowRepository.findLikeFlows(user.getId()).stream().map(FlowItemDto::new).toList();
     }
 
     public List<RecordDto> listFlowRecords(Long flowId) {
         Flow flow = flowRepository.getReferenceById(flowId);
-        if (flow.getAuthority() == Authority.PRIVATE) {
-            /* TODO : 에러 처리 */
-        }
         return recordRepository.findRecordsByFlowId(flowId).stream().map(RecordDto::new).toList();
     }
 
