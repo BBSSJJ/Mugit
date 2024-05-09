@@ -10,6 +10,7 @@ import com.ssafy.mugit.global.exception.FlowApiException;
 import com.ssafy.mugit.global.exception.error.FlowApiError;
 import com.ssafy.mugit.hashtag.entity.Hashtag;
 import com.ssafy.mugit.hashtag.service.HashtagService;
+import com.ssafy.mugit.notification.service.NotificationService;
 import com.ssafy.mugit.record.entity.Record;
 import com.ssafy.mugit.record.entity.RecordSource;
 import com.ssafy.mugit.record.entity.Source;
@@ -34,6 +35,7 @@ public class FlowService {
     private final UserRepository userRepository;
     private final HashtagService hashtagService;
     private final FlowHashtagService flowHashtagService;
+    private final NotificationService notificationService;
 
 
     public void create(Long userId, RequestCreateNoteDto requestCreateNoteDto) {
@@ -117,7 +119,7 @@ public class FlowService {
 
     public void release(Long userId, Long flowId, RequestReleaseFlowDto requestReleaseFlowDto) {
         User user = userRepository.getReferenceById(userId);
-        Flow flow = flowRepository.getReferenceById(flowId);
+        Flow flow = flowRepository.findFlowAndParentByFlowId(flowId).orElseThrow(() -> new FlowApiException(FlowApiError.NOT_EXIST_FLOW));
         List<FilePathDto> files = requestReleaseFlowDto.getFiles();
         String musicPath = null;
         String coverPath = null;
@@ -152,5 +154,10 @@ public class FlowService {
 
         // Flow Hashtag 연결테이블 생성
         flowHashtagService.addHashtags(flow, hashtags);
+
+        // 알림 생성
+        if (!flow.getAuthority().equals(Authority.PRIVATE)) {
+            notificationService.sendFlowRelease(flow.getUser(), flow.getParentFlow().getUser(), flow);
+        }
     }
 }
