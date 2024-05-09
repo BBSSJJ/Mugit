@@ -76,19 +76,26 @@ public class FlowReadService {
         return flowRepository.findAll(pageable).map(FlowItemDto::new);
     }
 
-    public List<FlowItemDto> listMyFlow(Long userId) {
+    public List<FlowItemDto> listReleasedFlow(Long myId, Long userId) {
         User user = userRepository.getReferenceById(userId);
-        return flowRepository.findFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        if (myId.equals(userId)) {
+            return flowRepository.findAllByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        } else {
+            return flowRepository.findFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        }
     }
 
-    public List<FlowItemDto> listMyWorkingFlow(Long userId) {
+    public List<FlowItemDto> listUnreleasedFlow(Long myId, Long userId) {
+        if (!myId.equals(userId)) {
+            throw new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS);
+        }
         User user = userRepository.getReferenceById(userId);
-        return flowRepository.findWorkingFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
+        return flowRepository.findUnreleasedFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
     }
 
-    public List<FlowItemDto> listMyLikeFlow(Long userId) {
+    public List<FlowItemDto> listLikesFlow(Long userId) {
         User user = userRepository.getReferenceById(userId);
-        return flowRepository.findMyLikeFlows(user.getId()).stream().map(FlowItemDto::new).toList();
+        return flowRepository.findLikeFlows(user.getId()).stream().map(FlowItemDto::new).toList();
     }
 
     public List<RecordDto> listFlowRecords(Long flowId) {
