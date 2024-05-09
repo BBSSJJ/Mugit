@@ -6,6 +6,8 @@ import com.ssafy.mugit.flow.review.dto.RequestCreateReviewDto;
 import com.ssafy.mugit.flow.review.dto.ReviewDto;
 import com.ssafy.mugit.flow.review.entity.Review;
 import com.ssafy.mugit.flow.review.repository.ReviewRepository;
+import com.ssafy.mugit.global.exception.FlowApiException;
+import com.ssafy.mugit.global.exception.error.FlowApiError;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class ReviewService {
         String content = requestCreateReviewDto.getContent();
         String timeline = requestCreateReviewDto.getTimeline();
         if (content == null) {
-            /* TODO : 에러 처리 */
+            throw new FlowApiException(FlowApiError.NO_CONTENT);
         }
         if (timeline == null) {
             timeline = "0:00";
@@ -36,7 +38,7 @@ public class ReviewService {
     }
 
     public void eraseReview(Long userId, Long reviewId) {
-        Review review = reviewRepository.findReviewByIdAndUserId(reviewId, userId).orElseThrow(/* TODO : 에러 처리 */);
+        Review review = reviewRepository.findReviewByIdAndUserId(reviewId, userId).orElseThrow(() -> new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS));
         reviewRepository.delete(review);
     }
 
