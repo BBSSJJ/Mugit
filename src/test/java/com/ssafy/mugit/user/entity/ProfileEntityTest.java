@@ -23,6 +23,6 @@ class ProfileEntityTest {
         
         // then
         assertThat(profile.getProfileText()).isEqualTo("텍스트를 입력하세요.");
-        assertThat(profile.getProfileImagePath()).isEqualTo("https://mugit.site/files/008494eb-b272-4c83-919b-677378107fd2.jpg");
+        assertThat(profile.getProfileImagePath()).isEqualTo("https://mugit.site/files/default/user.jpg");
     }
 }
