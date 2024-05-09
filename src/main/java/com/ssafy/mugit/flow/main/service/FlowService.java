@@ -27,7 +27,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FlowService {
-    private final String DEFAULT_COVER_PATH = "https://mugit.site/files/de2fb102-c3ab-4d41-815a-19b0bf2e2a66.png";
     private final FlowRepository flowRepository;
     private final RecordRepository recordRepository;
     private final RecordSourceRepository recordSourceRepository;
@@ -41,7 +40,7 @@ public class FlowService {
         User user = userRepository.getReferenceById(userId);
         List<FilePathDto> files = requestCreateNoteDto.getFiles();
         String musicPath = null;
-        String coverPath = DEFAULT_COVER_PATH;
+        String coverPath = null;
         for (FilePathDto file : files) {
             if (file.getType().equals("source")) {
                 musicPath = file.getPath();
@@ -121,7 +120,7 @@ public class FlowService {
         Flow flow = flowRepository.getReferenceById(flowId);
         List<FilePathDto> files = requestReleaseFlowDto.getFiles();
         String musicPath = null;
-        String coverPath = DEFAULT_COVER_PATH;
+        String coverPath = null;
         for (FilePathDto file : files) {
             if (file.getType().equals("source")) {
                 musicPath = file.getPath();
@@ -133,7 +132,6 @@ public class FlowService {
         if (musicPath == null) {
             throw new FlowApiException(FlowApiError.NO_MUSIC);
         }
-
         if (!flow.getUser().equals(user)) {
             throw new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS);
         }

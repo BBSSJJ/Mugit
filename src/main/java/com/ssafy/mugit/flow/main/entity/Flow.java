@@ -17,6 +17,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Flow extends BaseTimeEntity {
+    @Transient
+    private final String DEFAULT_FLOW_IMAGE_PATH = "https://mugit.site/files/default/flow.png";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flow_id")
@@ -76,7 +78,7 @@ public class Flow extends BaseTimeEntity {
         this.authority = authority;
         this.isReleased = true;
         this.musicPath = musicPath;
-        this.coverPath = coverPath;
+        this.coverPath = !coverPath.isBlank() ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
         this.views = 0;
     }
 
@@ -85,7 +87,7 @@ public class Flow extends BaseTimeEntity {
         this.message = message;
         this.authority = authority;
         this.musicPath = musicPath;
-        this.coverPath = coverPath;
+        this.coverPath = !coverPath.isBlank() ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
         this.isReleased = true;
     }
 
