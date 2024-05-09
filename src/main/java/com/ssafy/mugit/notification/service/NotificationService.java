@@ -1,5 +1,8 @@
 package com.ssafy.mugit.notification.service;
 
+import com.ssafy.mugit.flow.likes.entity.Likes;
+import com.ssafy.mugit.flow.main.entity.Flow;
+import com.ssafy.mugit.flow.review.entity.Review;
 import com.ssafy.mugit.global.dto.SseMessageDto;
 import com.ssafy.mugit.global.entity.SseEvent;
 import com.ssafy.mugit.global.exception.UserApiException;
@@ -35,6 +38,12 @@ public class NotificationService {
         NotificationDto notificationDto = new NotificationDto(notification);
         ApiMessageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FOLLOW, notificationDto));
     }
+
+    public void sendLikes(User giveLikeUser, User takeLikeUser, Flow flow) {}
+
+    public void sendFlowRelease(User flowRecordMaker, User flowAncestor, Flow flow) {}
+
+    public void sendReview(User reviewer, User reviewReceiver, Flow reviewedFlow) {}
 
     public List<NotificationDto> findAllNotifications(Long userId) {
         List<NotificationDto> allNotifications = notificationRepository.findAllReadableByUserId(userId);
