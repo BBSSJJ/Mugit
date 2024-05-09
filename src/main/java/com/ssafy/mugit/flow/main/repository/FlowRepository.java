@@ -21,6 +21,21 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "WHERE f.id = :flowId")
     Optional<Flow> findFlowById(Long flowId);
 
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN FETCH f.parentFlow pf " +
+            "LEFT JOIN FETCH pf.user pfu " +
+            "LEFT JOIN FETCH pfu.profile " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile " +
+            "WHERE f.id = :flowId")
+    Optional<Flow> findFlowAndParentByFlowId(Long flowId);
+
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile " +
+            "WHERE f.id = :flowId")
+    Optional<Flow> findFlowAndUserByFlowId(Long flowId);
+
     @Query("SELECT DISTINCT f FROM flow f " +
             "LEFT JOIN FETCH f.user u " +
             "LEFT JOIN FETCH u.profile " +
