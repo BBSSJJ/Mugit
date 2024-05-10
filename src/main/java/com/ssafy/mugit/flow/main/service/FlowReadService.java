@@ -78,7 +78,7 @@ public class FlowReadService {
 
     public List<FlowItemDto> listReleasedFlow(Long myId, Long userId) {
         User user = userRepository.getReferenceById(userId);
-        if (myId.equals(userId)) {
+        if (userId.equals(myId)) {
             return flowRepository.findAllByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
         } else {
             return flowRepository.findFlowsByUserId(user.getId()).stream().map(FlowItemDto::new).toList();
@@ -86,7 +86,7 @@ public class FlowReadService {
     }
 
     public List<FlowItemDto> listUnreleasedFlow(Long myId, Long userId) {
-        if (!myId.equals(userId)) {
+        if (!userId.equals(myId)) {
             throw new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS);
         }
         User user = userRepository.getReferenceById(userId);
