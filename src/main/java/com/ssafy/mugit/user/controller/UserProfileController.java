@@ -41,7 +41,7 @@ public class UserProfileController {
             @PathVariable Long userId) {
 
         // 로그인 했을때와 안했을때로 구분
-        if (user == null) {
+        if (user == null || user.getId() == null) {
             return ResponseEntity.ok().body(userProfileService.getProfileById(userId));
         } else {
             return ResponseEntity.ok().body(userProfileService.getProfileById(user.getId(), userId));
