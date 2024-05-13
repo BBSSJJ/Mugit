@@ -1,22 +1,20 @@
-package com.ssafy.mugit.musitory.fixure;
+package com.ssafy.mugit.mugitory.fixure;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
-
 @Getter
 @AllArgsConstructor
 public enum FlowFixture {
-    FLOW(USER.getFixture(), "test title", "https://mugit.site/files/default_mugic_path");
+    FLOW("test title", "https://mugit.site/files/default_mugic_path"),
+    FLOW_2("test title 2", "https://mugit.site/files/default_mugic_path"),;
 
-    private final User user;
     private final String title;
     private final String musicPath;
 
-    public Flow getFixture() {
+    public Flow getFixture(User user) {
         return new Flow(user, title, musicPath);
     }
 }
