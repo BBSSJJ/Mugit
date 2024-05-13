@@ -81,14 +81,14 @@ public class FlowReadController {
 
     @Operation(summary = "Flow 장르 검색", description = "장르 이름 검색. 기본값으로 size=12, sort='createdAt'으로 되어있으므로 page 변수만 보내면 됩니다.")
     @GetMapping("/genre")
-    ResponseEntity<Slice<FlowItemDto>> searchFlowsByGenre(@PageableDefault(size = 12, sort = "createdAt", direction = DESC) Pageable pageable,
+    ResponseEntity<Slice<FlowItemDto>> searchFlowsByGenre(@PageableDefault(size = 6, sort = "createdAt", direction = DESC) Pageable pageable,
                                                           @RequestParam("hashtag") String hashtag) {
         return ResponseEntity.status(200).body(flowReadService.getFlowsByGenre(pageable, hashtag));
     }
 
     @Operation(summary = "Flow 검색", description = "키워드로 제목, 해시태그, 유저 검색. 기본값으로 size=12, sort='createdAt'으로 되어있으므로 page 변수만 보내면 됩니다.")
     @GetMapping("/search")
-    ResponseEntity<Slice<FlowItemDto>> searchFlowsByKeyword(@PageableDefault(size = 12, sort = "createdAt", direction = DESC) Pageable pageable,
+    ResponseEntity<Slice<FlowItemDto>> searchFlowsByKeyword(@PageableDefault(size = 6, sort = "createdAt", direction = DESC) Pageable pageable,
                                                             @RequestParam("keyword") String keyword) {
         return ResponseEntity.status(200).body(flowReadService.getFlowsByKeyword(pageable, keyword));
     }
