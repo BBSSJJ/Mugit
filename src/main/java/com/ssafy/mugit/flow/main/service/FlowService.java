@@ -64,7 +64,7 @@ public class FlowService {
                 coverPath);
         flowRepository.save(note);
 
-        if (!requestCreateNoteDto.getHashtags().isEmpty()) {
+        if (requestCreateNoteDto.getHashtags() != null && !requestCreateNoteDto.getHashtags().isEmpty()) {
             // 필요한 Hashtag 목록 추가
             List<Hashtag> hashtags = hashtagService.update(requestCreateNoteDto.getHashtags());
 
@@ -151,7 +151,7 @@ public class FlowService {
                 coverPath
         );
 
-        if (!requestReleaseFlowDto.getHashtags().isEmpty()) {
+        if (requestReleaseFlowDto.getHashtags() != null && !requestReleaseFlowDto.getHashtags().isEmpty()) {
             // 필요한 Hashtag 목록 추가
             List<Hashtag> hashtags = hashtagService.update(requestReleaseFlowDto.getHashtags());
 
