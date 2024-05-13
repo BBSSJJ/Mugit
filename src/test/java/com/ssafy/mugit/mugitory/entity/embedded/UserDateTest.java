@@ -1,4 +1,4 @@
-package com.ssafy.mugit.musitory.entity.embedded;
+package com.ssafy.mugit.mugitory.entity.embedded;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

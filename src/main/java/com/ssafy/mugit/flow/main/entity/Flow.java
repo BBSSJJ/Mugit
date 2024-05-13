@@ -19,26 +19,35 @@ import java.util.List;
 public class Flow extends BaseTimeEntity {
     @Transient
     private final String DEFAULT_FLOW_IMAGE_PATH = "https://mugit.site/files/default/flow.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flow_id")
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
     @Column(name = "title")
     private String title;
+
     @Column(name = "is_released")
     private boolean isReleased;
+
     @Column(name = "message")
     private String message;
+
     @Column(name = "authority")
     @Enumerated(value = EnumType.STRING)
     private Authority authority;
+
     @Column(name = "music_path")
     private String musicPath;
+
     @Column(name = "cover_path")
     private String coverPath;
+
     @Column(name = "views")
     private Integer views;
 

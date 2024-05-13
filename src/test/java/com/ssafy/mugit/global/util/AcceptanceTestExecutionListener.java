@@ -22,7 +22,7 @@ public class AcceptanceTestExecutionListener extends AbstractTestExecutionListen
     }
 
     private List<String> getPopulateQuery(final JdbcTemplate jdbcTemplate) {
-        return jdbcTemplate.queryForList("SELECT CONCAT('INSERT INTO ', TABLE_NAME, ' VALUES (1);') AS list FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mugit_test_db' AND TABLE_NAME LIKE '%_seq'", String.class);
+        return jdbcTemplate.queryForList("SELECT CONCAT('INSERT INTO ', TABLE_NAME, ' VALUES ( 50 );') AS list FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mugit_test_db' AND TABLE_NAME LIKE '%_seq'", String.class);
     }
 
     private void truncateTables(final JdbcTemplate jdbcTemplate, final List<String> truncateQueries) {

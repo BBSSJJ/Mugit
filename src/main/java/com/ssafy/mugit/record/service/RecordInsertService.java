@@ -2,6 +2,7 @@ package com.ssafy.mugit.record.service;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
+import com.ssafy.mugit.mugitory.service.MugitoryService;
 import com.ssafy.mugit.record.dto.NewSourceDto;
 import com.ssafy.mugit.record.dto.PreSourceDto;
 import com.ssafy.mugit.record.dto.RecordRequestDto;
@@ -30,6 +31,7 @@ public class RecordInsertService {
     private final RecordRepository recordRepository;
     private final FlowRepository flowRepository;
     private final RecordSourceRepository recordSourceRepository;
+    private final MugitoryService mugitoryService;
     private final ValidateUtil validateUtil;
 
     public void insertRecord(Long userId, Long flowId, RecordRequestDto recordRequestDto) {
@@ -45,6 +47,9 @@ public class RecordInsertService {
 
         // 4. 추가된 소스 생성 및 매핑
         mappingRecordSource(record, createSource(recordRequestDto.getNewSources()));
+
+        // 5. 뮤지토리 생성
+        mugitoryService.recordMugitory(record);
     }
 
     private Record createRecord(Long flowId, String message) {
