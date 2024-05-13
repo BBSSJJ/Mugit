@@ -64,11 +64,13 @@ public class FlowService {
                 coverPath);
         flowRepository.save(note);
 
-        // 필요한 Hashtag 목록 추가
-        List<Hashtag> hashtags = hashtagService.update(requestCreateNoteDto.getHashtags());
+        if (!requestCreateNoteDto.getHashtags().isEmpty()) {
+            // 필요한 Hashtag 목록 추가
+            List<Hashtag> hashtags = hashtagService.update(requestCreateNoteDto.getHashtags());
 
-        // Flow Hashtag 연결테이블 생성
-        flowHashtagService.addHashtags(note, hashtags);
+            // Flow Hashtag 연결테이블 생성
+            flowHashtagService.addHashtags(note, hashtags);
+        }
 
         // Flow의 부모, 루트 추가
         note.initParentAndRoot(note, null);
@@ -149,11 +151,13 @@ public class FlowService {
                 coverPath
         );
 
-        // 필요한 Hashtag 목록 추가
-        List<Hashtag> hashtags = hashtagService.update(requestReleaseFlowDto.getHashtags());
+        if (!requestReleaseFlowDto.getHashtags().isEmpty()) {
+            // 필요한 Hashtag 목록 추가
+            List<Hashtag> hashtags = hashtagService.update(requestReleaseFlowDto.getHashtags());
 
-        // Flow Hashtag 연결테이블 생성
-        flowHashtagService.addHashtags(flow, hashtags);
+            // Flow Hashtag 연결테이블 생성
+            flowHashtagService.addHashtags(flow, hashtags);
+        }
 
         // 알림 생성
         if (!flow.getAuthority().equals(Authority.PRIVATE)) {

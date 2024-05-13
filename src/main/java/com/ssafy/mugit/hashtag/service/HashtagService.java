@@ -14,18 +14,22 @@ public class HashtagService {
     private final HashtagRepository hashtagRepository;
 
     public List<Hashtag> update(List<String> hashtags) {
+        if (hashtags.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         List<Hashtag> existHashtags = hashtagRepository.findHashtagsInDatabase(hashtags);
 
         List<Hashtag> newHashtags = new ArrayList<>();
         hashtags.forEach((hashtag) -> {
             boolean exist = false;
             for (Hashtag existHashtag : existHashtags) {
-                if (existHashtag.getName().equals(hashtag)){
+                if (existHashtag.getName().equals(hashtag)) {
                     exist = true;
                     break;
                 }
             }
-            if(!exist){
+            if (!exist) {
                 newHashtags.add(new Hashtag(hashtag));
             }
         });
