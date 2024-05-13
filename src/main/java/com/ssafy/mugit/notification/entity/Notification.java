@@ -69,7 +69,7 @@ public class Notification {
                 this.isRead = false;
                 this.causeEntityId = causeEntityId;
                 this.causeEntityClass = causeEntityClass;
-                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우를 릴리즈합니다.";
+                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우에서 릴리즈합니다.";
             }
         }
     }

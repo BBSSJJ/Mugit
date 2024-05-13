@@ -49,4 +49,16 @@ public class NotificationController {
         notificationService.read(notificationId, user.getId());
         return ResponseEntity.ok().body(new MessageDto("알림 읽기완료"));
     }
+
+    @Operation(summary = "전체알림 읽기", description = "전체 알림을 읽는다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "알림 읽기완료", content = @Content(schema = @Schema(implementation = MessageDto.class))),
+            @ApiResponse(responseCode = "401", description = "Security Filter 통과 실패 : 로그인 정보 없음", content = @Content(schema = @Schema(implementation = MessageDto.class))),
+            @ApiResponse(responseCode = "404", description = "해당 알림 없음", content = @Content(schema = @Schema(implementation = MessageDto.class)))
+    })
+    @PatchMapping("")
+    public ResponseEntity<MessageDto> readAll(@UserSession UserSessionDto user) {
+        notificationService.readAll(user.getId());
+        return ResponseEntity.ok().body(new MessageDto("전체 알림 읽기완료"));
+    }
 }

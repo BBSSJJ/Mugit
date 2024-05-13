@@ -162,7 +162,7 @@ public class FlowService {
 
         // 알림 생성
         if (!flow.getAuthority().equals(Authority.PRIVATE)) {
-            notificationService.sendFlowRelease(flow.getUser(), flow.getParentFlow().getUser(), flow);
+            notificationService.sendFlowRelease(flow.getUser(), flow.getParentFlow().getUser(), flow.getParentFlow());
         }
     }
 }

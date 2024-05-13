@@ -20,10 +20,18 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
     }
 
     @Override
-    public List<NotificationDto> findAllReadableByUserId(Long userId) {
+    public List<Notification> findAllReadableByUserId(Long userId) {
+        return queryFactory.selectFrom(notification)
+                .leftJoin(notification.notified, user)
+                .where(notification.isRead.eq(false).and(user.id.eq(userId)))
+                .stream().toList();
+    }
+
+    @Override
+    public List<NotificationDto> findAllReadableDtoByUserId(Long userId) {
         return queryFactory.select(new QNotificationDto(notification))
                 .from(notification)
-                .leftJoin(user).on(notification.notified.eq(user))
+                .leftJoin(notification.notified, user)
                 .where(notification.isRead.eq(false).and(user.id.eq(userId)))
                 .stream().toList();
     }

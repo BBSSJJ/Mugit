@@ -145,15 +145,15 @@ class NotificationServiceTest {
                 List.of(new FilePathDto("source", "source file 2", "https://mugit.site/files/source_file_2")), null));
 
         // when 3 : like
-        likesService.changeLikes(me.getId(), following.getId());
+        likesService.changeLikes(following.getId(), noteFlow.getId());
 
         // then
         List<NotificationDto> allNotifications = sut.findAllNotifications(me.getId());
         assertThat(allNotifications).hasSize(3);
         assertThat(allNotifications)
                 .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 당신을 팔로우합니다."))
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + followFlow.getId() + "번 플로우를 릴리즈합니다."))
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + followFlow.getId() + "번 플로우를 좋아합니다."));
+                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에서 릴리즈합니다."))
+                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우를 좋아합니다."));
     }
 
     @Test
@@ -184,5 +184,23 @@ class NotificationServiceTest {
 
         // then
         assertThat(notificationInDB.getIsRead()).isTrue();
+    }
+
+    @Test
+    @DisplayName("[통합] 알림 모두읽기")
+    void testReadAllNotifications() {
+        // given
+        Notification notification = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
+        Notification notification2 = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
+        Notification notification3 = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
+        notificationRepository.saveAll(List.of(notification, notification2, notification3));
+        List<Notification> notificationsInDB = notificationRepository.findAll();
+
+        // when
+        assertThat(notificationsInDB).allSatisfy(notificationInDB -> assertThat(notificationInDB.getIsRead()).isFalse());
+        sut.readAll(me.getId());
+
+        // then
+        assertThat(notificationsInDB).allSatisfy(notificationInDB -> assertThat(notificationInDB.getIsRead()).isTrue());
     }
 }

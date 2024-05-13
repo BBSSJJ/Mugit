@@ -17,23 +17,25 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ssafy.mugit.global.exception.error.UserApiError.NOT_EXIST_FOLLOW;
-import static com.ssafy.mugit.global.exception.error.UserApiError.USER_NOT_FOUND;
 import static com.ssafy.mugit.fixure.FollowerFixture.FOLLOWER_USER_2;
 import static com.ssafy.mugit.fixure.FollowerFixture.FOLLOWER_USER_3;
 import static com.ssafy.mugit.fixure.ProfileFixture.*;
 import static com.ssafy.mugit.fixure.UserFixture.*;
+import static com.ssafy.mugit.global.exception.error.UserApiError.NOT_EXIST_FOLLOW;
+import static com.ssafy.mugit.global.exception.error.UserApiError.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Tag("follow")
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 class FollowServiceTest {
 

@@ -41,7 +41,7 @@ public class NotificationService {
     }
 
     public void sendLikes(User giveLikeUser, User takeLikeUser, Flow flow) {
-        Notification notification = new Notification(giveLikeUser, takeLikeUser, flow.getId(), flow.getClass(), LIKE);
+        Notification notification = new Notification(takeLikeUser, giveLikeUser, flow.getId(), flow.getClass(), LIKE);
         notificationRepository.save(notification);
         NotificationDto notificationDto = new NotificationDto(notification);
         ApiMessageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FLOW_RELEASE, notificationDto));
@@ -50,7 +50,7 @@ public class NotificationService {
     public void sendReview(User reviewer, User reviewReceiver, Flow reviewedFlow) {}
 
     public List<NotificationDto> findAllNotifications(Long userId) {
-        List<NotificationDto> allNotifications = notificationRepository.findAllReadableByUserId(userId);
+        List<NotificationDto> allNotifications = notificationRepository.findAllReadableDtoByUserId(userId);
         if (allNotifications.isEmpty()) throw new UserApiException(UserApiError.NOT_EXIST_READABLE_NOTIFICATION);
         return allNotifications;
     }
@@ -60,5 +60,11 @@ public class NotificationService {
         Notification notificationInDB = notificationRepository.findByIdWithUserId(notificationId, userId);
         if (notificationInDB == null) throw new UserApiException(UserApiError.NOTIFICATION_NOT_FOUNT);
         notificationInDB.read();
+    }
+
+    @Transactional
+    public void readAll(Long userId) {
+        List<Notification> notificationsInDB = notificationRepository.findAllReadableByUserId(userId);
+        notificationsInDB.forEach(Notification::read);
     }
 }
