@@ -12,6 +12,7 @@ import com.ssafy.mugit.notification.repository.NotificationRepository;
 import com.ssafy.mugit.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class NotificationService {
         return allNotifications;
     }
 
+    @Transactional
     public void read(Long notificationId, Long userId) {
         Notification notificationInDB = notificationRepository.findByIdWithUserId(notificationId, userId);
         if (notificationInDB == null) throw new UserApiException(UserApiError.NOTIFICATION_NOT_FOUNT);
