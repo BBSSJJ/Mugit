@@ -77,6 +77,7 @@ public class Flow extends BaseTimeEntity {
         this.title = title;
         this.isReleased = false;
         this.musicPath = musicPath;
+        this.coverPath = DEFAULT_FLOW_IMAGE_PATH;
         this.views = 0;
     }
 
