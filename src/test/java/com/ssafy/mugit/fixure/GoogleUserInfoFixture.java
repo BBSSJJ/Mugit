@@ -1,11 +1,11 @@
-package com.ssafy.mugit.user.fixture;
+package com.ssafy.mugit.fixure;
 
 import com.ssafy.mugit.global.dto.GoogleUserInfoDto;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
-import static com.ssafy.mugit.user.fixture.UserFixture.*;
+import static com.ssafy.mugit.fixure.ProfileFixture.*;
+import static com.ssafy.mugit.fixure.UserFixture.*;
 
 public enum GoogleUserInfoFixture {
     GOOGLE_USER_INFO(USER.getFixture(), PROFILE.getFixture()),

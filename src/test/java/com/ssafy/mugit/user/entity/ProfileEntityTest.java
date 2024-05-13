@@ -1,7 +1,7 @@
 package com.ssafy.mugit.user.entity;
 
-import com.ssafy.mugit.user.fixture.ProfileFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
+import com.ssafy.mugit.fixure.ProfileFixture;
+import com.ssafy.mugit.fixure.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Entity(name = "flow")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -88,7 +90,7 @@ public class Flow extends BaseTimeEntity {
         this.authority = authority;
         this.isReleased = true;
         this.musicPath = musicPath;
-        this.coverPath = !coverPath.isBlank() ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
+        this.coverPath = !isBlank(coverPath) ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
         this.views = 0;
     }
 
@@ -97,7 +99,7 @@ public class Flow extends BaseTimeEntity {
         this.message = message;
         this.authority = authority;
         this.musicPath = musicPath;
-        this.coverPath = !coverPath.isBlank() ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
+        this.coverPath = !isBlank(coverPath) ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
         this.isReleased = true;
     }
 

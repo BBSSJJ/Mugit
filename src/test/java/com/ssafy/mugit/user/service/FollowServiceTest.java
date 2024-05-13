@@ -25,10 +25,10 @@ import java.util.List;
 
 import static com.ssafy.mugit.global.exception.error.UserApiError.NOT_EXIST_FOLLOW;
 import static com.ssafy.mugit.global.exception.error.UserApiError.USER_NOT_FOUND;
-import static com.ssafy.mugit.user.fixture.FollowerFixture.FOLLOWER_USER_2;
-import static com.ssafy.mugit.user.fixture.FollowerFixture.FOLLOWER_USER_3;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
-import static com.ssafy.mugit.user.fixture.UserFixture.*;
+import static com.ssafy.mugit.fixure.FollowerFixture.FOLLOWER_USER_2;
+import static com.ssafy.mugit.fixure.FollowerFixture.FOLLOWER_USER_3;
+import static com.ssafy.mugit.fixure.ProfileFixture.*;
+import static com.ssafy.mugit.fixure.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

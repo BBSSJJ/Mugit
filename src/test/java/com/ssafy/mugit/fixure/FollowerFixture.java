@@ -1,12 +1,12 @@
-package com.ssafy.mugit.user.fixture;
+package com.ssafy.mugit.fixure;
 
 import com.ssafy.mugit.user.dto.FollowerDto;
 import com.ssafy.mugit.user.entity.User;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_3;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_2;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_3;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE_2;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE_3;
+import static com.ssafy.mugit.fixure.UserFixture.USER_2;
+import static com.ssafy.mugit.fixure.UserFixture.USER_3;
 
 public enum FollowerFixture {
     FOLLOWER_USER_2(USER_2.getFixture(PROFILE_2.getFixture())),

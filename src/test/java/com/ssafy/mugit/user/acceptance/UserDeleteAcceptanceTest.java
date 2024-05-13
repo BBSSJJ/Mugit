@@ -5,7 +5,7 @@ import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.user.controller.UserDeleteController;
 import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.fixture.ProfileFixture;
+import com.ssafy.mugit.fixure.ProfileFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserDeleteService;
 import jakarta.servlet.http.Cookie;
@@ -19,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

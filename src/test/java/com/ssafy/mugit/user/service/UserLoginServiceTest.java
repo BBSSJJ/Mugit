@@ -23,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.ssafy.mugit.global.dto.DataKeys.LOGIN_USER_KEY;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
-import static com.ssafy.mugit.user.fixture.UserInfoFixture.DEFAULT_GOOGLE_USER_INFO;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
+import static com.ssafy.mugit.fixure.UserInfoFixture.DEFAULT_GOOGLE_USER_INFO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;

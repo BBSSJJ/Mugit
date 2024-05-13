@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
-import static com.ssafy.mugit.user.fixture.UserFixture.*;
+import static com.ssafy.mugit.fixure.ProfileFixture.*;
+import static com.ssafy.mugit.fixure.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

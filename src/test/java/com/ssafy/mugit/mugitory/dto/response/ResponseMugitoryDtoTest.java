@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static com.ssafy.mugit.mugitory.fixure.FlowFixture.FLOW;
-import static com.ssafy.mugit.mugitory.fixure.MugitoryFixture.MUGITORY_TODAY;
-import static com.ssafy.mugit.mugitory.fixure.RecordFixture.RECORD;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_WITH_PK;
+import static com.ssafy.mugit.fixure.FlowFixture.FLOW;
+import static com.ssafy.mugit.fixure.MugitoryFixture.MUGITORY_TODAY;
+import static com.ssafy.mugit.fixure.RecordFixture.RECORD;
+import static com.ssafy.mugit.fixure.UserFixture.USER_WITH_PK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("mugitory")

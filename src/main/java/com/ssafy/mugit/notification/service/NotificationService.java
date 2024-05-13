@@ -1,8 +1,6 @@
 package com.ssafy.mugit.notification.service;
 
-import com.ssafy.mugit.flow.likes.entity.Likes;
 import com.ssafy.mugit.flow.main.entity.Flow;
-import com.ssafy.mugit.flow.review.entity.Review;
 import com.ssafy.mugit.global.dto.SseMessageDto;
 import com.ssafy.mugit.global.entity.SseEvent;
 import com.ssafy.mugit.global.exception.UserApiException;
@@ -13,13 +11,11 @@ import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.notification.repository.NotificationRepository;
 import com.ssafy.mugit.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ssafy.mugit.notification.entity.NotificationType.FOLLOW;
+import static com.ssafy.mugit.notification.entity.NotificationType.*;
 
 @Component
 @RequiredArgsConstructor
@@ -28,10 +24,7 @@ public class NotificationService {
     private final MessageBus ApiMessageBus;
     private final NotificationRepository notificationRepository;
 
-    @SneakyThrows
-    @Transactional
     public void sendFollow(User followingUser, User followeeUser) {
-
         // ※ follow 받는사람이 notified 임을 주의
         Notification notification = new Notification(followeeUser, followingUser, followingUser.getId(), followeeUser.getClass(), FOLLOW);
         notificationRepository.save(notification);
@@ -39,9 +32,19 @@ public class NotificationService {
         ApiMessageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FOLLOW, notificationDto));
     }
 
-    public void sendLikes(User giveLikeUser, User takeLikeUser, Flow flow) {}
+    public void sendFlowRelease(User flowRecordMaker, User flowAncestor, Flow flow) {
+        Notification notification = new Notification(flowAncestor, flowRecordMaker, flow.getId(), flow.getClass(), FLOW_RELEASE);
+        notificationRepository.save(notification);
+        NotificationDto notificationDto = new NotificationDto(notification);
+        ApiMessageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FLOW_RELEASE, notificationDto));
+    }
 
-    public void sendFlowRelease(User flowRecordMaker, User flowAncestor, Flow flow) {}
+    public void sendLikes(User giveLikeUser, User takeLikeUser, Flow flow) {
+        Notification notification = new Notification(giveLikeUser, takeLikeUser, flow.getId(), flow.getClass(), LIKE);
+        notificationRepository.save(notification);
+        NotificationDto notificationDto = new NotificationDto(notification);
+        ApiMessageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FLOW_RELEASE, notificationDto));
+    }
 
     public void sendReview(User reviewer, User reviewReceiver, Flow reviewedFlow) {}
 

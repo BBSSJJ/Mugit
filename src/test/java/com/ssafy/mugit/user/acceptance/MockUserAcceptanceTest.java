@@ -6,7 +6,7 @@ import com.ssafy.mugit.user.controller.MockUserController;
 import com.ssafy.mugit.user.dto.response.ResponseMockLoginDto;
 import com.ssafy.mugit.user.dto.response.ResponseUserProfileDto;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.fixture.MockUserInfoFixture;
+import com.ssafy.mugit.fixure.MockUserInfoFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.MockUserService;
 import jakarta.servlet.http.Cookie;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,8 +21,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Base64;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

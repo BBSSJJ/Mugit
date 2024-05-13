@@ -4,7 +4,7 @@ import com.ssafy.mugit.user.dto.MockUserInfoDto;
 import com.ssafy.mugit.user.dto.response.ResponseMockLoginDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
-import com.ssafy.mugit.user.fixture.MockUserInfoFixture;
+import com.ssafy.mugit.fixure.MockUserInfoFixture;
 import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
@@ -22,9 +22,8 @@ import org.springframework.mock.web.MockHttpSession;
 
 import java.util.Base64;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_WITH_PK;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("mock")

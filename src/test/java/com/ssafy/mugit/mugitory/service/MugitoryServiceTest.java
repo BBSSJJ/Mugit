@@ -33,16 +33,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.ssafy.mugit.mugitory.fixure.FlowFixture.FLOW;
-import static com.ssafy.mugit.mugitory.fixure.FlowFixture.FLOW_2;
-import static com.ssafy.mugit.mugitory.fixure.MugitoryFixture.*;
-import static com.ssafy.mugit.mugitory.fixure.RecordFixture.RECORD;
-import static com.ssafy.mugit.mugitory.fixure.RecordFixture.RECORD_2;
-import static com.ssafy.mugit.mugitory.fixure.RecordRequestFixture.RECORD_REQUEST_FIXTURE;
-import static com.ssafy.mugit.mugitory.fixure.RecordRequestFixture.RECORD_REQUEST_FIXTURE_2;
-import static com.ssafy.mugit.mugitory.fixure.SourceFixture.SOURCE;
-import static com.ssafy.mugit.mugitory.fixure.SourceFixture.SOURCE_2;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
+import static com.ssafy.mugit.fixure.FlowFixture.FLOW;
+import static com.ssafy.mugit.fixure.FlowFixture.FLOW_2;
+import static com.ssafy.mugit.fixure.MugitoryFixture.*;
+import static com.ssafy.mugit.fixure.RecordFixture.RECORD;
+import static com.ssafy.mugit.fixure.RecordFixture.RECORD_2;
+import static com.ssafy.mugit.fixure.RecordRequestFixture.RECORD_REQUEST_FIXTURE;
+import static com.ssafy.mugit.fixure.RecordRequestFixture.RECORD_REQUEST_FIXTURE_2;
+import static com.ssafy.mugit.fixure.SourceFixture.SOURCE;
+import static com.ssafy.mugit.fixure.SourceFixture.SOURCE_2;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("mugitory")
