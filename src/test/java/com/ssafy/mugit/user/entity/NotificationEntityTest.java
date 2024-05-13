@@ -5,10 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.ssafy.mugit.notification.entity.NotificationType.FOLLOW;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_2;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE_2;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
+import static com.ssafy.mugit.fixure.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NotificationEntityTest {

@@ -21,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_2;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE_2;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
+import static com.ssafy.mugit.fixure.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

@@ -7,8 +7,8 @@ import org.springframework.mock.web.MockHttpSession;
 
 import java.util.Base64;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_WITH_PK;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.UserFixture.USER_WITH_PK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ResponseMockLoginDtoTest {

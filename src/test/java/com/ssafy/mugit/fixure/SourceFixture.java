@@ -1,4 +1,4 @@
-package com.ssafy.mugit.mugitory.fixure;
+package com.ssafy.mugit.fixure;
 
 import com.ssafy.mugit.record.entity.Source;
 import lombok.AllArgsConstructor;

@@ -119,6 +119,7 @@ public class FlowService {
         newFlow.initParentAndRoot(parentFlow.getRootFlow(), parentFlow);
     }
 
+    @Transactional
     public void release(Long userId, Long flowId, RequestReleaseFlowDto requestReleaseFlowDto) {
         User user = userRepository.getReferenceById(userId);
         Flow flow = flowRepository.findFlowAndParentByFlowId(flowId).orElseThrow(() -> new FlowApiException(FlowApiError.NOT_EXIST_FLOW));

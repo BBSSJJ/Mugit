@@ -11,6 +11,7 @@ import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class LikesService {
     private final FlowRepository flowRepository;
     private final NotificationService notificationService;
 
+    @Transactional
     public String changeLikes(Long userId, Long flowId) {
         User user = userRepository.getReferenceById(userId);
         Flow flow = flowRepository.findFlowAndUserByFlowId(flowId).orElseThrow(() -> new FlowApiException(FlowApiError.NOT_EXIST_FLOW));

@@ -22,11 +22,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.PROFILE_2;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER;
-import static com.ssafy.mugit.user.fixture.UserFixture.USER_2;
+import static com.ssafy.mugit.fixure.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE;
+import static com.ssafy.mugit.fixure.ProfileFixture.PROFILE_2;
+import static com.ssafy.mugit.fixure.UserFixture.USER;
+import static com.ssafy.mugit.fixure.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -55,9 +55,21 @@ public class Notification {
             }
             case LIKE -> {
                 this.type = LIKE;
+                this.notified = notified;
+                this.notifier = notifier;
+                this.isRead = false;
+                this.causeEntityId = causeEntityId;
+                this.causeEntityClass = causeEntityClass;
+                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우를 좋아합니다.";
             }
             case FLOW_RELEASE -> {
                 this.type = FLOW_RELEASE;
+                this.notified = notified;
+                this.notifier = notifier;
+                this.isRead = false;
+                this.causeEntityId = causeEntityId;
+                this.causeEntityClass = causeEntityClass;
+                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우를 릴리즈합니다.";
             }
         }
     }
