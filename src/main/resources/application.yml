@@ -91,3 +91,7 @@ message:
 logging:
   level:
     root: ${ROOT_LOGGING_LEVEL}
+
+upload-path: ${UPLOAD_PATH}
+
+file-server: ${FILE_SERVER}
