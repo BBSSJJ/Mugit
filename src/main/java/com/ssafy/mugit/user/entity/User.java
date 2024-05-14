@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_USER;
 
 @Entity(name = "users")
@@ -16,7 +19,8 @@ import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_USER;
 @AllArgsConstructor
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
     private Long id;
 
@@ -36,6 +40,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Profile profile;
+
+    @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY)
+    private List<Follow> followees = new ArrayList<>();
 
     // 회원가입 시 생성자
     public User(String snsId, String email, SnsType snsType) {

@@ -2,6 +2,7 @@ package com.ssafy.mugit.flow.main.repository;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.querydsl.CustomFlowRepository;
+import com.ssafy.mugit.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -86,4 +87,8 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "OR h.name LIKE %:keyword% " +
             "OR f.title LIKE %:keyword%")
     Page<Flow> findFlowsByKeyword(Pageable pageable, String keyword);
+
+    @Query("SELECT f FROM flow f " +
+            "WHERE f.user IN :users AND f.authority != 'PRIVATE' AND f.isReleased = true")
+    Page<Flow> findFlowsByUsers(Pageable pageable, List<User> users);
 }
