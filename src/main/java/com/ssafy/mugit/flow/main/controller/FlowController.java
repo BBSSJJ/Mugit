@@ -42,4 +42,12 @@ public class FlowController {
         flowService.release(user.getId(), flowId, requestReleaseFlowDto);
         return ResponseEntity.status(200).body(new MessageDto("Flow 릴리즈 성공"));
     }
+
+    @Operation(summary = "Flow 삭제", description = "Flow 삭제, release 된 플로우는 유저를 undefined로 설정, release 되지 않은 플로우는 아예 삭제됩니다.")
+    @DeleteMapping("/{flowId}")
+    public ResponseEntity<MessageDto> deleteFlow(@UserSession UserSessionDto user, @PathVariable("flowId") Long flowId) {
+        flowService.delete(user.getId(), flowId);
+        return ResponseEntity.status(200).body(new MessageDto("Flow 삭제 성공"));
+    }
+
 }
