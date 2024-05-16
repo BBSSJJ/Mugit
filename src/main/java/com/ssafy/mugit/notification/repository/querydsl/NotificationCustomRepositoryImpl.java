@@ -24,15 +24,17 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
         return queryFactory.selectFrom(notification)
                 .leftJoin(notification.notified, user)
                 .where(notification.isRead.eq(false).and(user.id.eq(userId)))
+                .orderBy(notification.createdAt.desc())
                 .stream().toList();
     }
 
     @Override
-    public List<NotificationDto> findAllReadableDtoByUserId(Long userId) {
+    public List<NotificationDto> findAllReadableDtoByUserIdOrderByCreatedAt(Long userId) {
         return queryFactory.select(new QNotificationDto(notification))
                 .from(notification)
                 .leftJoin(notification.notified, user)
                 .where(notification.isRead.eq(false).and(user.id.eq(userId)))
+                .orderBy(notification.createdAt.desc())
                 .stream().toList();
     }
 

@@ -197,8 +197,6 @@ public class MugitoryAcceptanceTest {
         RecordDto recordDto1 = recordDtoList.getList().get(0);
         RecordDto recordDto2 = recordDtoList.getList().get(1);
         mockMvc.perform(delete("/api/records/" + recordDto1.getId()).cookie(loginCookie)).andExpect(status().is(200));
-        List<Mugitory> selectMFromMugitoryM = entityManager.createQuery("select m from mugitory m", Mugitory.class).getResultList();
-
         mockMvc.perform(delete("/api/records/" + recordDto2.getId()).cookie(loginCookie)).andExpect(status().is(200));
 
         // then 2 : 뮤지토리 조회 시 404

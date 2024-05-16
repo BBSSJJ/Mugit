@@ -58,7 +58,7 @@ public class NotificationService {
     }
 
     public List<NotificationDto> findAllNotifications(Long userId) {
-        List<NotificationDto> allNotifications = notificationRepository.findAllReadableDtoByUserId(userId);
+        List<NotificationDto> allNotifications = notificationRepository.findAllReadableDtoByUserIdOrderByCreatedAt(userId);
         if (allNotifications.isEmpty()) throw new UserApiException(UserApiError.NOT_EXIST_READABLE_NOTIFICATION);
         return allNotifications;
     }

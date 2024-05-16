@@ -210,6 +210,6 @@ class UserProfileServiceTest {
         // then
         assertThat(profileInDB).isNotNull();
         assertThat(profileInDB).usingRecursiveComparison()
-                .ignoringFields("id", "user", "DEFAULT_PROFILE_IMAGE_PATH", "DEFAULT_PROFILE_TEXT").isEqualTo(dto);
+                .comparingOnlyFields("nickName", "profileText", "profileImagePath").isEqualTo(dto);
     }
 }

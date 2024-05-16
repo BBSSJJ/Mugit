@@ -15,6 +15,7 @@ public class NotificationDto {
     private Long causeEntityId;
     private NotificationType type;
     private String description;
+    private String createAt;
 
     @QueryProjection
     public NotificationDto(Notification notification) {
@@ -24,5 +25,6 @@ public class NotificationDto {
         this.causeEntityId = notification.getCauseEntityId();
         this.type = notification.getType();
         this.description = notification.getDescription();
+        this.createAt = notification.getCreatedAt().toString();
     }
 }

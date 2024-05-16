@@ -1,5 +1,6 @@
 package com.ssafy.mugit.notification.entity;
 
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import static com.ssafy.mugit.notification.entity.NotificationType.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Notification {
+public class Notification extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "notification_id")

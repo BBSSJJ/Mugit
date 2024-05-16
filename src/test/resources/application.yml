@@ -86,3 +86,5 @@ decorator:
     datasource-proxy:
       json-format: true
 
+redis:
+  topic: ${REDIS_TOPIC}

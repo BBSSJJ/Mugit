@@ -135,7 +135,7 @@ class NotificationServiceTest {
 
     @Test
     @DisplayName("[통합] 읽지 않은 알림 정상 조회")
-    void testFindAllNotifications() {
+    void testFindAllNotifications() throws InterruptedException {
         // given
 
         // when 1 : follow
@@ -144,28 +144,31 @@ class NotificationServiceTest {
         // when 2 : release flow
         flowService.create(me.getId(), new RequestCreateNoteDto("new flow", "create flow message", Authority.PUBLIC,
                 List.of(new FilePathDto("source", "source file 1", "https://mugit.site/files/source_file_1")), null));
-
+        Thread.sleep(1000L);
         Flow noteFlow = flowRepository.findAllByUserId(me.getId()).get(0);
         flowService.regist(following.getId(), noteFlow.getId());
+        Thread.sleep(1000L);
 
         Flow followFlow = flowRepository.findUnreleasedFlowsByUserId(following.getId()).get(0);
         flowService.release(following.getId(), followFlow.getId(), new RequestReleaseFlowDto("follow new flow", "release flow message", Authority.PROTECTED,
                 List.of(new FilePathDto("source", "source file 2", "https://mugit.site/files/source_file_2")), null));
+        Thread.sleep(1000L);
 
         // when 3 : like
         likesService.changeLikes(following.getId(), noteFlow.getId());
-        
+        Thread.sleep(1000L);
+
         // when 4 : review
         reviewService.createReview(following.getId(), noteFlow.getId(), new RequestCreateReviewDto("여기 좋네요", "00:00"));
 
         // then
         List<NotificationDto> allNotifications = sut.findAllNotifications(me.getId());
         assertThat(allNotifications).hasSize(4);
-        assertThat(allNotifications)
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 당신을 팔로우합니다."))
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에서 릴리즈합니다."))
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우를 좋아합니다."))
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에 리뷰를 남겼습니다."));
+        // 알림 정렬 테스트 병행
+        assertThat(allNotifications.get(3)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 당신을 팔로우합니다."));
+        assertThat(allNotifications.get(2)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에서 릴리즈합니다."));
+        assertThat(allNotifications.get(1)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우를 좋아합니다."));
+        assertThat(allNotifications.get(0)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에 리뷰를 남겼습니다."));
     }
 
     @Test
