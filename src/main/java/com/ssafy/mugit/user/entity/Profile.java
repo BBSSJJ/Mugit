@@ -1,15 +1,15 @@
 package com.ssafy.mugit.user.entity;
 
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Profile {
+public class Profile extends BaseTimeEntity {
 
     @Transient
     private final String DEFAULT_PROFILE_TEXT = "텍스트를 입력하세요.";

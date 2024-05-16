@@ -11,12 +11,15 @@ import com.ssafy.mugit.flow.main.repository.FlowHashtagRepository;
 import com.ssafy.mugit.flow.main.repository.FlowRepository;
 import com.ssafy.mugit.flow.main.service.FlowHashtagService;
 import com.ssafy.mugit.flow.main.service.FlowService;
+import com.ssafy.mugit.flow.review.dto.RequestCreateReviewDto;
+import com.ssafy.mugit.flow.review.repository.ReviewRepository;
+import com.ssafy.mugit.flow.review.service.ReviewService;
 import com.ssafy.mugit.global.exception.UserApiException;
 import com.ssafy.mugit.global.exception.error.UserApiError;
 import com.ssafy.mugit.global.message.MessageBus;
 import com.ssafy.mugit.hashtag.repository.HashtagRepository;
 import com.ssafy.mugit.hashtag.service.HashtagService;
-import com.ssafy.mugit.notification.dto.NotificationDto;
+import com.ssafy.mugit.global.dto.NotificationDto;
 import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.notification.repository.NotificationRepository;
 import com.ssafy.mugit.notification.service.NotificationService;
@@ -86,6 +89,9 @@ class NotificationServiceTest {
     LikesRepository likesRepository;
 
     @Autowired
+    ReviewRepository reviewRepository;
+
+    @Autowired
     TestEntityManager testEntityManager;
 
     FollowService followService;
@@ -93,6 +99,7 @@ class NotificationServiceTest {
     HashtagService hashtagService;
     FlowHashtagService flowHashtagService;
     LikesService likesService;
+    ReviewService reviewService;
     NotificationService sut;
 
     User me;
@@ -106,6 +113,7 @@ class NotificationServiceTest {
         flowHashtagService = new FlowHashtagService(flowHashtagRepository);
         flowService = new FlowService(flowRepository, recordRepository, recordSourceRepository, sourceRepository, userRepository, hashtagService, flowHashtagService, sut);
         likesService = new LikesService(likesRepository, userRepository, flowRepository, sut);
+        reviewService = new ReviewService(reviewRepository, userRepository, flowRepository, sut);
 
         me = USER.getFixture(PROFILE.getFixture());
         following = USER_2.getFixture(PROFILE_2.getFixture());
@@ -146,14 +154,18 @@ class NotificationServiceTest {
 
         // when 3 : like
         likesService.changeLikes(following.getId(), noteFlow.getId());
+        
+        // when 4 : review
+        reviewService.createReview(following.getId(), noteFlow.getId(), new RequestCreateReviewDto("여기 좋네요", "00:00"));
 
         // then
         List<NotificationDto> allNotifications = sut.findAllNotifications(me.getId());
-        assertThat(allNotifications).hasSize(3);
+        assertThat(allNotifications).hasSize(4);
         assertThat(allNotifications)
                 .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 당신을 팔로우합니다."))
                 .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에서 릴리즈합니다."))
-                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우를 좋아합니다."));
+                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우를 좋아합니다."))
+                .anySatisfy(notificationDto -> assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에 리뷰를 남겼습니다."));
     }
 
     @Test

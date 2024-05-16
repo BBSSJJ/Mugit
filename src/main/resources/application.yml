@@ -95,3 +95,6 @@ logging:
 upload-path: ${UPLOAD_PATH}
 
 file-server: ${FILE_SERVER}
+
+redis:
+  topic: ${REDIS_TOPIC}

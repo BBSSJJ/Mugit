@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SseEvent {
 
+    @JsonProperty("connect")
     CONNECT("connect"),
 
     @JsonProperty("follow")
@@ -17,8 +18,10 @@ public enum SseEvent {
     FLOW_RELEASE("flow_release"),
 
     @JsonProperty("like")
-    LIKE("like");
+    LIKE("like"),
 
+    @JsonProperty("review")
+    REVIEW("review");
 
     private final String event;
 }

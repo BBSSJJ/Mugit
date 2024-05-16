@@ -25,11 +25,11 @@ public enum UserFixture {
     }
 
     public User getFixture(){
-        return new User(id, snsId, email, snsType, RoleType.ROLE_USER, null);
+        return new User(id, snsId, email, snsType, RoleType.ROLE_USER, null, null);
     }
 
     public User getFixture(Profile profile){
-        User user = new User(id, snsId, email, snsType, RoleType.ROLE_USER, null);
+        User user = new User(id, snsId, email, snsType, RoleType.ROLE_USER, null, null);
         user.regist(profile);
         return user;
     }

@@ -43,33 +43,27 @@ public class Notification {
 
 
     public Notification(User notified, User notifier, Long causeEntityId, Class<?> causeEntityClass, NotificationType type) {
+        this.notified = notified;
+        this.notifier = notifier;
+        this.isRead = false;
+        this.causeEntityId = causeEntityId;
+        this.causeEntityClass = causeEntityClass;
         switch (type){
             case FOLLOW -> {
                 this.type = FOLLOW;
-                this.notified = notified;
-                this.notifier = notifier;
-                this.isRead = false;
-                this.causeEntityId = causeEntityId;
-                this.causeEntityClass = causeEntityClass;
                 this.description = notifier.getProfile().getNickName() + "님이 당신을 팔로우합니다.";
             }
             case LIKE -> {
                 this.type = LIKE;
-                this.notified = notified;
-                this.notifier = notifier;
-                this.isRead = false;
-                this.causeEntityId = causeEntityId;
-                this.causeEntityClass = causeEntityClass;
                 this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우를 좋아합니다.";
             }
             case FLOW_RELEASE -> {
                 this.type = FLOW_RELEASE;
-                this.notified = notified;
-                this.notifier = notifier;
-                this.isRead = false;
-                this.causeEntityId = causeEntityId;
-                this.causeEntityClass = causeEntityClass;
                 this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우에서 릴리즈합니다.";
+            }
+            case REVIEW -> {
+                this.type = REVIEW;
+                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우에 리뷰를 남겼습니다.";
             }
         }
     }

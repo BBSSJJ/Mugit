@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Entity(name = "mugitory")
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "mugitory",
+        indexes = {@Index(name = "user_date_id_index", columnList = "date, user_id", unique = true)})
 public class Mugitory {
 
     @EmbeddedId

@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.entity;
 
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import com.ssafy.mugit.user.entity.type.RoleType;
 import com.ssafy.mugit.user.entity.type.SnsType;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ import static com.ssafy.mugit.user.entity.type.RoleType.ROLE_USER;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

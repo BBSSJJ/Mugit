@@ -8,13 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Embeddable
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDate {
+public class UserDate implements Serializable {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

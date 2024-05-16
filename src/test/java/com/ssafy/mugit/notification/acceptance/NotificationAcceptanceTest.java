@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.global.dto.ListDto;
-import com.ssafy.mugit.notification.dto.NotificationDto;
+import com.ssafy.mugit.global.dto.NotificationDto;
 import com.ssafy.mugit.notification.entity.Notification;
 import com.ssafy.mugit.notification.repository.NotificationRepository;
 import com.ssafy.mugit.user.entity.User;

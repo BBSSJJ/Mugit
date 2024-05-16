@@ -96,7 +96,7 @@
 <script type="text/javascript">
     // constance
     const WAS_SERVER_BASE_URL = "http://localhost:8080"
-    const SSE_SERVER_BASE_URL = "https://mugit.site"
+    const SSE_SERVER_BASE_URL = "http://localhost:8082"
     const LOGIN_API_PATH = "/api/users/mocks/login"
     const SSE_CONNECT_API_PATH = "/sse/subscribe"
 
@@ -119,7 +119,7 @@
         connected.style.display = "none"
         notConnected.style.display = "block"
     }
-    const followHandler = function (e) {
+    const writeEventHandler = function (e) {
         const newElement = document.createElement("li");
         newElement.innerHTML = "message: " + e.data;
         sseList.appendChild(newElement);
@@ -133,7 +133,10 @@
             eventSource.addEventListener("connect", connectHandler)
             eventSource.addEventListener("error", errorHandler)
             eventSource.addEventListener("open", openHandler)
-            eventSource.addEventListener("follow", followHandler)
+            eventSource.addEventListener("follow", writeEventHandler)
+            eventSource.addEventListener("flow_release", writeEventHandler)
+            eventSource.addEventListener("like", writeEventHandler)
+            eventSource.addEventListener("review", writeEventHandler)
         }
     }
 

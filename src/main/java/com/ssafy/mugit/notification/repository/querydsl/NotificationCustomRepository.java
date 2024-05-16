@@ -1,6 +1,6 @@
 package com.ssafy.mugit.notification.repository.querydsl;
 
-import com.ssafy.mugit.notification.dto.NotificationDto;
+import com.ssafy.mugit.global.dto.NotificationDto;
 import com.ssafy.mugit.notification.entity.Notification;
 
 import java.util.List;

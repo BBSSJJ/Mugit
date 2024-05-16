@@ -4,7 +4,7 @@ import com.ssafy.mugit.global.config.UserSession;
 import com.ssafy.mugit.global.dto.ListDto;
 import com.ssafy.mugit.global.dto.MessageDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
-import com.ssafy.mugit.notification.dto.NotificationDto;
+import com.ssafy.mugit.global.dto.NotificationDto;
 import com.ssafy.mugit.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

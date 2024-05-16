@@ -1,6 +1,5 @@
 package com.ssafy.mugit.global.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +8,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 
@@ -48,5 +46,10 @@ public class RedisConfig {
         template.setHashKeySerializer(new StringRedisSerializer());
 
         return template;
+    }
+
+    @Bean
+    Publisher publisher(RedisTemplate<String, Object> redisTemplate) {
+        return new Publisher(redisTemplate);
     }
 }

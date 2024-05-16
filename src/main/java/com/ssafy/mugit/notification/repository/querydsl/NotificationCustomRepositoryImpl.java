@@ -1,8 +1,8 @@
 package com.ssafy.mugit.notification.repository.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.mugit.notification.dto.NotificationDto;
-import com.ssafy.mugit.notification.dto.QNotificationDto;
+import com.ssafy.mugit.global.dto.NotificationDto;
+import com.ssafy.mugit.global.dto.QNotificationDto;
 import com.ssafy.mugit.notification.entity.Notification;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;

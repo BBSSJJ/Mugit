@@ -1,4 +1,4 @@
-package com.ssafy.mugit.notification.dto;
+package com.ssafy.mugit.global.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.mugit.notification.entity.Notification;
