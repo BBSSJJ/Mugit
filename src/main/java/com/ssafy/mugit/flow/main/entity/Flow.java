@@ -65,7 +65,7 @@ public class Flow extends BaseTimeEntity {
     private List<Flow> childFlows = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
     @OneToMany(mappedBy = "childFlow", fetch = FetchType.LAZY)
@@ -110,5 +110,9 @@ public class Flow extends BaseTimeEntity {
 
     public void updateViews(Integer views) {
         this.views = views;
+    }
+
+    public void updateUser(User user) {
+        this.user = user;
     }
 }
