@@ -65,7 +65,7 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "LEFT JOIN flow f ON l.flow.id = flow.id " +
             "LEFT JOIN FETCH f.user u " +
             "LEFT JOIN FETCH u.profile " +
-            "WHERE l.user.id = :userId AND f.authority != 'PRIVATE'")
+            "WHERE l.user.id = :userId AND f.authority != 'PRIVATE' AND f.isReleased = true")
     List<Flow> findLikeFlows(Long userId);
 
     List<Flow> findFlowsByRootFlow(Flow rootFlow);
@@ -85,7 +85,9 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "LEFT JOIN FETCH ht.hashtag h " +
             "WHERE p.nickName LIKE %:keyword% " +
             "OR h.name LIKE %:keyword% " +
-            "OR f.title LIKE %:keyword%")
+            "OR f.title LIKE %:keyword% " +
+            "AND f.authority != 'PRIVATE' " +
+            "AND f.isReleased = true")
     Page<Flow> findFlowsByKeyword(Pageable pageable, String keyword);
 
     @Query("SELECT f FROM flow f " +
