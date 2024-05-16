@@ -165,4 +165,19 @@ public class FlowService {
             notificationService.sendFlowRelease(flow.getUser(), flow.getParentFlow().getUser(), flow.getParentFlow());
         }
     }
+
+    @Transactional
+    public void delete(Long userId, Long flowId) {
+        Flow flow = flowRepository.findByIdWithUser(flowId);
+        if (!flow.getUser().getId().equals(userId)) {
+            throw new FlowApiException(FlowApiError.NOT_ALLOWED_ACCESS);
+        }
+
+        if (flow.isReleased()) {
+            User undefinedUser = userRepository.getReferenceById(0L);
+            flow.updateUser(undefinedUser);
+        } else {
+            flowRepository.delete(flow);
+        }
+    }
 }
