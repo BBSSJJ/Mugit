@@ -23,6 +23,7 @@ public class CustomAuthorizeHttpRequestsFilter {
                 // 다른 사용자 조회
                 .requestMatchers("/api/users/*/profiles/detail").permitAll()
                 .requestMatchers("/api/users/nick/**").permitAll()
+                .requestMatchers("/api/mugitories/**").permitAll()
 
                 // 가짜 로그인 및 회원가입
                 .requestMatchers("/api/users/mocks/**").permitAll()

@@ -31,14 +31,14 @@ public class MugitoryController {
 
     private final MugitoryService mugitoryService;
 
-    @Operation(summary = "전체 뮤지토리 조회", description = "모든 뮤지토리를 조회한다.")
+    @Operation(summary = "전체 뮤지토리 조회", description = "해당 유저의 모든 뮤지토리를 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "뮤지토리 조회 완료", content = @Content(schema = @Schema(implementation = ResponseMugitoryDto.class))),
             @ApiResponse(responseCode = "401", description = "토큰인증 실패", content = @Content(schema = @Schema(implementation = MessageDto.class)))
     })
-    @GetMapping
-    public ResponseEntity<ListDto<List<ResponseMugitoryDto>>> getMugitory(@UserSession UserSessionDto user) {
-        return ResponseEntity.ok(new ListDto<>(mugitoryService.getOneYearMugitoryByUserId(user.getId())));
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<ListDto<List<ResponseMugitoryDto>>> getMugitory(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(new ListDto<>(mugitoryService.getOneYearMugitoryByUserId(userId)));
     }
 
     @Operation(summary = "특정일 뮤지토리 조회", description = "특정한 날짜의 뮤지토리를 조회한다.")
