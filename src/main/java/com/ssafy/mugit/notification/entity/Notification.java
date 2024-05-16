@@ -34,7 +34,7 @@ public class Notification extends BaseTimeEntity {
     private Long causeEntityId;
 
     @Column(name = "cause_entity_class", nullable = false)
-    private Class<?> causeEntityClass;
+    private String causeEntityClass;
 
     @Column(name = "type", nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -53,28 +53,28 @@ public class Notification extends BaseTimeEntity {
                 this.type = FOLLOW;
                 User causeEntityUser = (User) causeEntity;
                 this.causeEntityId = causeEntityUser.getId();
-                this.causeEntityClass = causeEntityUser.getClass();
+                this.causeEntityClass = causeEntityUser.getClass().getSimpleName();
                 this.description = notifier.getProfile().getNickName() + "님이 당신을 팔로우합니다.";
             }
             case LIKE -> {
                 this.type = LIKE;
                 Flow causeEntityFlow = (Flow) causeEntity;
                 this.causeEntityId = causeEntityFlow.getId();
-                this.causeEntityClass = causeEntityFlow.getClass();
+                this.causeEntityClass = causeEntityFlow.getClass().getSimpleName();
                 this.description = notifier.getProfile().getNickName() + "님이 [" + causeEntityFlow.getTitle() + "] 플로우를 좋아합니다.";
             }
             case FLOW_RELEASE -> {
                 this.type = FLOW_RELEASE;
                 Flow causeEntityFlow = (Flow) causeEntity;
                 this.causeEntityId = causeEntityFlow.getId();
-                this.causeEntityClass = causeEntityFlow.getClass();
+                this.causeEntityClass = causeEntityFlow.getClass().getSimpleName();
                 this.description = notifier.getProfile().getNickName() + "님이 [" + causeEntityFlow.getTitle() + "] 플로우에서 릴리즈합니다.";
             }
             case REVIEW -> {
                 this.type = REVIEW;
                 Flow causeEntityFlow = (Flow) causeEntity;
                 this.causeEntityId = causeEntityFlow.getId();
-                this.causeEntityClass = causeEntityFlow.getClass();
+                this.causeEntityClass = causeEntityFlow.getClass().getSimpleName();
                 this.description = notifier.getProfile().getNickName() + "님이 [" + causeEntityFlow.getTitle() + "] 플로우에 리뷰를 남겼습니다.";
             }
         }
