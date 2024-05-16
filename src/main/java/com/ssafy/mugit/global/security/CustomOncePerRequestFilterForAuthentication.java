@@ -46,6 +46,7 @@ public class CustomOncePerRequestFilterForAuthentication extends OncePerRequestF
                 RoleType role = userDto.getRole();
 
                 getContext().setAuthentication(new UsernamePasswordAuthenticationToken(email, id, role.getAuthorities()));
+                filterChain.doFilter(request, response);
             }
         }
     }
