@@ -166,9 +166,9 @@ class NotificationServiceTest {
         assertThat(allNotifications).hasSize(4);
         // 알림 정렬 테스트 병행
         assertThat(allNotifications.get(3)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 당신을 팔로우합니다."));
-        assertThat(allNotifications.get(2)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에서 릴리즈합니다."));
-        assertThat(allNotifications.get(1)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우를 좋아합니다."));
-        assertThat(allNotifications.get(0)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 " + noteFlow.getId() + "번 플로우에 리뷰를 남겼습니다."));
+        assertThat(allNotifications.get(2)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 [" + noteFlow.getTitle() + "] 플로우에서 릴리즈합니다."));
+        assertThat(allNotifications.get(1)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 [" + noteFlow.getTitle() + "] 플로우를 좋아합니다."));
+        assertThat(allNotifications.get(0)).satisfies(notificationDto ->  assertThat(notificationDto.getDescription()).isEqualTo("leaf2님이 [" + noteFlow.getTitle() + "] 플로우에 리뷰를 남겼습니다."));
     }
 
     @Test
@@ -189,7 +189,7 @@ class NotificationServiceTest {
     @DisplayName("[통합] 해당 알림 읽기로 변경")
     void testReadNotification() {
         // given
-        Notification notification = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
+        Notification notification = new Notification(me, following, following, FOLLOW);
         notificationRepository.save(notification);
         Notification notificationInDB = notificationRepository.getReferenceById(notification.getId());
 
@@ -205,9 +205,9 @@ class NotificationServiceTest {
     @DisplayName("[통합] 알림 모두읽기")
     void testReadAllNotifications() {
         // given
-        Notification notification = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
-        Notification notification2 = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
-        Notification notification3 = new Notification(me, following, following.getId(), following.getClass(), FOLLOW);
+        Notification notification = new Notification(me, following, following, FOLLOW);
+        Notification notification2 = new Notification(me, following, following, FOLLOW);
+        Notification notification3 = new Notification(me, following, following, FOLLOW);
         notificationRepository.saveAll(List.of(notification, notification2, notification3));
         List<Notification> notificationsInDB = notificationRepository.findAll();
 

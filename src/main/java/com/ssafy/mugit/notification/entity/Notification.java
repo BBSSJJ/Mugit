@@ -1,5 +1,6 @@
 package com.ssafy.mugit.notification.entity;
 
+import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import com.ssafy.mugit.user.entity.User;
 import jakarta.persistence.*;
@@ -43,28 +44,38 @@ public class Notification extends BaseTimeEntity {
     private String description;
 
 
-    public Notification(User notified, User notifier, Long causeEntityId, Class<?> causeEntityClass, NotificationType type) {
+    public Notification(User notified, User notifier, Object causeEntity, NotificationType type) {
         this.notified = notified;
         this.notifier = notifier;
         this.isRead = false;
-        this.causeEntityId = causeEntityId;
-        this.causeEntityClass = causeEntityClass;
         switch (type){
             case FOLLOW -> {
                 this.type = FOLLOW;
+                User causeEntityUser = (User) causeEntity;
+                this.causeEntityId = causeEntityUser.getId();
+                this.causeEntityClass = causeEntityUser.getClass();
                 this.description = notifier.getProfile().getNickName() + "님이 당신을 팔로우합니다.";
             }
             case LIKE -> {
                 this.type = LIKE;
-                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우를 좋아합니다.";
+                Flow causeEntityFlow = (Flow) causeEntity;
+                this.causeEntityId = causeEntityFlow.getId();
+                this.causeEntityClass = causeEntityFlow.getClass();
+                this.description = notifier.getProfile().getNickName() + "님이 [" + causeEntityFlow.getTitle() + "] 플로우를 좋아합니다.";
             }
             case FLOW_RELEASE -> {
                 this.type = FLOW_RELEASE;
-                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우에서 릴리즈합니다.";
+                Flow causeEntityFlow = (Flow) causeEntity;
+                this.causeEntityId = causeEntityFlow.getId();
+                this.causeEntityClass = causeEntityFlow.getClass();
+                this.description = notifier.getProfile().getNickName() + "님이 [" + causeEntityFlow.getTitle() + "] 플로우에서 릴리즈합니다.";
             }
             case REVIEW -> {
                 this.type = REVIEW;
-                this.description = notifier.getProfile().getNickName() + "님이 " + causeEntityId + "번 플로우에 리뷰를 남겼습니다.";
+                Flow causeEntityFlow = (Flow) causeEntity;
+                this.causeEntityId = causeEntityFlow.getId();
+                this.causeEntityClass = causeEntityFlow.getClass();
+                this.description = notifier.getProfile().getNickName() + "님이 [" + causeEntityFlow.getTitle() + "] 플로우에 리뷰를 남겼습니다.";
             }
         }
     }

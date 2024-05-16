@@ -30,28 +30,28 @@ public class NotificationService {
 
     public void sendFollow(User followingUser, User followeeUser) {
         // ※ follow 받는사람이 notified 임을 주의
-        Notification notification = new Notification(followeeUser, followingUser, followingUser.getId(), followeeUser.getClass(), FOLLOW);
+        Notification notification = new Notification(followeeUser, followingUser, followingUser, FOLLOW);
         notificationRepository.save(notification);
         NotificationDto notificationDto = new NotificationDto(notification);
         messageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FOLLOW, notificationDto));
     }
 
     public void sendFlowRelease(User flowRecordMaker, User flowAncestor, Flow flow) {
-        Notification notification = new Notification(flowAncestor, flowRecordMaker, flow.getId(), flow.getClass(), FLOW_RELEASE);
+        Notification notification = new Notification(flowAncestor, flowRecordMaker, flow, FLOW_RELEASE);
         notificationRepository.save(notification);
         NotificationDto notificationDto = new NotificationDto(notification);
         messageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.FLOW_RELEASE, notificationDto));
     }
 
     public void sendLikes(User giveLikeUser, User takeLikeUser, Flow flow) {
-        Notification notification = new Notification(takeLikeUser, giveLikeUser, flow.getId(), flow.getClass(), LIKE);
+        Notification notification = new Notification(takeLikeUser, giveLikeUser, flow, LIKE);
         notificationRepository.save(notification);
         NotificationDto notificationDto = new NotificationDto(notification);
         messageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.LIKE, notificationDto));
     }
 
     public void sendReview(User reviewer, Flow reviewedFlow) {
-        Notification notification = new Notification(reviewedFlow.getUser(), reviewer, reviewedFlow.getId(), reviewedFlow.getClass(), NotificationType.REVIEW);
+        Notification notification = new Notification(reviewedFlow.getUser(), reviewer, reviewedFlow, NotificationType.REVIEW);
         notificationRepository.save(notification);
         NotificationDto notificationDto = new NotificationDto(notification);
         messageBus.send(new SseMessageDto<NotificationDto>(notificationDto.getNotifiedId(), SseEvent.REVIEW, notificationDto));

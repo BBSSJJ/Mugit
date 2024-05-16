@@ -21,7 +21,7 @@ class NotificationEntityTest {
         User followingUser = USER_2.getFixture(PROFILE_2.getFixture());
 
         // when
-        Notification notification = new Notification(followeeUser, followingUser, followeeUser.getId(), followingUser.getClass(), FOLLOW);
+        Notification notification = new Notification(followeeUser, followingUser, followeeUser, FOLLOW);
 
         // then
         assertThat(notification.getNotifier().getId()).isEqualTo(followeeUser.getId());
