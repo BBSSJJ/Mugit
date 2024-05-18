@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.entity;
 
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Profile {
+public class Profile extends BaseTimeEntity {
 
     @Transient
     private final String DEFAULT_PROFILE_TEXT = "텍스트를 입력하세요.";
+
     @Transient
-    private final String DEFAULT_PROFILE_IMAGE_PATH = "https://mugit.site/files/008494eb-b272-4c83-919b-677378107fd2.jpg";
+    private final String DEFAULT_PROFILE_IMAGE_PATH = "https://mugit.site/files/default/user.jpg";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

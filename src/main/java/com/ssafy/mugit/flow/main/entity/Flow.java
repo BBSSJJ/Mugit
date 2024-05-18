@@ -12,31 +12,44 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Entity(name = "flow")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Flow extends BaseTimeEntity {
+    @Transient
+    private final String DEFAULT_FLOW_IMAGE_PATH = "https://mugit.site/files/default/flow.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flow_id")
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
     @Column(name = "title")
     private String title;
+
     @Column(name = "is_released")
     private boolean isReleased;
+
     @Column(name = "message")
     private String message;
+
     @Column(name = "authority")
     @Enumerated(value = EnumType.STRING)
     private Authority authority;
+
     @Column(name = "music_path")
     private String musicPath;
+
     @Column(name = "cover_path")
     private String coverPath;
+
     @Column(name = "views")
     private Integer views;
 
@@ -52,7 +65,7 @@ public class Flow extends BaseTimeEntity {
     private List<Flow> childFlows = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flow", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
     @OneToMany(mappedBy = "childFlow", fetch = FetchType.LAZY)
@@ -66,6 +79,7 @@ public class Flow extends BaseTimeEntity {
         this.title = title;
         this.isReleased = false;
         this.musicPath = musicPath;
+        this.coverPath = DEFAULT_FLOW_IMAGE_PATH;
         this.views = 0;
     }
 
@@ -76,7 +90,7 @@ public class Flow extends BaseTimeEntity {
         this.authority = authority;
         this.isReleased = true;
         this.musicPath = musicPath;
-        this.coverPath = coverPath;
+        this.coverPath = !isBlank(coverPath) ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
         this.views = 0;
     }
 
@@ -85,7 +99,7 @@ public class Flow extends BaseTimeEntity {
         this.message = message;
         this.authority = authority;
         this.musicPath = musicPath;
-        this.coverPath = coverPath;
+        this.coverPath = !isBlank(coverPath) ? coverPath : DEFAULT_FLOW_IMAGE_PATH;
         this.isReleased = true;
     }
 
@@ -96,5 +110,9 @@ public class Flow extends BaseTimeEntity {
 
     public void updateViews(Integer views) {
         this.views = views;
+    }
+
+    public void updateUser(User user) {
+        this.user = user;
     }
 }

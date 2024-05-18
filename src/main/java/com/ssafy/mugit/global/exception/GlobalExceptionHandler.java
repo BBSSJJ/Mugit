@@ -42,10 +42,27 @@ public class GlobalExceptionHandler {
             case SELF_FOLLOW -> new ResponseEntity<>(new MessageDto("본인 팔로우"), HttpStatus.BAD_REQUEST);
             case ALREADY_FOLLOW -> new ResponseEntity<>(new MessageDto("이미 팔로우"), HttpStatus.CONFLICT);
             case NOT_EXIST_FOLLOW -> new ResponseEntity<>(new MessageDto("이미 삭제된 팔로우"), HttpStatus.NO_CONTENT);
-            case SELF_PROFILE ->  new ResponseEntity<>(new MessageDto("본인 프로필 조회"), HttpStatus.BAD_REQUEST);
+            case SELF_PROFILE -> new ResponseEntity<>(new MessageDto("본인 프로필 조회"), HttpStatus.BAD_REQUEST);
             case NOT_ALLOWED_ACCESS -> new ResponseEntity<>(new MessageDto("접근 권한 없음"), HttpStatus.FORBIDDEN);
             case NOT_EXIST_READABLE_NOTIFICATION -> new ResponseEntity<>(new MessageDto("안읽은 알림 없음"), HttpStatus.NOT_FOUND);
             case NOTIFICATION_NOT_FOUNT -> new ResponseEntity<>(new MessageDto("해당 알림 없음"), HttpStatus.NOT_FOUND);
+            case DELETE_RECORD_NOT_IN_MUGITORY -> new ResponseEntity<>(new MessageDto("뮤기토리에 존재하지 않는 레코드 삭제"), HttpStatus.NOT_FOUND);
+            case ALREADY_RECORDED_TO_MUGITORY -> new ResponseEntity<>(new MessageDto("뮤기토리에 이미 등록된 레코드 재등록"), HttpStatus.CONFLICT);
+            case NOT_EXIST_MUGITORY -> new ResponseEntity<>(new MessageDto("해당일자 뮤지토리 없음"), HttpStatus.NOT_FOUND);
+        };
+    }
+
+    @ExceptionHandler(FlowApiException.class)
+    protected ResponseEntity<MessageDto> handleFlowApiException(FlowApiException e) {
+        log.error(e.getMessage());
+        return switch (e.getFlowApiError()) {
+            case NOT_ALLOWED_ACCESS -> new ResponseEntity<>(new MessageDto("접근 권한 없음"), HttpStatus.FORBIDDEN);
+            case NOT_RELEASED_FLOW -> new ResponseEntity<>(new MessageDto("릴리즈 되지 않은 플로우"), HttpStatus.BAD_REQUEST);
+            case NO_RECORD -> new ResponseEntity<>(new MessageDto("레코드 없음"), HttpStatus.NOT_FOUND);
+            case ALREADY_RELEASED_FLOW -> new ResponseEntity<>(new MessageDto("이미 릴리즈된 플로우"), HttpStatus.BAD_REQUEST);
+            case NOT_EXIST_FLOW -> new ResponseEntity<>(new MessageDto("존재하지 않는 플로우"), HttpStatus.NOT_FOUND);
+            case NO_CONTENT -> new ResponseEntity<>(new MessageDto("내용 없음"), HttpStatus.NO_CONTENT);
+            case NO_MUSIC -> new ResponseEntity<>(new MessageDto("음악 파일 없음"), HttpStatus.NO_CONTENT);
         };
     }
 

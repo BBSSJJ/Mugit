@@ -1,8 +1,8 @@
 package com.ssafy.mugit.notification.repository.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.mugit.notification.dto.NotificationDto;
-import com.ssafy.mugit.notification.dto.QNotificationDto;
+import com.ssafy.mugit.global.dto.NotificationDto;
+import com.ssafy.mugit.global.dto.QNotificationDto;
 import com.ssafy.mugit.notification.entity.Notification;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,21 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
     }
 
     @Override
-    public List<NotificationDto> findAllReadableByUserId(Long userId) {
+    public List<Notification> findAllReadableByUserId(Long userId) {
+        return queryFactory.selectFrom(notification)
+                .leftJoin(notification.notified, user)
+                .where(notification.isRead.eq(false).and(user.id.eq(userId)))
+                .orderBy(notification.createdAt.desc())
+                .stream().toList();
+    }
+
+    @Override
+    public List<NotificationDto> findAllReadableDtoByUserIdOrderByCreatedAt(Long userId) {
         return queryFactory.select(new QNotificationDto(notification))
                 .from(notification)
-                .leftJoin(user).on(notification.notified.eq(user))
+                .leftJoin(notification.notified, user)
                 .where(notification.isRead.eq(false).and(user.id.eq(userId)))
+                .orderBy(notification.createdAt.desc())
                 .stream().toList();
     }
 

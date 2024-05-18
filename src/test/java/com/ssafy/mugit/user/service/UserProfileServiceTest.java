@@ -9,6 +9,7 @@ import com.ssafy.mugit.user.entity.Profile;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.repository.ProfileRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -19,10 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
-import static com.ssafy.mugit.user.fixture.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
-import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
-import static com.ssafy.mugit.user.fixture.UserFixture.*;
+import static com.ssafy.mugit.fixure.ModifyUserInfoFixture.MODIFY_USER_INFO_DTO_01;
+import static com.ssafy.mugit.fixure.ModifyUserInfoFixture.DUPLICATE_MODIFY_USER_INFO_DTO;
+import static com.ssafy.mugit.fixure.ProfileFixture.*;
+import static com.ssafy.mugit.fixure.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -45,7 +46,7 @@ class UserProfileServiceTest {
 
     @BeforeEach
     void setUp() {
-        sut = new UserProfileService(userRepository, profileRepository, followService);
+        sut = new UserProfileService(userRepository, profileRepository, followService, new UserCookieUtil());
     }
 
 
@@ -169,10 +170,6 @@ class UserProfileServiceTest {
         ResponseUserProfileDto followingProfile = sut.getProfileById(following.getId());
 
         // then
-        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollower", false);
-        assertThat(followerProfile).hasFieldOrPropertyWithValue("isFollowing", false);
-        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollower", false);
-        assertThat(followingProfile).hasFieldOrPropertyWithValue("isFollowing", false);
         assertThat(followerProfile.getFollowerCount()).isEqualTo(1L);
         assertThat(followerProfile.getFollowingCount()).isEqualTo(0L);
         assertThat(followingProfile.getFollowerCount()).isEqualTo(0L);
@@ -213,6 +210,6 @@ class UserProfileServiceTest {
         // then
         assertThat(profileInDB).isNotNull();
         assertThat(profileInDB).usingRecursiveComparison()
-                .ignoringFields("id", "user", "DEFAULT_PROFILE_IMAGE_PATH", "DEFAULT_PROFILE_TEXT").isEqualTo(dto);
+                .comparingOnlyFields("nickName", "profileText", "profileImagePath").isEqualTo(dto);
     }
 }

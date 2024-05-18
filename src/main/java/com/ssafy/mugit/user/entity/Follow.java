@@ -1,5 +1,6 @@
 package com.ssafy.mugit.user.entity;
 
+import com.ssafy.mugit.global.entity.BaseTimeEntity;
 import com.ssafy.mugit.global.exception.UserApiException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import static com.ssafy.mugit.global.exception.error.UserApiError.SELF_FOLLOW;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Follow {
+public class Follow extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "follow_id")

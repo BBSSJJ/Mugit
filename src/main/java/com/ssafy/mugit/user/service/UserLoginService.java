@@ -8,9 +8,8 @@ import com.ssafy.mugit.user.dto.UserInfoDto;
 import com.ssafy.mugit.global.dto.UserSessionDto;
 import com.ssafy.mugit.user.entity.User;
 import com.ssafy.mugit.user.entity.type.SnsType;
-import com.ssafy.mugit.user.repository.FollowRepository;
 import com.ssafy.mugit.user.repository.UserRepository;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +27,7 @@ public class UserLoginService {
     private final OAuthApi oAuthApi;
     private final UserRepository userRepository;
     private final FollowService followService;
-    private final CookieUtil cookieUtil;
+    private final UserCookieUtil userCookieUtil;
 
     @Transactional
     public HttpHeaders login(String token, SnsType snsType, HttpSession session) throws JsonProcessingException {
@@ -41,13 +40,13 @@ public class UserLoginService {
         User userInDB = userRepository.findBySnsIdAndSnsType(userInfo.getSnsId(), userInfo.getSnsType());
 
         // 회원가입 필요시 regist cookie 등록
-        if (userInDB == null) return cookieUtil.getRegistCookieHeader(userInfo);
+        if (userInDB == null) return userCookieUtil.getRegistCookieHeader(userInfo);
 
         // 로그인 시 세션 설정
         UserSessionDto userSessionDto = new UserSessionDto(userInDB);
         session.setAttribute(LOGIN_USER_KEY.getKey(), userSessionDto);
 
-        return cookieUtil.getLoginCookieHeader(userInDB,
+        return userCookieUtil.getLoginCookieHeader(userInDB,
                 followService.countMyFollowers(userInDB.getId()),
                 followService.countMyFollowings(userInDB.getId()));
     }

@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@Component
+@Component("ApiMessageBus")
 @Slf4j
 public class ApiMessageBus implements MessageBus {
 

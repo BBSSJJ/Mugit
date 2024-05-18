@@ -49,22 +49,22 @@ public class FlowReadController {
         return ResponseEntity.status(200).body(flowReadService.listFlow(pageable));
     }
 
-    @Operation(summary = "내 Flow 리스트 조회", description = "릴리즈한 내 Flow List 조회")
-    @GetMapping("/mine")
-    ResponseEntity<ListDto<List<FlowItemDto>>> getMyFlowList(@UserSession UserSessionDto user) {
-        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listMyFlow(user.getId())));
+    @Operation(summary = "유저의 Flow 리스트 조회", description = "유저의 릴리즈한 Flow List 조회, 자신일 경우에만 PRIVATE 까지 조회")
+    @GetMapping("/users/{userId}/released")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getReleasedFlowList(@UserSession UserSessionDto me, @PathVariable("userId") Long userId) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listReleasedFlow(me.getId(), userId)));
     }
 
-    @Operation(summary = "작업중인 Flow 리스트 조회", description = "아직 릴리즈 하지 않은 내 Flow List 조회")
-    @GetMapping("/working")
-    ResponseEntity<ListDto<List<FlowItemDto>>> getMyWorkingFlowList(@UserSession UserSessionDto user) {
-        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listMyWorkingFlow(user.getId())));
+    @Operation(summary = "유저의 작업중인 Flow 리스트 조회", description = "아직 릴리즈 하지 않은 Flow List 조회, 자신의 Flow만 볼 수 있음")
+    @GetMapping("/users/{userId}/unreleased")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getUnreleasedFlowList(@UserSession UserSessionDto me, @PathVariable("userId") Long userId) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listUnreleasedFlow(me.getId(), userId)));
     }
 
-    @Operation(summary = "좋아요 Flow 리스트 조회", description = "내가 좋아요 누른 Flow List 조회")
-    @GetMapping("/likes")
-    ResponseEntity<ListDto<List<FlowItemDto>>> getMyLikeFlowList(@UserSession UserSessionDto user) {
-        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listMyLikeFlow(user.getId())));
+    @Operation(summary = "유저의 좋아요 Flow 리스트 조회", description = "유저가 좋아요 누른 Flow List 조회")
+    @GetMapping("/users/{userId}/likes")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getLikesFlowList(@PathVariable("userId") Long userId) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listLikesFlow(userId)));
     }
 
     @Operation(summary = "Flow 의 Record 조회", description = "Flow의 Record들 조회")
@@ -81,14 +81,14 @@ public class FlowReadController {
 
     @Operation(summary = "Flow 장르 검색", description = "장르 이름 검색. 기본값으로 size=12, sort='createdAt'으로 되어있으므로 page 변수만 보내면 됩니다.")
     @GetMapping("/genre")
-    ResponseEntity<Slice<FlowItemDto>> searchFlowsByGenre(@PageableDefault(size = 12, sort = "createdAt", direction = DESC) Pageable pageable,
+    ResponseEntity<Slice<FlowItemDto>> searchFlowsByGenre(@PageableDefault(size = 6, sort = "createdAt", direction = DESC) Pageable pageable,
                                                           @RequestParam("hashtag") String hashtag) {
         return ResponseEntity.status(200).body(flowReadService.getFlowsByGenre(pageable, hashtag));
     }
 
     @Operation(summary = "Flow 검색", description = "키워드로 제목, 해시태그, 유저 검색. 기본값으로 size=12, sort='createdAt'으로 되어있으므로 page 변수만 보내면 됩니다.")
     @GetMapping("/search")
-    ResponseEntity<Slice<FlowItemDto>> searchFlowsByKeyword(@PageableDefault(size = 12, sort = "createdAt", direction = DESC) Pageable pageable,
+    ResponseEntity<Slice<FlowItemDto>> searchFlowsByKeyword(@PageableDefault(size = 6, sort = "createdAt", direction = DESC) Pageable pageable,
                                                             @RequestParam("keyword") String keyword) {
         return ResponseEntity.status(200).body(flowReadService.getFlowsByKeyword(pageable, keyword));
     }

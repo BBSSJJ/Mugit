@@ -27,6 +27,6 @@ public class SessionUserParameterResolver implements HandlerMethodArgumentResolv
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return httpSession.getAttribute(DataKeys.LOGIN_USER_KEY.getKey());
+        return httpSession.getAttribute(DataKeys.LOGIN_USER_KEY.getKey()) != null ? httpSession.getAttribute(DataKeys.LOGIN_USER_KEY.getKey()) : new UserSessionDto();
     }
 }

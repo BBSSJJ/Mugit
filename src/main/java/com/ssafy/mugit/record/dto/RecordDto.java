@@ -1,6 +1,8 @@
 package com.ssafy.mugit.record.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.mugit.record.entity.Record;
+import com.ssafy.mugit.record.entity.RecordSource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +23,9 @@ public class RecordDto {
         this.id = record.getId();
         this.message = record.getMessage();
         this.isOpen = record.getIsOpen();
-        this.sources = new ArrayList<>();
-        record.getRecordSources().forEach(recordSource -> {
-            this.sources.add(new SourceInfoDto(recordSource.getSource().getId(),
-                    recordSource.getName(),
-                    recordSource.getSource().getPath()));
-        });
+        if (record.getRecordSources() != null) this.sources = record.getRecordSources().stream().map(recordSource -> new SourceInfoDto(
+                                recordSource.getSource().getId(),
+                                recordSource.getName(),
+                                recordSource.getSource().getPath())).toList();
     }
 }

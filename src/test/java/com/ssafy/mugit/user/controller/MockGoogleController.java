@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.ssafy.mugit.user.fixture.GoogleUserInfoFixture.*;
+import static com.ssafy.mugit.fixure.GoogleUserInfoFixture.*;
 
 @RestController
 public class MockGoogleController {

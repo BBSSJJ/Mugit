@@ -3,12 +3,12 @@ package com.ssafy.mugit.user.acceptance;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.mugit.global.annotation.AcceptanceTest;
 import com.ssafy.mugit.user.entity.User;
-import com.ssafy.mugit.user.fixture.ProfileFixture;
-import com.ssafy.mugit.user.fixture.RegistProfileDtoFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
+import com.ssafy.mugit.fixure.ProfileFixture;
+import com.ssafy.mugit.fixure.RegistProfileDtoFixture;
+import com.ssafy.mugit.fixure.UserFixture;
 import com.ssafy.mugit.user.repository.UserRepository;
 import com.ssafy.mugit.user.service.UserRegistService;
-import com.ssafy.mugit.user.util.CookieUtil;
+import com.ssafy.mugit.user.util.UserCookieUtil;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +36,7 @@ public class UserRegistAcceptanceTest {
     UserRepository userRepository;
 
     @Autowired
-    CookieUtil cookieUtil;
+    UserCookieUtil userCookieUtil;
 
     @Autowired
     MockMvc mockMvc;

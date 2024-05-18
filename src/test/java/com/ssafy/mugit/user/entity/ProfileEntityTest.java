@@ -1,7 +1,7 @@
 package com.ssafy.mugit.user.entity;
 
-import com.ssafy.mugit.user.fixture.ProfileFixture;
-import com.ssafy.mugit.user.fixture.UserFixture;
+import com.ssafy.mugit.fixure.ProfileFixture;
+import com.ssafy.mugit.fixure.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,6 @@ class ProfileEntityTest {
         
         // then
         assertThat(profile.getProfileText()).isEqualTo("텍스트를 입력하세요.");
-        assertThat(profile.getProfileImagePath()).isEqualTo("https://mugit.site/files/008494eb-b272-4c83-919b-677378107fd2.jpg");
+        assertThat(profile.getProfileImagePath()).isEqualTo("https://mugit.site/files/default/user.jpg");
     }
 }

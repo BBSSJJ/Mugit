@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ssafy.mugit.user.fixture.ProfileFixture.*;
-import static com.ssafy.mugit.user.fixture.UserFixture.*;
+import static com.ssafy.mugit.fixure.ProfileFixture.*;
+import static com.ssafy.mugit.fixure.UserFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -129,8 +129,8 @@ public class FollowAcceptanceTest {
         // then
         perform.andExpect(cookie().exists("followers"))
                 .andExpect(cookie().exists("followings"))
-                .andExpect(cookie().value("followers", "2"))
-                .andExpect(cookie().value("followings", "1"))
+                .andExpect(cookie().value("followers", "1"))
+                .andExpect(cookie().value("followings", "2"))
                 .andExpect(status().is(200));
     }
 
@@ -189,7 +189,7 @@ public class FollowAcceptanceTest {
                 .cookie(loginCookie));
         // then
         perform.andExpect(status().isOk());
-        assertThat(followRepository.countMyFollowers(myId)).isEqualTo(0);
+        assertThat(followRepository.countMyFollowings(myId)).isEqualTo(0);
 
         // when2
         ResultActions perform2 = mockMvc.perform(delete("/api/users/" + friend + "/follows")

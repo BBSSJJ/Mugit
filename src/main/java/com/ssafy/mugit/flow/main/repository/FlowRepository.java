@@ -2,6 +2,7 @@ package com.ssafy.mugit.flow.main.repository;
 
 import com.ssafy.mugit.flow.main.entity.Flow;
 import com.ssafy.mugit.flow.main.repository.querydsl.CustomFlowRepository;
+import com.ssafy.mugit.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,11 +22,20 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "WHERE f.id = :flowId")
     Optional<Flow> findFlowById(Long flowId);
 
-//        @Query("SELECT f FROM flow f " +
-//            "LEFT JOIN users u ON f.user.id = u.id " +
-//            "LEFT JOIN com.ssafy.mugit.user.entity.Profile p ON p.user.id = u.id " +
-//            "WHERE f.isReleased = true AND f.authority != 'PRIVATE'")
-//    List<Flow> findFlows();
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN FETCH f.parentFlow pf " +
+            "LEFT JOIN FETCH pf.user pfu " +
+            "LEFT JOIN FETCH pfu.profile " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile " +
+            "WHERE f.id = :flowId")
+    Optional<Flow> findFlowAndParentByFlowId(Long flowId);
+
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile " +
+            "WHERE f.id = :flowId")
+    Optional<Flow> findFlowAndUserByFlowId(Long flowId);
 
     @Query("SELECT DISTINCT f FROM flow f " +
             "LEFT JOIN FETCH f.user u " +
@@ -37,20 +47,26 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "LEFT JOIN FETCH f.user u " +
             "LEFT JOIN FETCH u.profile " +
             "WHERE f.isReleased = true AND f.user.id = :userId")
+    List<Flow> findAllByUserId(Long userId);
+
+    @Query("SELECT f FROM flow f " +
+            "LEFT JOIN FETCH f.user u " +
+            "LEFT JOIN FETCH u.profile " +
+            "WHERE f.isReleased = true AND f.user.id = :userId AND f.authority != 'PRIVATE'")
     List<Flow> findFlowsByUserId(Long userId);
 
     @Query("SELECT f FROM flow f " +
             "LEFT JOIN FETCH f.user u " +
             "LEFT JOIN FETCH u.profile " +
             "WHERE f.isReleased = false AND f.user.id = :userId")
-    List<Flow> findWorkingFlowsByUserId(Long userId);
+    List<Flow> findUnreleasedFlowsByUserId(Long userId);
 
     @Query("SELECT f FROM likes l " +
             "LEFT JOIN flow f ON l.flow.id = flow.id " +
             "LEFT JOIN FETCH f.user u " +
             "LEFT JOIN FETCH u.profile " +
-            "WHERE l.user.id = :userId")
-    List<Flow> findMyLikeFlows(Long userId);
+            "WHERE l.user.id = :userId AND f.authority != 'PRIVATE'")
+    List<Flow> findLikeFlows(Long userId);
 
     List<Flow> findFlowsByRootFlow(Flow rootFlow);
 
@@ -71,4 +87,8 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "OR h.name LIKE %:keyword% " +
             "OR f.title LIKE %:keyword%")
     Page<Flow> findFlowsByKeyword(Pageable pageable, String keyword);
+
+    @Query("SELECT f FROM flow f " +
+            "WHERE f.user IN :users AND f.authority != 'PRIVATE' AND f.isReleased = true")
+    Page<Flow> findFlowsByUsers(Pageable pageable, List<User> users);
 }

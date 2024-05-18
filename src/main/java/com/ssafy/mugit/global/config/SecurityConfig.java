@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final CustomAuthorizeHttpRequestsFilter customAuthorizeHttpRequestsFilter;
     private final CustomOncePerRequestFilter customOncePerRequestFilter;
+    private final CustomOncePerRequestFilterForAuthentication customOncePerRequestFilterForAuthentication;
     private final CustomAdminLoginHandler customAdminLoginHandler;
     private final CustomAdminLoginFailureHandler customAdminLoginFailureHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -29,6 +30,9 @@ public class SecurityConfig {
 
                 // Make Authentication Object by Redis Session
                 .addFilterBefore(customOncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
+
+                // Make Authentication Object by Authorization Header
+                .addFilterBefore(customOncePerRequestFilterForAuthentication, UsernamePasswordAuthenticationFilter.class)
 
                 // form login
                 .formLogin((loginConfigurer) ->{
