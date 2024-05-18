@@ -93,4 +93,10 @@ public class FlowReadController {
         return ResponseEntity.status(200).body(flowReadService.getFlowsByKeyword(pageable, keyword));
     }
 
+    @Operation(summary = "Flow 조상 조회", description = "플로우의 조상 모두 조회.")
+    @GetMapping("/{flowId}/ancestors")
+    ResponseEntity<ListDto<List<FlowItemDto>>> getAncestorFlows(@PathVariable("flowId") Long flowId) {
+        return ResponseEntity.status(200).body(new ListDto<>(flowReadService.listAncestorFlow(flowId)));
+    }
+
 }

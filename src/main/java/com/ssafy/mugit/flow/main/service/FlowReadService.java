@@ -2,6 +2,7 @@ package com.ssafy.mugit.flow.main.service;
 
 import com.ssafy.mugit.flow.likes.entity.Likes;
 import com.ssafy.mugit.flow.likes.repository.LikesRepository;
+import com.ssafy.mugit.flow.main.dto.FlowAncestorDto;
 import com.ssafy.mugit.flow.main.dto.FlowDetailDto;
 import com.ssafy.mugit.flow.main.dto.FlowGraphTmpDto;
 import com.ssafy.mugit.flow.main.dto.FlowItemDto;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -108,5 +110,18 @@ public class FlowReadService {
 
     public Slice<FlowItemDto> getFlowsByKeyword(Pageable pageable, String keyword) {
         return flowRepository.findFlowsByKeyword(pageable, keyword).map(FlowItemDto::new);
+    }
+
+    public List<FlowItemDto> listAncestorFlow(Long flowId) {
+        List<FlowItemDto> flowList = new ArrayList<>();
+        Flow flow = flowRepository.getReferenceById(flowId);
+
+        FlowAncestorDto tmp = new FlowAncestorDto(flow);
+        while (tmp.getParentFlow() != null) {
+            tmp = tmp.getParentFlow();
+            flowList.add(new FlowItemDto(flowRepository.getReferenceById(tmp.getId())));
+        }
+
+        return flowList;
     }
 }
