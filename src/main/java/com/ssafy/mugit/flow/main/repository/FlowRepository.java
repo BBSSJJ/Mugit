@@ -68,6 +68,9 @@ public interface FlowRepository extends JpaRepository<Flow, Long>, CustomFlowRep
             "WHERE l.user.id = :userId AND f.authority != 'PRIVATE'")
     List<Flow> findLikeFlows(Long userId);
 
+    @Query("SELECT f FROM flow f " +
+            "WHERE f.isReleased = true " +
+            "AND f.rootFlow = :rootFlow")
     List<Flow> findFlowsByRootFlow(Flow rootFlow);
 
     @Query("SELECT DISTINCT f FROM flow f " +
