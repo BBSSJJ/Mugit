@@ -21,6 +21,6 @@ public class FlowGraphTmpDto {
         this.id = flow.getId();
         this.name = flow.getTitle();
         this.image = flow.getCoverPath();
-        this.childFlows = flow.getChildFlows().stream().map(FlowGraphTmpDto::new).toList();
+        this.childFlows = flow.getChildFlows().stream().filter(Flow::isReleased).map(FlowGraphTmpDto::new).toList();
     }
 }
