@@ -217,7 +217,7 @@ dge&logo=spring&logoColor=white"
 | 이준학       | BE      | Record 관련 API, 음악/사진 파일 관리, 파일 정리 자동화                                 | 메인 서버, 파일 서버 |
 | 이연우       | FE      | user profile page, flow detail page, SSE알림, google 소셜 로그인                       | frontend 서버        |
 | 김승희       | FE      | landing page, trends page, trends 검색, flow graph, music editor 기능, 하단 뮤직재생바 | frontend 서버        |
-| 김도희       | FE      | Record page                                                                            | frontend 서버        |
+| 김도희       | FE      | Record page, 멀티트랙 재생 기능, 멀티트랙 병합 기능   , git 시스템 구현                                                                         | frontend 서버        |
 
 [맨위로](#mugit)
 
