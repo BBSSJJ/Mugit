@@ -154,7 +154,7 @@ GIT 처럼 음악 관리, 협업할 수 있는 플랫폼
   <img
     src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"
   />
-
+    
 <h2>Databases</h2>
   <img
     src="https://img.shields.io/badge/redis-E34F26?style=for-the-badge&logo=redis&logoColor=white"
@@ -223,104 +223,45 @@ dge&logo=spring&logoColor=white"
 
 ## 7. :desktop_computer: 주요 페이지
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>google 검색 가능</th>
-    </tr>
-    <tr>
-        <td><img src="./images/google-search.png" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>Next.js를 활용하여 구축한 프로젝트를 Google 검색 엔진에 최적화하고, Google Search Console을 통해 관리하여 SEO(검색 엔진 최적화) 성능을 극대화하였다.</td>
-    </tr>
-</table>
+|                                                                   google 검색 가능                                                                   |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                     <img title="" src="./images/google-search.png" alt="" width="5000px">                                     |
+| Next.js를 활용하여 구축한 프로젝트를 Google 검색 엔진에 최적화하고, Google Search Console을 통해 관리하여 SEO(검색 엔진 최적화) 성능을 극대화하였다. |
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>Landing Page</th>
-    </tr>
-    <tr>
-        <td><img src="./images/01.LANDING(international).gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>i18n 라이브러리를 이용하여 국제화 기능을 구현하였다.</td>
-    </tr>
-</table>
+|                                       Landing Page                                        |
+| :---------------------------------------------------------------------------------------: |
+| <img title="" src="./images/01.LANDING(international).gif" alt="" width="5000px"> |
+|                   i18n 라이브러리를 이용하여 국제화 기능을 구현하였다.                    |
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>Trends</th>
-    </tr>
-    <tr>
-        <td><img src="./images/02. TREND(infinite-scroll).gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td><img src="./images/03. TREND(pagination).gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>infinite scroll과 pagination을 직접 구현하였다.</td>
-    </tr>
-</table>
+|                                           Trend                                           |
+| :---------------------------------------------------------------------------------------: |
+| <img title="" src="./images/02. TREND(infinite-scroll).gif" alt="" width="5000px"> |
+|   <img title="" src="./images/03. TREND(pagination).gif" alt="" width="5000px">   |
+|                     infinite scroll과 pagination을  직접 구현하였다.                      |
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>Feed</th>
-    </tr>
-    <tr>
-        <td><img src="./images/04. FEED.gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>follow한 user들이 작업한 flow들을 확인할 수 있다.</td>
-    </tr>
-</table>
+|                                   Feed                                   |
+| :----------------------------------------------------------------------: |
+| <img title="" src="./images/04. FEED.gif" alt="" width="5000px"> |
+|            follow한 user들이 작업한 flow들을 확인할 수 있다.             |
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>Flow Detail</th>
-    </tr>
-    <tr>
-        <td><img src="./images/05. FLOW(flow-play).gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td><img src="./images/06. FLOW(flow-tree).gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td><img src="./images/07. FLOW(comment).gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>- 플로우를 구성하고 있는 source들 확인 <br>- 플로우 좋아요 기능 <br>- 플로우의 흐름을 나타내는 graph <br>- 댓글 작성<br>- 댓글에 음악 시간 클릭시 해당 시간으로 flow 재생바 이동<br>- 마음에 드는 Flow 발견시 Works 탭에 저장 가능</td>
-    </tr>
-</table>
+|                                                                                                               Flow Detail                                                                                                               |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                           <img title="" src="./images/05. FLOW(flow-play).gif" alt="" width="5000px"">                                                                           |
+|                                                                           <img title="" src="./images/06. FLOW(flow-tree).gif"  alt="" width="5000px">                                                                           |
+|                                                                            <img title="" src="./images/07. FLOW(comment).gif" alt="" width="5000px">                                                                            |
+| - 플로우를 구성하고 있는 source들 확인 <br/>- 플로우 좋아요 기능 <br/>- 플로우의 흐름을 나타내는 graph <br/>- 댓글 작성<br/>- 댓글에 음악 시간 클릭시 해당 시간으로 flow 재생바 이동<br/>- 마음에 드는 Flow 발견시 Works 탭에 저장 가능 |
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>Profile</th>
-    </tr>
-    <tr>
-        <td><img src="./images/08. PROFILE(profile-edit).png" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td><img src="./images/09. notification.gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>- 본인 페이지로 이동해서 팔로우 및 플로우 조회 <br>- 플로우 그래프 조회<br>- 뮤지토리에서 릴리즈한 플로우 레코드 확인</td>
-    </tr>
-</table>
+|                                                         Profile                                                         |
+| :---------------------------------------------------------------------------------------------------------------------: |
+|                <img title="" src="./images/08. PROFILE(profile-edit).png" alt="" width="5000px">                |
+|                    <img title="" src="./images/09. notification.gif" alt="" width="5000px">                     |
+| - 본인 페이지로 이동해서 팔로우 및 플로우 조회 <br/>- 플로우 그래프 조회<br/>- 뮤지토리에서 릴리즈한 플로우 레코드 확인 |
 
-<table style="width: 100%; margin: auto;">
-    <tr>
-        <th>New Note, Music Editor</th>
-    </tr>
-    <tr>
-        <td><img src="./images/10. new-note.gif" alt="loading-ag-584" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td><img src="./images/11. editor.gif" alt="" style="width: 100%; height: auto;"></td>
-    </tr>
-    <tr>
-        <td>- 새로운 루트가 되는 Note 생성 기능<br>- 음악 Editor 기능</td>
-    </tr>
-</table>
+|                                   New Note, Music Editor                                   |
+| :----------------------------------------------------------------------------------------: |
+| <img title="" src="./images/10. new-note.gif" alt="loading-ag-584" width="5000px"> |
+|         <img title="" src="./images/11. editor.gif" alt="" width="5000px">          |
+|                 - 새로운 루트가 되는 Note 생성 기능<br/>- 음악 Editor 기능                 |
 
 ### :green_heart: 서버
 
